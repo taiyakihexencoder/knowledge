@@ -1,3 +1,1 @@
-# budgeting_app
-
-A new Flutter project.
+家計簿アプリのサンプル
