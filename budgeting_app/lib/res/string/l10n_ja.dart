@@ -10,4 +10,12 @@ class L10nJa extends L10n {
 
   @override
   String get applicationTitle => '家計簿アプリ';
+
+  @override
+  String get expenseHistory => '消費履歴';
+
+  @override
+  String commonPrice(Object price) {
+    return '$price円';
+  }
 }

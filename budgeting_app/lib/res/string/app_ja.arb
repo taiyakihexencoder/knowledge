@@ -1,4 +1,8 @@
 {
     "@@locale": "ja",
-    "applicationTitle": "家計簿アプリ"
+    "applicationTitle": "家計簿アプリ",
+
+    "expenseHistory": "消費履歴",
+    
+    "commonPrice": "{price}円"
 }

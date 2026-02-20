@@ -98,6 +98,18 @@ abstract class L10n {
   /// In ja, this message translates to:
   /// **'家計簿アプリ'**
   String get applicationTitle;
+
+  /// No description provided for @expenseHistory.
+  ///
+  /// In ja, this message translates to:
+  /// **'消費履歴'**
+  String get expenseHistory;
+
+  /// No description provided for @commonPrice.
+  ///
+  /// In ja, this message translates to:
+  /// **'{price}円'**
+  String commonPrice(Object price);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
