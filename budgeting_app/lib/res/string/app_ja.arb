@@ -3,6 +3,18 @@
     "applicationTitle": "家計簿アプリ",
 
     "expenseHistory": "消費履歴",
+
+    "newLogAmount": "購入金額",
+    "newLogAmountHint": "金額を入力...",
+    "newLogShop": "購入先",
+    "newLogCategory": "カテゴリー",
+    "newLogTag": "タグ",
+    "newLogContent": "購入詳細",
+    "newLogContentIndex": "No.{index}",
+    "newLogContentTitle": "タイトル",
+    "newLogContentDescription": "概要",
+    "newLogAdd": "新規追加",
     
-    "commonPrice": "{price}円"
+    "commonPrice": "{price}円",
+    "commonPriceSuffix": "円"
 }

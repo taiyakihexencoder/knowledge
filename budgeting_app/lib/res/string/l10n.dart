@@ -105,11 +105,77 @@ abstract class L10n {
   /// **'消費履歴'**
   String get expenseHistory;
 
+  /// No description provided for @newLogAmount.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入金額'**
+  String get newLogAmount;
+
+  /// No description provided for @newLogAmountHint.
+  ///
+  /// In ja, this message translates to:
+  /// **'金額を入力...'**
+  String get newLogAmountHint;
+
+  /// No description provided for @newLogShop.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先'**
+  String get newLogShop;
+
+  /// No description provided for @newLogCategory.
+  ///
+  /// In ja, this message translates to:
+  /// **'カテゴリー'**
+  String get newLogCategory;
+
+  /// No description provided for @newLogTag.
+  ///
+  /// In ja, this message translates to:
+  /// **'タグ'**
+  String get newLogTag;
+
+  /// No description provided for @newLogContent.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入詳細'**
+  String get newLogContent;
+
+  /// No description provided for @newLogContentIndex.
+  ///
+  /// In ja, this message translates to:
+  /// **'No.{index}'**
+  String newLogContentIndex(Object index);
+
+  /// No description provided for @newLogContentTitle.
+  ///
+  /// In ja, this message translates to:
+  /// **'タイトル'**
+  String get newLogContentTitle;
+
+  /// No description provided for @newLogContentDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'概要'**
+  String get newLogContentDescription;
+
+  /// No description provided for @newLogAdd.
+  ///
+  /// In ja, this message translates to:
+  /// **'新規追加'**
+  String get newLogAdd;
+
   /// No description provided for @commonPrice.
   ///
   /// In ja, this message translates to:
   /// **'{price}円'**
   String commonPrice(Object price);
+
+  /// No description provided for @commonPriceSuffix.
+  ///
+  /// In ja, this message translates to:
+  /// **'円'**
+  String get commonPriceSuffix;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
