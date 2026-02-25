@@ -15,6 +15,9 @@ class L10nJa extends L10n {
   String get expenseHistory => '消費履歴';
 
   @override
+  String get newLog => '購入情報の追加';
+
+  @override
   String get newLogAmount => '購入金額';
 
   @override

@@ -105,6 +105,12 @@ abstract class L10n {
   /// **'消費履歴'**
   String get expenseHistory;
 
+  /// No description provided for @newLog.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入情報の追加'**
+  String get newLog;
+
   /// No description provided for @newLogAmount.
   ///
   /// In ja, this message translates to:

@@ -4,6 +4,7 @@
 
     "expenseHistory": "消費履歴",
 
+    "newLog": "購入情報の追加",
     "newLogAmount": "購入金額",
     "newLogAmountHint": "金額を入力...",
     "newLogShop": "購入先",

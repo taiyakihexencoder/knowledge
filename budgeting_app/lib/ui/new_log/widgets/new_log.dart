@@ -15,6 +15,9 @@ class NewLog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(L10n.of(context)!.newLog),
+      ),
       body: Padding(
         padding: EdgeInsetsGeometry.fromSTEB(16.0, 0.0, 16.0, 0.0),
         child: SingleChildScrollView(
