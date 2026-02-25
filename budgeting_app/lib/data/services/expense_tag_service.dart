@@ -27,4 +27,22 @@ class ExpenseTagService {
   {"history_id": 19, "id": 1, "name": "外食" }
 ]''';
   }
+
+  String getAllExpenseTagList() {
+    return '''
+[
+  {"id": 1, "name": "外食"},
+  {"id": 2, "name": "スーパー"},
+  {"id": 3, "name": "接待"},
+  {"id": 4, "name": "領収書あり"},
+  {"id": 5, "name": "電車"},
+  {"id": 6, "name": "往復"},
+  {"id": 7, "name": "タクシー"},
+  {"id": 8, "name": "固定費"},
+  {"id": 9, "name": "家賃"},
+  {"id": 10, "name": "サーバー費用"},
+  {"id": 11, "name": "Netflix"}
+]
+''';
+  }
 }

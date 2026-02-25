@@ -10,4 +10,14 @@ class ShopService {
       _ => '{"id": $id, "name":"JR"}',
     };
   }
+
+  String getAllShopList() {
+    return '''
+[
+  {"id": 1, "name":"AEON"},
+  {"id": 2, "name":"東京電力"},
+  {"id": 3, "name":"Amazon"}
+]
+''';
+  }
 }

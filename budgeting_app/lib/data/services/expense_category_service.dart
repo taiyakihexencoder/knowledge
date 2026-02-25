@@ -11,4 +11,15 @@ class ExpenseCategoryService {
       _ => '{"id": 0, "name": "Unknown"}',
     };
   }
+
+  String getAllCategoryList() {
+    return '''
+[
+  {"id": 1, "name": "食費"},
+  {"id": 2, "name": "水道光熱費"},
+  {"id": 3, "name": "その他サービス費"},
+  {"id": 4, "name": "交通費"}
+]
+''';
+  }
 }

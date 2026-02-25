@@ -15,4 +15,10 @@ class ShopRepository {
     String json = _shopService.getShop(shopId);
     return ShopEntity.fromJson(json);
   }
+
+  /// 登録済のすべての購入先をリストとして取得する
+  List<ShopEntity> getAllShopList() {
+    String json = _shopService.getAllShopList();
+    return ShopEntity.fromListJson(json);
+  }
 }

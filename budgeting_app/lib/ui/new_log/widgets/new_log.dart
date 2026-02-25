@@ -3,17 +3,26 @@ import 'package:budgeting_app/ui/core/widget/preview_wrapper.dart';
 import 'package:budgeting_app/ui/new_log/models/category_model.dart';
 import 'package:budgeting_app/ui/new_log/models/shop_model.dart';
 import 'package:budgeting_app/ui/new_log/models/tag_model.dart';
+import 'package:budgeting_app/ui/new_log/view_models/new_log_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widget_previews.dart';
 
 class NewLog extends StatelessWidget {
-  const NewLog({
+  // ignore: prefer_const_constructors_in_immutables
+  NewLog({
     super.key,
-  });
+    required NewLogViewModel viewModel,
+  }): _viewModel = viewModel;
+
+  final NewLogViewModel _viewModel;
 
   @override
   Widget build(BuildContext context) {
+    _viewModel.refreshCategoryList();
+    _viewModel.refreshTagList();
+    _viewModel.refreshShopList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(L10n.of(context)!.newLog),
@@ -26,9 +35,9 @@ class NewLog extends StatelessWidget {
             children: [
               SizedBox(height: 16.0),
               _AmountField(),
-              _ShopField(shops: []),
-              _CategoryField(categories: []),
-              _TagField(tags: []),
+              _ShopField(shops: _viewModel.shopSelections),
+              _CategoryField(categories: _viewModel.categorySelections),
+              _TagField(tags: _viewModel.tagSelections),
               _ContentField(),
 
               SizedBox(
@@ -359,14 +368,6 @@ class _SubHeader extends StatelessWidget {
       style: Theme.of(context).textTheme.headlineSmall,
     );
   }
-}
-
-@Preview(
-  name: 'New Log',
-  wrapper: previewWrapper,
-)
-Widget previewNewLog() {
-  return NewLog();
 }
 
 @Preview(

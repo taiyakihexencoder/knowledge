@@ -1,6 +1,7 @@
 import 'package:budgeting_app/domain/repositories/repositories.dart';
 import 'package:budgeting_app/ui/history/view_models/history_list_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_list/history_list.dart';
+import 'package:budgeting_app/ui/new_log/view_models/new_log_view_model.dart';
 import 'package:budgeting_app/ui/new_log/widgets/new_log.dart';
 import 'package:flutter/material.dart';
 
@@ -55,12 +56,20 @@ class HistoryListPage extends StatelessWidget {
 }
 
 class NewLogPage extends StatelessWidget {
-  const NewLogPage({
+  NewLogPage({
     super.key,
-  });
+  }): _viewModel = NewLogViewModel(
+    categoryRepository: categoryRepository,
+    tagRepository: tagRepository,
+    shopRepository: shopRepository
+  );
+
+  final NewLogViewModel _viewModel;
 
   @override
   Widget build(BuildContext context) {
-    return NewLog();
+    return NewLog(
+      viewModel: _viewModel
+    );
   }
 }

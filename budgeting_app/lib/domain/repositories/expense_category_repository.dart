@@ -15,4 +15,10 @@ class ExpenseCategoryRepository {
     String json = _expenseCategoryService.getCategory(categoryId);
     return ExpenseCategoryEntity.fromJson(json);
   }
+
+  /// 登録済のすべてのカテゴリーをリストとして取得する
+  List<ExpenseCategoryEntity> getAllCategoryList() {
+    String json = _expenseCategoryService.getAllCategoryList();
+    return ExpenseCategoryEntity.fromListJson(json);
+  }
 }
