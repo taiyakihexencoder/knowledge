@@ -1,9 +1,12 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/preview_wrapper.dart';
 import 'package:budgeting_app/ui/new_log/models/category_model.dart';
+import 'package:budgeting_app/ui/new_log/models/content_model.dart';
+import 'package:budgeting_app/ui/new_log/models/log_model.dart';
 import 'package:budgeting_app/ui/new_log/models/shop_model.dart';
 import 'package:budgeting_app/ui/new_log/models/tag_model.dart';
 import 'package:budgeting_app/ui/new_log/view_models/new_log_view_model.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widget_previews.dart';
@@ -23,6 +26,12 @@ class NewLog extends StatelessWidget {
     _viewModel.refreshTagList();
     _viewModel.refreshShopList();
 
+    final _AmountField amountField = _AmountField();
+    final _ShopField shopField = _ShopField(shops: _viewModel.shopSelections);
+    final _CategoryField categoryField = _CategoryField(categories: _viewModel.categorySelections);
+    final _TagField tagField = _TagField(tags: _viewModel.tagSelections);
+    final _ContentField contentField = _ContentField();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(L10n.of(context)!.newLog),
@@ -34,17 +43,25 @@ class NewLog extends StatelessWidget {
             spacing: 24.0,
             children: [
               SizedBox(height: 16.0),
-              _AmountField(),
-              _ShopField(shops: _viewModel.shopSelections),
-              _CategoryField(categories: _viewModel.categorySelections),
-              _TagField(tags: _viewModel.tagSelections),
-              _ContentField(),
+              amountField,
+              shopField,
+              categoryField,
+              tagField,
+              contentField,
 
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-
+                    _viewModel.onRequestAddLog(
+                      LogModel(
+                        amount: amountField.getInput(),
+                        shop: shopField.getInput(),
+                        category: categoryField.getInput(),
+                        tags: tagField.getInput(),
+                        contents: contentField.getInput(),
+                      )
+                    );
                   }, 
                   child: Text(
                     L10n.of(context)!.newLogAdd,
@@ -63,27 +80,47 @@ class NewLog extends StatelessWidget {
 /// 購入金額の入力UI
 /// 
 /// 入力の最大値は99,999,999とする
-class _AmountField extends StatelessWidget {
+class _AmountField extends StatefulWidget {
   static const int _maxLength = 8;
 
   @override
+  _AmountState createState() => _AmountState();
+
+  final _amountController = TextEditingController();
+
+  /// 入力されている値を取得
+  int getInput() {
+    return int.tryParse(_amountController.text) ?? 0;
+  }
+}
+
+class _AmountState extends State<_AmountField> {
+
+  @override
+  void dispose() {
+    widget._amountController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-      final String pattern = '^[0-9.]+';
-      final TextInputFormatter digitFormatter = FilteringTextInputFormatter.allow(RegExp(pattern));
+    final String pattern = '^[0-9.]+';
+    final TextInputFormatter digitFormatter = FilteringTextInputFormatter.allow(RegExp(pattern));
       
-      return Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _Header(title: L10n.of(context)!.newLogAmount),
         Padding(
           padding: EdgeInsetsGeometry.fromLTRB(12.0, 0, 12.0, 0),
           child: TextField(
+            controller: widget._amountController,
             keyboardType: TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
               digitFormatter,
             ],
             textAlign: TextAlign.right,
-            maxLength: _maxLength,
+            maxLength: _AmountField._maxLength,
             onSubmitted: (String input) {},
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -106,12 +143,39 @@ class _AmountField extends StatelessWidget {
 }
 
 /// 購入店舗の入力UI
-class _ShopField extends StatelessWidget {
-  const _ShopField({
+class _ShopField extends StatefulWidget {
+  _ShopField({
     required List<ShopModel> shops,
-  }) : _shops = shops;
+  }): _shops = shops;
 
-  final List<ShopModel> _shops; 
+  final List<ShopModel> _shops;
+
+  final TextEditingController _shopEditingController = TextEditingController();
+
+  @override
+  _ShopState createState() => _ShopState();
+
+  ShopModel? getInput() {
+    return _shops.firstWhereOrNull(
+      (shop) => shop.name == _shopEditingController.text,
+    );
+  }
+}
+
+class _ShopState extends State<_ShopField> {
+  late List<ShopModel> _shops; 
+
+  @override
+  void initState() {
+    super.initState();
+    _shops = widget._shops;
+  }
+
+  @override
+  void dispose() {
+    widget._shopEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +193,7 @@ class _ShopField extends StatelessWidget {
 
   Widget _dropdown(BuildContext context) {
     return DropdownMenu(
+      controller: widget._shopEditingController,
       width: double.infinity,
       enableFilter: true,
       dropdownMenuEntries: [
@@ -139,20 +204,48 @@ class _ShopField extends StatelessWidget {
           )
         ),
       ],
-      onSelected: (value) => {
-
-      },
+      onSelected: (value) => {},
     );
   }
 }
 
 /// 購入カテゴリーの入力UI
-class _CategoryField extends StatelessWidget {
-  const _CategoryField({
+class _CategoryField extends StatefulWidget {
+  _CategoryField({
     required List<CategoryModel> categories,
   }) : _categories = categories;
-
+  
   final List<CategoryModel> _categories;
+  List<CategoryModel> get categories => _categories;
+
+  final TextEditingController _categoryEditingController = TextEditingController();
+
+  @override
+  _CategoryState createState() => _CategoryState();
+
+  CategoryModel? getInput() {
+    return _categories.firstWhereOrNull(
+      (category) => category.name == _categoryEditingController.text,
+    );
+  }
+}
+
+class _CategoryState extends State<_CategoryField> {
+  _CategoryState();
+
+  late List<CategoryModel> _categories;
+
+  @override
+  void initState() {
+    super.initState();
+    _categories = widget.categories;
+  }
+
+  @override
+  void dispose() {
+    widget._categoryEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +263,7 @@ class _CategoryField extends StatelessWidget {
 
   Widget _dropdown(BuildContext context) {
     return DropdownMenu(
+      controller: widget._categoryEditingController,
       width: double.infinity,
       enableFilter: true,
       dropdownMenuEntries: [
@@ -180,23 +274,51 @@ class _CategoryField extends StatelessWidget {
           )
         ),
       ],
-      onSelected: (value) => {
-
-      },
+      onSelected: (value) {},
     );
   }
 }
 
 /// 購入タグの入力UI
 /// タグは[_maxCount]個まで設定可能
-class _TagField extends StatelessWidget {
-  const _TagField({
+class _TagField extends StatefulWidget {
+  static const int _maxCount = 8;
+
+  _TagField({
     required List<TagModel> tags,
   }): _tags = tags;
 
-  static const int _maxCount = 8;
-
   final List<TagModel> _tags;
+
+  final List<TextEditingController> _tagControllers = List.generate(_maxCount, (_) => TextEditingController());
+
+  @override
+  State<StatefulWidget> createState() => _TagState();
+
+  List<TagModel?> getInput() {
+    Map<String, TagModel> tagMap = { for (var tag in _tags) tag.name : tag };
+    return _tagControllers.map(
+      (controller) => tagMap[controller.text],
+    ).toList();
+  }
+}
+
+class _TagState extends State<_TagField> {
+  late List<TagModel> _tags;
+
+  @override
+  void initState() {
+    super.initState();
+    _tags = widget._tags;
+  }
+
+  @override
+  void dispose() {
+    for (int i = 0; i < _TagField._maxCount; ++i) {
+      widget._tagControllers[i].dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +331,7 @@ class _TagField extends StatelessWidget {
           child: Column(
             spacing: 12.0,
             children: [
-              for(int i = 0; i < _maxCount; ++i) _dropdown(context,)
+              for(int i = 0; i < _TagField._maxCount; ++i) _dropdown(context, i),
             ],
           ),
         ),
@@ -217,8 +339,9 @@ class _TagField extends StatelessWidget {
     );
   }
 
-  Widget _dropdown(BuildContext context) {
+  Widget _dropdown(BuildContext context, int index) {
     return DropdownMenu(
+      controller: widget._tagControllers[index],
       width: double.infinity,
       enableFilter: true,
       dropdownMenuEntries: [
@@ -229,9 +352,7 @@ class _TagField extends StatelessWidget {
           )
         ),
       ],
-      onSelected: (value) => {
-
-      },
+      onSelected: (value) => {},
     );
   }
 }
@@ -243,10 +364,42 @@ class _TagField extends StatelessWidget {
 /// タイトルは最大[_titleMaxLength]文字まで
 /// 
 /// 概要は最大[_descriptionMaxLength]文字まで
-class _ContentField extends StatelessWidget {
+class _ContentField extends StatefulWidget {
   static const int _maxCount = 4;
   static const int _titleMaxLength = 50;
   static const int _descriptionMaxLength = 300;
+
+  @override
+  _ContentState createState() => _ContentState();
+
+  final List<TextEditingController> _titleEditingControllers = List.generate(_maxCount, (_) => TextEditingController());
+  final List<TextEditingController> _descriptionEditingControllers = List.generate(_maxCount, (_) => TextEditingController());
+
+  List<ContentModel> getInput() {
+    List<ContentModel> list = [];
+
+    for (int i = 0; i < _ContentField._maxCount; ++i) {
+      list.add(
+        ContentModel(
+          title: _titleEditingControllers[i].text, 
+          description: _descriptionEditingControllers[i].text
+        )
+      );
+    }
+    return list;
+  }
+}
+
+class _ContentState extends State<_ContentField> {
+
+  @override 
+  void dispose() {
+    for (int i = 0; i < _ContentField._maxCount; ++i) {
+      widget._titleEditingControllers[i].dispose();
+      widget._descriptionEditingControllers[i].dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -264,12 +417,14 @@ class _ContentField extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              for (int i = 1; i <= _maxCount; ++i) 
+              for (int i = 0; i < _ContentField._maxCount; ++i) 
                 ..._contentWidgets(
-                  indexDescription: l10n.newLogContentIndex(i),
+                  indexDescription: l10n.newLogContentIndex(i+1),
                   title: title, 
                   description: description, 
-                  border: border
+                  border: border,
+                  titleEditingController: widget._titleEditingControllers[i],
+                  descriptionEditingController: widget._descriptionEditingControllers[i],
                 )
             ],
           ),
@@ -283,6 +438,8 @@ class _ContentField extends StatelessWidget {
     required String title,
     required String description,
     required InputBorder border,
+    required TextEditingController titleEditingController,
+    required TextEditingController descriptionEditingController,
   }) {
     final FocusNode descriptionFocus = FocusNode();
 
@@ -295,7 +452,8 @@ class _ContentField extends StatelessWidget {
 
       // タイトル
       TextField(
-        maxLength: _titleMaxLength,
+        controller: titleEditingController,
+        maxLength: _ContentField._titleMaxLength,
         onSubmitted: (value) => {
           descriptionFocus.requestFocus(),
         },
@@ -311,9 +469,10 @@ class _ContentField extends StatelessWidget {
 
       // 概要
       TextField(
+        controller: descriptionEditingController,
         focusNode: descriptionFocus,
         keyboardType: TextInputType.multiline,
-        maxLength: _descriptionMaxLength,
+        maxLength: _ContentField._descriptionMaxLength,
         minLines: 3,
         maxLines: 5,
         onSubmitted: (value) => {},

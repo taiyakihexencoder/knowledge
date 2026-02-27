@@ -13,6 +13,12 @@ class ShopEntity {
   /// 購入先の名称
   final String name;
 
+  /// Map変換
+  Map<String, Object?> get toMap => {
+    'id': id,
+    'name': name,
+  };
+
   /// JSONをエンティティに変換
   static ShopEntity fromJson(String json) => commonDecodeFromJson(json, _fromMap);
 

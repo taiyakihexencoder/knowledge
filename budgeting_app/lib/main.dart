@@ -59,6 +59,7 @@ class NewLogPage extends StatelessWidget {
   NewLogPage({
     super.key,
   }): _viewModel = NewLogViewModel(
+    historyRepository: historyRepository,
     categoryRepository: categoryRepository,
     tagRepository: tagRepository,
     shopRepository: shopRepository

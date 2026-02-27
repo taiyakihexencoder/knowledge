@@ -13,6 +13,12 @@ class ExpenseTagEntity {
   /// タグ名
   final String name;
 
+  /// Map変換
+  Map<String, Object?> get toMap => {
+    'id': id,
+    'name': name,
+  };
+
   /// JSONをエンティティに変換
   static ExpenseTagEntity fromJson(String json) => commonDecodeFromJson(json, _fromMap);
 

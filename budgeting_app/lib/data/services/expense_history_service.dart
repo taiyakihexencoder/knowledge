@@ -29,4 +29,12 @@ class ExpenseHistoryService {
 ]
 ''';
   }
+
+  /// ログを登録する
+  int createLog({
+    required String json,
+  }) {
+    print(json);
+    return 0;
+  }
 }
