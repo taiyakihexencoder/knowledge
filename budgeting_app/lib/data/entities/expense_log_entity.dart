@@ -1,6 +1,6 @@
-import 'package:budgeting_app/domain/entities/expense_category_entity.dart';
-import 'package:budgeting_app/domain/entities/expense_tag_entity.dart';
-import 'package:budgeting_app/domain/entities/shop_entity.dart';
+import 'package:budgeting_app/data/entities/expense_category_entity.dart';
+import 'package:budgeting_app/data/entities/expense_tag_entity.dart';
+import 'package:budgeting_app/data/entities/shop_entity.dart';
 
 /// ログ書き込み用データEntity
 class ExpenseLogEntity {

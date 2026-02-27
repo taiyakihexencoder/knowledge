@@ -1,4 +1,4 @@
-import 'package:budgeting_app/domain/entities/entity_common.dart';
+import 'package:budgeting_app/data/entities/entity_common.dart';
 
 /// 消費カテゴリEntity
 class ExpenseCategoryEntity {

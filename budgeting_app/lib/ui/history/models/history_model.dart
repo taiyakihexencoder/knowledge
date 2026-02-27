@@ -1,7 +1,7 @@
-import 'package:budgeting_app/domain/entities/expense_category_entity.dart';
-import 'package:budgeting_app/domain/entities/expense_history_entity.dart';
-import 'package:budgeting_app/domain/entities/expense_history_tag_entity.dart';
-import 'package:budgeting_app/domain/entities/shop_entity.dart';
+import 'package:budgeting_app/data/entities/expense_category_entity.dart';
+import 'package:budgeting_app/data/entities/expense_history_entity.dart';
+import 'package:budgeting_app/data/entities/expense_history_tag_entity.dart';
+import 'package:budgeting_app/data/entities/shop_entity.dart';
 
 /// １つの消費履歴を表示するData Model
 class HistoryModel {

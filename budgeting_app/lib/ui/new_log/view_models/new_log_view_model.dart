@@ -1,7 +1,7 @@
-import 'package:budgeting_app/domain/entities/expense_category_entity.dart';
-import 'package:budgeting_app/domain/entities/expense_log_entity.dart';
-import 'package:budgeting_app/domain/entities/expense_tag_entity.dart';
-import 'package:budgeting_app/domain/entities/shop_entity.dart';
+import 'package:budgeting_app/data/entities/expense_category_entity.dart';
+import 'package:budgeting_app/data/entities/expense_log_entity.dart';
+import 'package:budgeting_app/data/entities/expense_tag_entity.dart';
+import 'package:budgeting_app/data/entities/shop_entity.dart';
 import 'package:budgeting_app/domain/repositories/expense_category_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_history_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_tag_repository.dart';
@@ -10,6 +10,7 @@ import 'package:budgeting_app/ui/new_log/models/category_model.dart';
 import 'package:budgeting_app/ui/new_log/models/log_model.dart';
 import 'package:budgeting_app/ui/new_log/models/shop_model.dart';
 import 'package:budgeting_app/ui/new_log/models/tag_model.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewLogViewModel {
@@ -23,9 +24,9 @@ class NewLogViewModel {
   _categoryRepository = categoryRepository,
   _tagRepository = tagRepository,
   _shopRepository = shopRepository,
-  _categorySelections = const [],
-  _tagSelections = const [],
-  _shopSelections = const [];
+  _categorySelections = ValueNotifier([]),
+  _tagSelections = ValueNotifier([]),
+  _shopSelections = ValueNotifier([]);
 
   /// 購入履歴Repository
   final ExpenseHistoryRepository _historyRepository;
@@ -40,21 +41,21 @@ class NewLogViewModel {
   final ShopRepository _shopRepository;
 
   /// カテゴリーの選択肢
-  List<CategoryModel> _categorySelections;
-  List<CategoryModel> get categorySelections => _categorySelections;
+  final ValueNotifier<List<CategoryModel>> _categorySelections;
+  ValueNotifier<List<CategoryModel>> get categorySelections => _categorySelections;
 
   /// タグの選択肢
-  List<TagModel> _tagSelections;
-  List<TagModel> get tagSelections => _tagSelections;
+  final ValueNotifier<List<TagModel>> _tagSelections;
+  ValueNotifier<List<TagModel>> get tagSelections => _tagSelections;
 
   /// 購入先の選択肢
-  List<ShopModel> _shopSelections;
-  List<ShopModel> get shopSelections => _shopSelections;
+  final ValueNotifier<List<ShopModel>> _shopSelections;
+  ValueNotifier<List<ShopModel>> get shopSelections => _shopSelections;
 
   /// カテゴリーリストを更新する
-  void refreshCategoryList() {
-    List<ExpenseCategoryEntity> categoryList = _categoryRepository.getAllCategoryList();
-    _categorySelections = categoryList.map(
+  void refreshCategoryList() async {
+    List<ExpenseCategoryEntity> categoryList = await _categoryRepository.getAllCategoryList();
+    _categorySelections.value = categoryList.map(
       (category) => CategoryModel(
         id: category.id, 
         name: category.name,
@@ -63,9 +64,9 @@ class NewLogViewModel {
   }
 
   /// タグリストを更新する
-  void refreshTagList() {
-    List<ExpenseTagEntity> tagList = _tagRepository.getAllTags();
-    _tagSelections = tagList.map(
+  void refreshTagList() async {
+    List<ExpenseTagEntity> tagList = await _tagRepository.getAllTags();
+    _tagSelections.value = tagList.map(
       (tag)=> TagModel(
         id: tag.id, 
         name: tag.name,
@@ -74,9 +75,9 @@ class NewLogViewModel {
   }
 
   /// 購入先リストを更新する
-  void refreshShopList() {
-    List<ShopEntity> shopList = _shopRepository.getAllShopList();
-    _shopSelections = shopList.map(
+  void refreshShopList() async {
+    List<ShopEntity> shopList = await _shopRepository.getAllShopList();
+    _shopSelections.value = shopList.map(
       (shop) => ShopModel(
         id: shop.id,
         name: shop.name,
@@ -85,8 +86,8 @@ class NewLogViewModel {
   }
 
   /// 新規追加時のアクション
-  void onRequestAddLog(LogModel log) {
-    _historyRepository.createLog(
+  void onRequestAddLog(LogModel log) async {
+    await _historyRepository.createLog(
       log: ExpenseLogEntity(
         amount: log.amount, 
         shop: ShopEntity(id: log.shop!.id, name: log.shop!.name), 

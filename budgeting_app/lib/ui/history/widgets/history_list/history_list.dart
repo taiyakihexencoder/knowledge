@@ -27,25 +27,28 @@ class HistoryList extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: false,
-            expandedHeight: 48.0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(L10n.of(context)!.expenseHistory),
-            ),
-          ),
-          SliverList.list(
-            children: [
-              ..._viewModel.models.map(
-                (model) => HistoryListElement(
-                  model: model,
-                )
+      body: ValueListenableBuilder(
+        valueListenable: _viewModel.models, 
+        builder: (_, models, _) => CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: false,
+              expandedHeight: 48.0,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(L10n.of(context)!.expenseHistory),
               ),
-            ],
-          ),
-        ],
+            ),
+            SliverList.list(
+              children: [
+                ...models.map(
+                  (model) => HistoryListElement(
+                    model: model,
+                  )
+                ),
+              ],
+            ),
+          ],
+        )
       )
     );
   }

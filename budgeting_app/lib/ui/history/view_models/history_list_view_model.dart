@@ -1,10 +1,13 @@
-import 'package:budgeting_app/domain/entities/expense_history_entity.dart';
-import 'package:budgeting_app/domain/entities/expense_history_tag_entity.dart';
+import 'package:budgeting_app/data/entities/expense_category_entity.dart';
+import 'package:budgeting_app/data/entities/expense_history_entity.dart';
+import 'package:budgeting_app/data/entities/expense_history_tag_entity.dart';
+import 'package:budgeting_app/data/entities/shop_entity.dart';
 import 'package:budgeting_app/domain/repositories/expense_category_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_history_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_tag_repository.dart';
 import 'package:budgeting_app/domain/repositories/shop_repository.dart';
 import 'package:budgeting_app/ui/history/models/history_model.dart';
+import 'package:flutter/material.dart';
 
 class HistoryListViewModel {
   HistoryListViewModel({
@@ -17,7 +20,7 @@ class HistoryListViewModel {
   _categoryRepository = categoryRepository,
   _tagRepository = tagRepository,
   _shopRepository = shopRepository,
-  _models = const [];
+  _models = ValueNotifier([]);
 
   /// 購入履歴Repository
   final ExpenseHistoryRepository _historyRepository;
@@ -31,24 +34,30 @@ class HistoryListViewModel {
   /// 購入先Repository
   final ShopRepository _shopRepository;
 
-  List<HistoryModel> _models;
-  List<HistoryModel> get models => _models;
+  final ValueNotifier<List<HistoryModel>> _models;
+  ValueNotifier<List<HistoryModel>> get models => _models;
 
-  void refreshList() {
-    List<ExpenseHistoryEntity> historyList = _historyRepository.getHistoryList();
-    Map<int, List<ExpenseHistoryTagEntity>> tagMap = _tagRepository.getTags(
+  void refreshList() async {
+    List<ExpenseHistoryEntity> historyList = await _historyRepository.getHistoryList();
+    Map<int, List<ExpenseHistoryTagEntity>> tagMap = await _tagRepository.getTags(
       historyList.map(
         (history) => history.id
       )
     );
 
-    _models = historyList.map(
-      (history) => HistoryModel.from(
-        expenseHistory: history,
-        expenseCategory: _categoryRepository.getCategory(history.categoryId),
-        shop: _shopRepository.getShop(history.shopId),
-        expenseTags: tagMap[history.id] ?? [],
-      )
-    ).toList();
+    List<HistoryModel> modelList = [];
+    for (ExpenseHistoryEntity history in historyList) {
+      Future<ExpenseCategoryEntity> category = _categoryRepository.getCategory(history.categoryId);
+      Future<ShopEntity> shop = _shopRepository.getShop(history.shopId);
+      modelList.add(
+        HistoryModel.from(
+          expenseHistory: history,
+          expenseCategory: await category,
+          shop: await shop,
+          expenseTags: tagMap[history.id] ?? [],
+        )
+      );
+    }
+    _models.value = modelList;
   }
 }

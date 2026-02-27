@@ -20,17 +20,18 @@ class NewLog extends StatelessWidget {
 
   final NewLogViewModel _viewModel;
 
+  final TextEditingController _amountEditingController = TextEditingController();
+  final TextEditingController _shopEditingController = TextEditingController();
+  final TextEditingController _categoryEditingController = TextEditingController();
+  final List<TextEditingController> _tagEditingControllers = List.generate(_TagField._maxCount, (_) => TextEditingController());
+  final List<TextEditingController> _contentTitleEditingControllers = List.generate(_ContentField._maxCount, (_) => TextEditingController());
+  final List<TextEditingController> _contentDescriptionEditingControllers = List.generate(_ContentField._maxCount, (_) => TextEditingController());
+
   @override
   Widget build(BuildContext context) {
     _viewModel.refreshCategoryList();
     _viewModel.refreshTagList();
     _viewModel.refreshShopList();
-
-    final _AmountField amountField = _AmountField();
-    final _ShopField shopField = _ShopField(shops: _viewModel.shopSelections);
-    final _CategoryField categoryField = _CategoryField(categories: _viewModel.categorySelections);
-    final _TagField tagField = _TagField(tags: _viewModel.tagSelections);
-    final _ContentField contentField = _ContentField();
 
     return Scaffold(
       appBar: AppBar(
@@ -43,23 +44,67 @@ class NewLog extends StatelessWidget {
             spacing: 24.0,
             children: [
               SizedBox(height: 16.0),
-              amountField,
-              shopField,
-              categoryField,
-              tagField,
-              contentField,
+              _AmountField(
+                amountController: _amountEditingController,
+              ),
+
+              ValueListenableBuilder(
+                valueListenable: _viewModel.shopSelections, 
+                builder: (_, shops, _) => _ShopField(
+                  shops: shops,
+                  shopEditingController: _shopEditingController,
+                ),
+              ),
+
+              ValueListenableBuilder(
+                valueListenable: _viewModel.categorySelections, 
+                builder: (_, categories, _) => _CategoryField(
+                  categories: categories,
+                  categoryEditingController: _categoryEditingController,
+                ),
+              ),
+
+              ValueListenableBuilder(
+                valueListenable: _viewModel.tagSelections, 
+                builder: (_, tags, _) => _TagField(
+                  tags: tags,
+                  tagControllers: _tagEditingControllers,
+                ),
+              ),
+
+              _ContentField(
+                titleEditingControllers: _contentTitleEditingControllers,
+                descriptionEditingControllers: _contentDescriptionEditingControllers,
+              ),
 
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
+                    Map<String, TagModel> tagMap = { for (var tag in _viewModel.tagSelections.value) tag.name : tag };
+                    List<ContentModel> contents = [];
+                    for (int i = 0; i < _ContentField._maxCount; ++i) {
+                      contents.add(
+                        ContentModel(
+                          title: _contentTitleEditingControllers[i].text, 
+                          description: _contentDescriptionEditingControllers[i].text
+                        )
+                      );
+                    }
+
                     _viewModel.onRequestAddLog(
                       LogModel(
-                        amount: amountField.getInput(),
-                        shop: shopField.getInput(),
-                        category: categoryField.getInput(),
-                        tags: tagField.getInput(),
-                        contents: contentField.getInput(),
+                        amount: int.tryParse(_amountEditingController.text) ?? 0,
+                        shop: _viewModel.shopSelections.value.firstWhereOrNull(
+                          (shop) => shop.name == _shopEditingController.text,
+                        ),
+                        category: _viewModel.categorySelections.value.firstWhereOrNull(
+                          (category) => category.name == _categoryEditingController.text,
+                        ),
+                        tags: _tagEditingControllers.map(
+                          (controller) => tagMap[controller.text]
+                        ).toList(),
+                        contents: contents,
                       )
                     );
                   }, 
@@ -83,15 +128,14 @@ class NewLog extends StatelessWidget {
 class _AmountField extends StatefulWidget {
   static const int _maxLength = 8;
 
+  const _AmountField({
+    required TextEditingController amountController,
+  }): _amountController = amountController;
+
   @override
   _AmountState createState() => _AmountState();
 
-  final _amountController = TextEditingController();
-
-  /// 入力されている値を取得
-  int getInput() {
-    return int.tryParse(_amountController.text) ?? 0;
-  }
+  final TextEditingController _amountController;
 }
 
 class _AmountState extends State<_AmountField> {
@@ -144,33 +188,22 @@ class _AmountState extends State<_AmountField> {
 
 /// 購入店舗の入力UI
 class _ShopField extends StatefulWidget {
-  _ShopField({
+  const _ShopField({
     required List<ShopModel> shops,
-  }): _shops = shops;
+    required TextEditingController shopEditingController,
+  }):
+  _shops = shops,
+  _shopEditingController = shopEditingController;
 
   final List<ShopModel> _shops;
 
-  final TextEditingController _shopEditingController = TextEditingController();
+  final TextEditingController _shopEditingController;
 
   @override
   _ShopState createState() => _ShopState();
-
-  ShopModel? getInput() {
-    return _shops.firstWhereOrNull(
-      (shop) => shop.name == _shopEditingController.text,
-    );
-  }
 }
 
 class _ShopState extends State<_ShopField> {
-  late List<ShopModel> _shops; 
-
-  @override
-  void initState() {
-    super.initState();
-    _shops = widget._shops;
-  }
-
   @override
   void dispose() {
     widget._shopEditingController.dispose();
@@ -197,7 +230,7 @@ class _ShopState extends State<_ShopField> {
       width: double.infinity,
       enableFilter: true,
       dropdownMenuEntries: [
-        ..._shops.map(
+        ...widget._shops.map(
           (category) => DropdownMenuEntry(
             value: category.id, 
             label: category.name,
@@ -211,35 +244,24 @@ class _ShopState extends State<_ShopField> {
 
 /// 購入カテゴリーの入力UI
 class _CategoryField extends StatefulWidget {
-  _CategoryField({
+  const _CategoryField({
     required List<CategoryModel> categories,
-  }) : _categories = categories;
+    required TextEditingController categoryEditingController,
+  }) : 
+  _categories = categories,
+  _categoryEditingController = categoryEditingController;
   
   final List<CategoryModel> _categories;
   List<CategoryModel> get categories => _categories;
 
-  final TextEditingController _categoryEditingController = TextEditingController();
+  final TextEditingController _categoryEditingController;
 
   @override
   _CategoryState createState() => _CategoryState();
-
-  CategoryModel? getInput() {
-    return _categories.firstWhereOrNull(
-      (category) => category.name == _categoryEditingController.text,
-    );
-  }
 }
 
 class _CategoryState extends State<_CategoryField> {
   _CategoryState();
-
-  late List<CategoryModel> _categories;
-
-  @override
-  void initState() {
-    super.initState();
-    _categories = widget.categories;
-  }
 
   @override
   void dispose() {
@@ -267,7 +289,7 @@ class _CategoryState extends State<_CategoryField> {
       width: double.infinity,
       enableFilter: true,
       dropdownMenuEntries: [
-        ..._categories.map(
+        ...widget._categories.map(
           (category) => DropdownMenuEntry(
             value: category.id, 
             label: category.name,
@@ -284,34 +306,22 @@ class _CategoryState extends State<_CategoryField> {
 class _TagField extends StatefulWidget {
   static const int _maxCount = 8;
 
-  _TagField({
+  const _TagField({
     required List<TagModel> tags,
-  }): _tags = tags;
+    required List<TextEditingController> tagControllers,
+  }): 
+  _tags = tags,
+  _tagControllers = tagControllers;
 
   final List<TagModel> _tags;
 
-  final List<TextEditingController> _tagControllers = List.generate(_maxCount, (_) => TextEditingController());
+  final List<TextEditingController> _tagControllers;
 
   @override
   State<StatefulWidget> createState() => _TagState();
-
-  List<TagModel?> getInput() {
-    Map<String, TagModel> tagMap = { for (var tag in _tags) tag.name : tag };
-    return _tagControllers.map(
-      (controller) => tagMap[controller.text],
-    ).toList();
-  }
 }
 
 class _TagState extends State<_TagField> {
-  late List<TagModel> _tags;
-
-  @override
-  void initState() {
-    super.initState();
-    _tags = widget._tags;
-  }
-
   @override
   void dispose() {
     for (int i = 0; i < _TagField._maxCount; ++i) {
@@ -345,7 +355,7 @@ class _TagState extends State<_TagField> {
       width: double.infinity,
       enableFilter: true,
       dropdownMenuEntries: [
-        ..._tags.map(
+        ...widget._tags.map(
           (tag) => DropdownMenuEntry(
             value: tag.id, 
             label: tag.name,
@@ -369,25 +379,18 @@ class _ContentField extends StatefulWidget {
   static const int _titleMaxLength = 50;
   static const int _descriptionMaxLength = 300;
 
+  const _ContentField({
+    required List<TextEditingController> titleEditingControllers,
+    required List<TextEditingController> descriptionEditingControllers,
+  }):
+  _titleEditingControllers = titleEditingControllers,
+  _descriptionEditingControllers = descriptionEditingControllers;
+
   @override
   _ContentState createState() => _ContentState();
 
-  final List<TextEditingController> _titleEditingControllers = List.generate(_maxCount, (_) => TextEditingController());
-  final List<TextEditingController> _descriptionEditingControllers = List.generate(_maxCount, (_) => TextEditingController());
-
-  List<ContentModel> getInput() {
-    List<ContentModel> list = [];
-
-    for (int i = 0; i < _ContentField._maxCount; ++i) {
-      list.add(
-        ContentModel(
-          title: _titleEditingControllers[i].text, 
-          description: _descriptionEditingControllers[i].text
-        )
-      );
-    }
-    return list;
-  }
+  final List<TextEditingController> _titleEditingControllers;
+  final List<TextEditingController> _descriptionEditingControllers;
 }
 
 class _ContentState extends State<_ContentField> {
@@ -534,7 +537,9 @@ class _SubHeader extends StatelessWidget {
   wrapper: previewWrapper,
 )
 Widget previewAmountField() {
-  return _AmountField();
+  return _AmountField(
+    amountController: TextEditingController(),
+  );
 }
 
 @Preview(
@@ -551,7 +556,8 @@ Widget previewShopField() {
       ShopModel(id: 4, name: 'E', ),
       ShopModel(id: 5, name: 'F', ),
       ShopModel(id: 6, name: 'G', ),
-    ]
+    ],
+    shopEditingController: TextEditingController(),
   );
 }
 
@@ -569,7 +575,8 @@ Widget previewCategoryField() {
       CategoryModel(id: 4, name: 'E', ),
       CategoryModel(id: 5, name: 'F', ),
       CategoryModel(id: 6, name: 'G', ),
-    ]
+    ],
+    categoryEditingController: TextEditingController(),
   );
 }
 
@@ -588,6 +595,7 @@ Widget perviewTagField() {
       TagModel(id: 5, name: 'F', ),
       TagModel(id: 6, name: 'G', ),
     ],
+    tagControllers: List.generate(_TagField._maxCount, (_) => TextEditingController()),
   );
 }
 
@@ -596,5 +604,8 @@ Widget perviewTagField() {
   wrapper: previewWrapper,
 )
 Widget previewContent() {
-  return _ContentField();
+  return _ContentField(
+    titleEditingControllers: List.generate(_ContentField._maxCount, (_) => TextEditingController()),
+    descriptionEditingControllers: List.generate(_ContentField._maxCount, (_) => TextEditingController()),
+  );
 }

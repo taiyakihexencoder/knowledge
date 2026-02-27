@@ -1,5 +1,5 @@
 import 'package:budgeting_app/data/services/shop_service.dart';
-import 'package:budgeting_app/domain/entities/shop_entity.dart';
+import 'package:budgeting_app/data/entities/shop_entity.dart';
 
 /// 購入先情報Repository
 class ShopRepository {
@@ -11,14 +11,12 @@ class ShopRepository {
   final ShopService _shopService;
 
   /// 指定した購入先情報を取得する
-  ShopEntity getShop(int shopId) {
-    String json = _shopService.getShop(shopId);
-    return ShopEntity.fromJson(json);
+  Future<ShopEntity> getShop(int shopId) {
+    return _shopService.getShop(shopId);
   }
 
   /// 登録済のすべての購入先をリストとして取得する
-  List<ShopEntity> getAllShopList() {
-    String json = _shopService.getAllShopList();
-    return ShopEntity.fromListJson(json);
+  Future<List<ShopEntity>> getAllShopList() {
+    return _shopService.getAllShopList();
   }
 }

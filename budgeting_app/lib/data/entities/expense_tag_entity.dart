@@ -1,4 +1,4 @@
-import 'package:budgeting_app/domain/entities/entity_common.dart';
+import 'package:budgeting_app/data/entities/entity_common.dart';
 
 /// 消費情報登録用タグ情報Entity
 class ExpenseTagEntity {
