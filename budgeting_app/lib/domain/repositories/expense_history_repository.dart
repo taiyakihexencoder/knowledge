@@ -18,6 +18,7 @@ class ExpenseHistoryRepository {
     return ExpenseHistoryEntity.fromListJson(json);
   }
 
+  /// ログを追加
   int createLog({
     required ExpenseLogEntity log,
   }) {
