@@ -1,6 +1,5 @@
 import 'package:budgeting_app/data/services/expense_category_service.dart';
 import 'package:budgeting_app/data/entities/expense_category_entity.dart';
-import 'package:budgeting_app/data/services/services.dart';
 
 /// 消費カテゴリー情報Repository
 class ExpenseCategoryRepository {
@@ -13,7 +12,7 @@ class ExpenseCategoryRepository {
 
   /// IDからカテゴリーを取得する
   Future<ExpenseCategoryEntity> getCategory(int categoryId) {
-    return expenseCategoryService.getCategory(categoryId);
+    return _expenseCategoryService.getCategory(categoryId);
   }
 
   /// 登録済のすべてのカテゴリーをリストとして取得する

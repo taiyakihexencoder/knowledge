@@ -4,7 +4,7 @@ import 'package:budgeting_app/domain/repositories/expense_history_repository.dar
 import 'package:budgeting_app/domain/repositories/expense_tag_repository.dart';
 import 'package:budgeting_app/domain/repositories/shop_repository.dart';
 
-const ExpenseHistoryRepository historyRepository = ExpenseHistoryRepository(historyService: historyService);
-const ExpenseCategoryRepository categoryRepository = ExpenseCategoryRepository(expenseCategoryService: expenseCategoryService);
-const ExpenseTagRepository tagRepository = ExpenseTagRepository(expenseTagService: expenseTagService);
-const ShopRepository shopRepository = ShopRepository(shopService: shopService);
+ExpenseHistoryRepository historyRepository = ExpenseHistoryRepository(historyService: services.historyService);
+ExpenseCategoryRepository categoryRepository = ExpenseCategoryRepository(expenseCategoryService: services.expenseCategoryService);
+ExpenseTagRepository tagRepository = ExpenseTagRepository(expenseTagService: services.expenseTagService);
+ShopRepository shopRepository = ShopRepository(shopService: services.shopService);
