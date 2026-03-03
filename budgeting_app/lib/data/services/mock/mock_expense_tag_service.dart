@@ -59,4 +59,27 @@ class MockExpenseTagService implements ExpenseTagService {
 ]
 ''';
   }
+
+  @override
+  Future<bool> addTag({
+    required String name,
+  }) {
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> updateTagName({
+    required int id, 
+    required String name,
+  }) {
+    return Future.value(true);
+  }
+
+  @override
+  Future<void> deleteTag({
+    required int id,
+  }) {
+    return Future.value();
+  }
+
 }

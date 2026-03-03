@@ -19,4 +19,32 @@ class ShopRepository {
   Future<List<ShopEntity>> getAllShopList() {
     return _shopService.getAllShopList();
   }
+
+  /// 購入先を追加する。
+  /// 
+  /// すでにあるものと重複している場合は追加できずfalse, 
+  /// それ以外はtrue
+  Future<bool> addShop({
+    required String name,
+  }) {
+    return _shopService.addShop(name: name);
+  }
+
+  /// 購入先を上書きする。
+  /// 
+  /// すでにあるものと重複している場合は追加できずfalse, 
+  /// それ以外はtrue
+  Future<bool> updateShopName({
+    required int id, 
+    required String name,
+  }) {
+    return _shopService.updateShopName(id: id, name: name);
+  }
+
+  /// 購入先を削除する
+  Future<void> deleteShop({
+    required int id
+  }) {
+    return _shopService.deleteShop(id: id);
+  }
 }

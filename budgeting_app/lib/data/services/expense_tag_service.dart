@@ -4,4 +4,25 @@ import 'package:budgeting_app/data/entities/expense_tag_entity.dart';
 abstract interface class ExpenseTagService {
   Future<List<ExpenseHistoryTagEntity>> getExpenseTagList(Iterable<int> ids);
   Future<List<ExpenseTagEntity>> getAllExpenseTagList();
+
+  /// タグの追加
+  /// 
+  /// 他と重複する名称になる場合はfalse
+  Future<bool> addTag({
+    required String name,
+  });
+
+  /// タグの名称変更
+  /// 
+  /// 他と重複する名称になる場合はfalse
+  Future<bool> updateTagName({
+    required int id, 
+    required String name,
+  });
+
+  /// タグの削除
+  Future<void> deleteTag({
+    required int id,
+  });
+
 }

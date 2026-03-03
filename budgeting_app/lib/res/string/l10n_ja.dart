@@ -50,10 +50,73 @@ class L10nJa extends L10n {
   String get newLogAdd => '新規追加';
 
   @override
+  String get settingsTop => '設定';
+
+  @override
+  String get settingsAttributes => '履歴の項目を編集';
+
+  @override
+  String get settingsAttributesCategory => 'カテゴリー一覧';
+
+  @override
+  String get settingsAttributesEditCategory => 'カテゴリーの編集';
+
+  @override
+  String get settingsAttributesAddCategory => 'カテゴリーの追加';
+
+  @override
+  String get settingsAttributesEditCategoryDescription => 'カテゴリーを入力';
+
+  @override
+  String settingsAttributesDeleteCategory(Object name) {
+    return 'カテゴリー \"$name\" を削除しますか？';
+  }
+
+  @override
+  String get settingsAttributesShop => '購入先一覧';
+
+  @override
+  String get settingsAttributesEditShop => '購入先の編集';
+
+  @override
+  String get settingsAttributesAddShop => '購入先の追加';
+
+  @override
+  String get settingsAttributesEditShopDescription => '購入先を入力';
+
+  @override
+  String settingsAttributesDeleteShop(Object name) {
+    return '購入先 \"$name\" を削除しますか？';
+  }
+
+  @override
+  String get settingsAttributesTag => 'タグ一覧';
+
+  @override
+  String get settingsAttributesEditTag => 'タグの編集';
+
+  @override
+  String get settingsAttributesAddTag => 'タグの追加';
+
+  @override
+  String get settingsAttributesEditTagDescription => 'タグを入力';
+
+  @override
+  String settingsAttributesDeleteTag(Object name) {
+    return 'タグ \"$name\" を削除しますか？';
+  }
+
+  @override
   String commonPrice(Object price) {
     return '$price円';
   }
 
   @override
   String get commonPriceSuffix => '円';
+
+  @override
+  String get commonOk => 'OK';
+
+  @override
+  String get commonCancel => 'キャンセル';
 }

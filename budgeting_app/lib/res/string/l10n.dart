@@ -171,6 +171,108 @@ abstract class L10n {
   /// **'新規追加'**
   String get newLogAdd;
 
+  /// No description provided for @settingsTop.
+  ///
+  /// In ja, this message translates to:
+  /// **'設定'**
+  String get settingsTop;
+
+  /// No description provided for @settingsAttributes.
+  ///
+  /// In ja, this message translates to:
+  /// **'履歴の項目を編集'**
+  String get settingsAttributes;
+
+  /// No description provided for @settingsAttributesCategory.
+  ///
+  /// In ja, this message translates to:
+  /// **'カテゴリー一覧'**
+  String get settingsAttributesCategory;
+
+  /// No description provided for @settingsAttributesEditCategory.
+  ///
+  /// In ja, this message translates to:
+  /// **'カテゴリーの編集'**
+  String get settingsAttributesEditCategory;
+
+  /// No description provided for @settingsAttributesAddCategory.
+  ///
+  /// In ja, this message translates to:
+  /// **'カテゴリーの追加'**
+  String get settingsAttributesAddCategory;
+
+  /// No description provided for @settingsAttributesEditCategoryDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'カテゴリーを入力'**
+  String get settingsAttributesEditCategoryDescription;
+
+  /// No description provided for @settingsAttributesDeleteCategory.
+  ///
+  /// In ja, this message translates to:
+  /// **'カテゴリー \"{name}\" を削除しますか？'**
+  String settingsAttributesDeleteCategory(Object name);
+
+  /// No description provided for @settingsAttributesShop.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先一覧'**
+  String get settingsAttributesShop;
+
+  /// No description provided for @settingsAttributesEditShop.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先の編集'**
+  String get settingsAttributesEditShop;
+
+  /// No description provided for @settingsAttributesAddShop.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先の追加'**
+  String get settingsAttributesAddShop;
+
+  /// No description provided for @settingsAttributesEditShopDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先を入力'**
+  String get settingsAttributesEditShopDescription;
+
+  /// No description provided for @settingsAttributesDeleteShop.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先 \"{name}\" を削除しますか？'**
+  String settingsAttributesDeleteShop(Object name);
+
+  /// No description provided for @settingsAttributesTag.
+  ///
+  /// In ja, this message translates to:
+  /// **'タグ一覧'**
+  String get settingsAttributesTag;
+
+  /// No description provided for @settingsAttributesEditTag.
+  ///
+  /// In ja, this message translates to:
+  /// **'タグの編集'**
+  String get settingsAttributesEditTag;
+
+  /// No description provided for @settingsAttributesAddTag.
+  ///
+  /// In ja, this message translates to:
+  /// **'タグの追加'**
+  String get settingsAttributesAddTag;
+
+  /// No description provided for @settingsAttributesEditTagDescription.
+  ///
+  /// In ja, this message translates to:
+  /// **'タグを入力'**
+  String get settingsAttributesEditTagDescription;
+
+  /// No description provided for @settingsAttributesDeleteTag.
+  ///
+  /// In ja, this message translates to:
+  /// **'タグ \"{name}\" を削除しますか？'**
+  String settingsAttributesDeleteTag(Object name);
+
   /// No description provided for @commonPrice.
   ///
   /// In ja, this message translates to:
@@ -182,6 +284,18 @@ abstract class L10n {
   /// In ja, this message translates to:
   /// **'円'**
   String get commonPriceSuffix;
+
+  /// No description provided for @commonOk.
+  ///
+  /// In ja, this message translates to:
+  /// **'OK'**
+  String get commonOk;
+
+  /// No description provided for @commonCancel.
+  ///
+  /// In ja, this message translates to:
+  /// **'キャンセル'**
+  String get commonCancel;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

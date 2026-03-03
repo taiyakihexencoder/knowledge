@@ -33,4 +33,26 @@ class MockShopService implements ShopService {
 ]
 ''';
   }
+
+  @override
+  Future<bool> addShop({
+    required String name,
+  }) {
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> updateShopName({
+    required int id, 
+    required String name,
+  }) {
+    return Future.value(true);
+  }
+
+  @override
+  Future<void> deleteShop({
+    required int id,
+  }) {
+    return Future.value();
+  }
 }

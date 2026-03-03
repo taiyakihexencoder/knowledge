@@ -1,4 +1,5 @@
 import 'package:budgeting_app/res/string/l10n.dart';
+import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/history/view_models/history_list_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_list/history_list_element.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ class HistoryList extends StatelessWidget {
   HistoryList({
     super.key,
     required HistoryListViewModel viewModel,
-    required Function(BuildContext context) navigateToNewLog,
+    required Function(BuildContext context) navigateToNewLog
   }) : 
   _viewModel = viewModel,
   _navigateToNewLog = navigateToNewLog;
@@ -27,6 +28,7 @@ class HistoryList extends StatelessWidget {
         },
         child: const Icon(Icons.add),
       ),
+      bottomNavigationBar: bottomNavigationBar,
       body: ValueListenableBuilder(
         valueListenable: _viewModel.models, 
         builder: (_, models, _) => CustomScrollView(

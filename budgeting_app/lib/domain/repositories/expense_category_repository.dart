@@ -19,4 +19,32 @@ class ExpenseCategoryRepository {
   Future<List<ExpenseCategoryEntity>> getAllCategoryList() {
     return _expenseCategoryService.getAllCategoryList();
   }
+
+  /// 購入カテゴリーを追加する
+  /// 
+  /// すでにあるものと重複している場合は追加できずfalse, 
+  /// それ以外はtrue
+  Future<bool> addCategory({
+    required String name,
+  }) {
+    return _expenseCategoryService.addCategory(name: name);
+  }
+
+  /// 購入カテゴリーを上書きする
+  /// 
+  /// すでにあるものと重複している場合は追加できずfalse, 
+  /// それ以外はtrue
+  Future<bool> updateCategory({
+    required int id,
+    required String name,
+  }) {
+    return _expenseCategoryService.updateCategoryName(id: id, name: name);
+  }
+
+  /// 購入カテゴリーを削除する
+  Future<void> deleteCategory({
+    required int id,
+  }) {
+    return _expenseCategoryService.deleteCategory(id: id);
+  }
 }

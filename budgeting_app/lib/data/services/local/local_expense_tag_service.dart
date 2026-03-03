@@ -50,6 +50,65 @@ class LocalExpenseTagService implements ExpenseTagService {
       );
   }
 
+  
+  @override
+  Future<bool> addTag({
+    required String name,
+  }) async {
+    return (_database.select(_database.expenseTag)..where((column) => column.name.equals(name))).getSingleOrNull()
+      .then(
+        (record) async {
+          if (record == null) {
+            return _database.into(_database.expenseTag).insert(
+              ExpenseTagCompanion(
+                name: Value(name),
+              )  
+            ).then( (_) => true, );
+          } else {
+            return false;
+          }
+        },
+      );
+  }
+
+  @override
+  Future<bool> updateTagName({
+    required int id,
+    required String name,
+  }) async {
+    return (_database.select(_database.expenseTag)..where((column) => column.name.equals(name))).getSingleOrNull()
+      .then(
+        (record) async {
+          if (record == null) {
+            return (_database.update(_database.expenseTag)
+              ..where((column) => column.id.equals(id))
+            ).write(
+              ExpenseTagCompanion(
+                name: Value(name),
+              )
+            ).then( (_) => true, );
+          } else {
+            return false;
+          }
+        }
+      );
+  }
+
+  @override
+  Future<void> deleteTag({
+    required int id,
+  }) async {
+    await (
+      _database.delete(_database.expenseTag)
+        ..where((column) => column.id.equals(id))
+    ).go();
+
+    await (
+      _database.delete(_database.expenseHistoryTag)
+        ..where((column) => column.tagId.equals(id))
+    ).go();
+  }
+
   ExpenseTagEntity convert(ExpenseTagData record) {
     return ExpenseTagEntity(
       id: record.id, 

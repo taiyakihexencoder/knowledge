@@ -32,6 +32,59 @@ class LocalShopService implements ShopService {
     );
   }
 
+  @override
+  Future<bool> addShop({
+    required String name,
+  }) async {
+    return (select..where((column) => column.name.equals(name))).getSingleOrNull()
+      .then(
+        (record) async {
+          if (record == null) {
+            return _database.into(_database.shop).insert(
+              ShopCompanion(
+                name: Value(name),
+              )
+            ).then( (_) => true, );
+          } else {
+            return false;
+          }
+        }
+      );
+  }
+
+  @override
+  Future<bool> updateShopName({
+    required int id, 
+    required String name,
+  }) async {
+    return (select..where((column) => column.name.equals(name))).getSingleOrNull()
+      .then(
+        (record) async {
+          if (record == null) {
+            return (_database.update(_database.shop)
+              ..where((column) => column.id.equals(id))
+            ).write(
+              ShopCompanion(
+                name: Value(name),
+              )
+            ).then( (_) => true, );
+          } else {
+            return false;
+          }
+        }
+      );
+  }
+
+  @override
+  Future<void> deleteShop({
+    required int id,
+  }) async {
+    await (
+      _database.delete(_database.shop)
+        ..where((column) => column.id.equals(id))
+    ).go();
+  }
+
   ShopEntity convert(ShopData record) {
     return ShopEntity(
       id: record.id, 

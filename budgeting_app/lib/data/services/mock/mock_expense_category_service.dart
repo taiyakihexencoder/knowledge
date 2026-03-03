@@ -35,4 +35,26 @@ class MockExpenseCategoryService implements ExpenseCategoryService {
 ]
 ''';
   }
+
+  @override
+  Future<bool> addCategory({
+    required String name,
+  }) {
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> updateCategoryName({
+    required int id,
+    required String name
+  }) {
+    return Future.value(true);
+  }
+
+  @override
+  Future<void> deleteCategory({
+    required int id,
+  }) {
+    return Future.value();
+  }
 }

@@ -25,4 +25,33 @@ class ExpenseTagRepository {
   Future<List<ExpenseTagEntity>> getAllTags() {
     return _expenseTagService.getAllExpenseTagList();
   }
+
+  /// タグを追加する
+  /// 
+  /// すでにあるものと重複している場合は追加できずfalse, 
+  /// それ以外はtrue
+  Future<bool> addTag({
+    required String name,
+  }) {
+    return _expenseTagService.addTag(name: name);
+  }
+
+  /// タグを上書きする
+  /// 
+  /// すでにあるものと重複している場合は追加できずfalse, 
+  /// それ以外はtrue
+  Future<bool> updateTag({
+    required int id,
+    required String name,
+  }) {
+    return _expenseTagService.updateTagName(id: id, name: name);
+  }
+
+  /// タグを削除する
+  Future<void> deleteTag({
+    required int id,
+  }) {
+    return _expenseTagService.deleteTag(id: id);
+  }
+
 }
