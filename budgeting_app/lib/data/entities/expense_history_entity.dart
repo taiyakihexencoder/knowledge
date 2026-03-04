@@ -44,7 +44,7 @@ class ExpenseHistoryEntity {
         categoryId: categoryId, 
         shopId: shopId, 
         amount: amount, 
-        usedAt: usedAt
+        usedAt: usedAt,
       ),
       _ => throw FormatException(),
     };

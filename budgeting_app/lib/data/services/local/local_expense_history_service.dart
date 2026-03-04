@@ -1,4 +1,5 @@
 import 'package:budgeting_app/data/db/budgeting_app_database.dart';
+import 'package:budgeting_app/data/entities/expense_history_content_entity.dart';
 import 'package:budgeting_app/data/entities/expense_history_entity.dart';
 import 'package:budgeting_app/data/entities/expense_log_entity.dart';
 import 'package:budgeting_app/data/services/expense_history_service.dart';
@@ -61,18 +62,49 @@ class LocalExpenseHistoryService implements ExpenseHistoryService {
   Future<List<ExpenseHistoryEntity>> getHistoryList() {
     return _select.get().then(
       (list) => list.map(
-        (data) => convert(data)
+        (data) => _convert(data)
       ).toList()
     );
   }
 
-  ExpenseHistoryEntity convert(ExpenseHistoryData data) {
+  @override
+  Future<ExpenseHistoryEntity?> getHistory({
+    required int historyId,
+  }) {
+    return (_select..where((column) => column.id.equals(BigInt.from(historyId)))).getSingleOrNull()
+      .then(
+        (record) => record == null ? null : _convert(record)
+      );
+  }
+
+  @override
+  Future<List<ExpenseHistoryContentEntity>> getHistoryContents({
+    required int historyId,
+  }) {
+    return (_database.select(_database.expenseContent)..where((column) => column.historyId.equals(BigInt.from(historyId)))).get()
+      .then(
+        (records) => records.map(
+          (record) => _convertContent(record),
+        ).toList()
+      );
+  }
+
+  ExpenseHistoryEntity _convert(ExpenseHistoryData data) {
     return ExpenseHistoryEntity(
       id: data.id.toInt(), 
       categoryId: data.categoryId, 
       shopId: data.shopId, 
       amount: data.amount, 
-      usedAt: data.usedAt
+      usedAt: data.usedAt,
+    );
+  }
+
+  ExpenseHistoryContentEntity _convertContent(ExpenseContentData data) {
+    return ExpenseHistoryContentEntity(
+      id: data.id.toInt(),
+      historyId: data.historyId.toInt(), 
+      title: data.title, 
+      description: data.description,
     );
   }
 

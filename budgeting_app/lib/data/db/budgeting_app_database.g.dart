@@ -203,12 +203,10 @@ class $ExpenseContentTable extends ExpenseContent
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ExpenseContentTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _historyIdMeta = const VerificationMeta(
-    'historyId',
-  );
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<BigInt> historyId = GeneratedColumn<BigInt>(
-    'history_id',
+  late final GeneratedColumn<BigInt> id = GeneratedColumn<BigInt>(
+    'id',
     aliasedName,
     false,
     hasAutoIncrement: true,
@@ -217,6 +215,17 @@ class $ExpenseContentTable extends ExpenseContent
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'PRIMARY KEY AUTOINCREMENT',
     ),
+  );
+  static const VerificationMeta _historyIdMeta = const VerificationMeta(
+    'historyId',
+  );
+  @override
+  late final GeneratedColumn<BigInt> historyId = GeneratedColumn<BigInt>(
+    'history_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.bigInt,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
@@ -247,7 +256,7 @@ class $ExpenseContentTable extends ExpenseContent
     requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [historyId, title, description];
+  List<GeneratedColumn> get $columns => [id, historyId, title, description];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -260,11 +269,16 @@ class $ExpenseContentTable extends ExpenseContent
   }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
     if (data.containsKey('history_id')) {
       context.handle(
         _historyIdMeta,
         historyId.isAcceptableOrUnknown(data['history_id']!, _historyIdMeta),
       );
+    } else if (isInserting) {
+      context.missing(_historyIdMeta);
     }
     if (data.containsKey('title')) {
       context.handle(
@@ -289,11 +303,15 @@ class $ExpenseContentTable extends ExpenseContent
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {historyId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ExpenseContentData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ExpenseContentData(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.bigInt,
+        data['${effectivePrefix}id'],
+      )!,
       historyId: attachedDatabase.typeMapping.read(
         DriftSqlType.bigInt,
         data['${effectivePrefix}history_id'],
@@ -317,10 +335,12 @@ class $ExpenseContentTable extends ExpenseContent
 
 class ExpenseContentData extends DataClass
     implements Insertable<ExpenseContentData> {
+  final BigInt id;
   final BigInt historyId;
   final String title;
   final String description;
   const ExpenseContentData({
+    required this.id,
     required this.historyId,
     required this.title,
     required this.description,
@@ -328,6 +348,7 @@ class ExpenseContentData extends DataClass
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    map['id'] = Variable<BigInt>(id);
     map['history_id'] = Variable<BigInt>(historyId);
     map['title'] = Variable<String>(title);
     map['description'] = Variable<String>(description);
@@ -336,6 +357,7 @@ class ExpenseContentData extends DataClass
 
   ExpenseContentCompanion toCompanion(bool nullToAbsent) {
     return ExpenseContentCompanion(
+      id: Value(id),
       historyId: Value(historyId),
       title: Value(title),
       description: Value(description),
@@ -348,6 +370,7 @@ class ExpenseContentData extends DataClass
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ExpenseContentData(
+      id: serializer.fromJson<BigInt>(json['id']),
       historyId: serializer.fromJson<BigInt>(json['historyId']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
@@ -357,6 +380,7 @@ class ExpenseContentData extends DataClass
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
+      'id': serializer.toJson<BigInt>(id),
       'historyId': serializer.toJson<BigInt>(historyId),
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String>(description),
@@ -364,16 +388,19 @@ class ExpenseContentData extends DataClass
   }
 
   ExpenseContentData copyWith({
+    BigInt? id,
     BigInt? historyId,
     String? title,
     String? description,
   }) => ExpenseContentData(
+    id: id ?? this.id,
     historyId: historyId ?? this.historyId,
     title: title ?? this.title,
     description: description ?? this.description,
   );
   ExpenseContentData copyWithCompanion(ExpenseContentCompanion data) {
     return ExpenseContentData(
+      id: data.id.present ? data.id.value : this.id,
       historyId: data.historyId.present ? data.historyId.value : this.historyId,
       title: data.title.present ? data.title.value : this.title,
       description: data.description.present
@@ -385,6 +412,7 @@ class ExpenseContentData extends DataClass
   @override
   String toString() {
     return (StringBuffer('ExpenseContentData(')
+          ..write('id: $id, ')
           ..write('historyId: $historyId, ')
           ..write('title: $title, ')
           ..write('description: $description')
@@ -393,37 +421,44 @@ class ExpenseContentData extends DataClass
   }
 
   @override
-  int get hashCode => Object.hash(historyId, title, description);
+  int get hashCode => Object.hash(id, historyId, title, description);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ExpenseContentData &&
+          other.id == this.id &&
           other.historyId == this.historyId &&
           other.title == this.title &&
           other.description == this.description);
 }
 
 class ExpenseContentCompanion extends UpdateCompanion<ExpenseContentData> {
+  final Value<BigInt> id;
   final Value<BigInt> historyId;
   final Value<String> title;
   final Value<String> description;
   const ExpenseContentCompanion({
+    this.id = const Value.absent(),
     this.historyId = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
   });
   ExpenseContentCompanion.insert({
-    this.historyId = const Value.absent(),
+    this.id = const Value.absent(),
+    required BigInt historyId,
     required String title,
     required String description,
-  }) : title = Value(title),
+  }) : historyId = Value(historyId),
+       title = Value(title),
        description = Value(description);
   static Insertable<ExpenseContentData> custom({
+    Expression<BigInt>? id,
     Expression<BigInt>? historyId,
     Expression<String>? title,
     Expression<String>? description,
   }) {
     return RawValuesInsertable({
+      if (id != null) 'id': id,
       if (historyId != null) 'history_id': historyId,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
@@ -431,11 +466,13 @@ class ExpenseContentCompanion extends UpdateCompanion<ExpenseContentData> {
   }
 
   ExpenseContentCompanion copyWith({
+    Value<BigInt>? id,
     Value<BigInt>? historyId,
     Value<String>? title,
     Value<String>? description,
   }) {
     return ExpenseContentCompanion(
+      id: id ?? this.id,
       historyId: historyId ?? this.historyId,
       title: title ?? this.title,
       description: description ?? this.description,
@@ -445,6 +482,9 @@ class ExpenseContentCompanion extends UpdateCompanion<ExpenseContentData> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<BigInt>(id.value);
+    }
     if (historyId.present) {
       map['history_id'] = Variable<BigInt>(historyId.value);
     }
@@ -460,6 +500,7 @@ class ExpenseContentCompanion extends UpdateCompanion<ExpenseContentData> {
   @override
   String toString() {
     return (StringBuffer('ExpenseContentCompanion(')
+          ..write('id: $id, ')
           ..write('historyId: $historyId, ')
           ..write('title: $title, ')
           ..write('description: $description')
@@ -1578,12 +1619,14 @@ typedef $$ExpenseCategoryTableProcessedTableManager =
     >;
 typedef $$ExpenseContentTableCreateCompanionBuilder =
     ExpenseContentCompanion Function({
-      Value<BigInt> historyId,
+      Value<BigInt> id,
+      required BigInt historyId,
       required String title,
       required String description,
     });
 typedef $$ExpenseContentTableUpdateCompanionBuilder =
     ExpenseContentCompanion Function({
+      Value<BigInt> id,
       Value<BigInt> historyId,
       Value<String> title,
       Value<String> description,
@@ -1598,6 +1641,11 @@ class $$ExpenseContentTableFilterComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnFilters<BigInt> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
   ColumnFilters<BigInt> get historyId => $composableBuilder(
     column: $table.historyId,
     builder: (column) => ColumnFilters(column),
@@ -1623,6 +1671,11 @@ class $$ExpenseContentTableOrderingComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  ColumnOrderings<BigInt> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<BigInt> get historyId => $composableBuilder(
     column: $table.historyId,
     builder: (column) => ColumnOrderings(column),
@@ -1648,6 +1701,9 @@ class $$ExpenseContentTableAnnotationComposer
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
+  GeneratedColumn<BigInt> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
   GeneratedColumn<BigInt> get historyId =>
       $composableBuilder(column: $table.historyId, builder: (column) => column);
 
@@ -1697,20 +1753,24 @@ class $$ExpenseContentTableTableManager
               $$ExpenseContentTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
+                Value<BigInt> id = const Value.absent(),
                 Value<BigInt> historyId = const Value.absent(),
                 Value<String> title = const Value.absent(),
                 Value<String> description = const Value.absent(),
               }) => ExpenseContentCompanion(
+                id: id,
                 historyId: historyId,
                 title: title,
                 description: description,
               ),
           createCompanionCallback:
               ({
-                Value<BigInt> historyId = const Value.absent(),
+                Value<BigInt> id = const Value.absent(),
+                required BigInt historyId,
                 required String title,
                 required String description,
               }) => ExpenseContentCompanion.insert(
+                id: id,
                 historyId: historyId,
                 title: title,
                 description: description,

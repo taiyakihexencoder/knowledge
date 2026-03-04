@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:budgeting_app/data/entities/expense_history_content_entity.dart';
 import 'package:budgeting_app/data/entities/expense_history_entity.dart';
 import 'package:budgeting_app/data/entities/expense_log_entity.dart';
 import 'package:budgeting_app/data/services/expense_history_service.dart';
@@ -39,6 +40,32 @@ class MockExpenseHistoryService implements ExpenseHistoryService {
   { "id": 20, "category_id": 2, "shop_id": 1, "amount": 676500, "used_at": "20260120" }
 ]
 ''';
+  }
+
+  @override
+  Future<ExpenseHistoryEntity?> getHistory({
+    required int historyId,
+  }) {
+    return Future.value(ExpenseHistoryEntity.fromJson(_mockHistory()));
+  }
+
+  String _mockHistory() {
+    return '{ "id": 1, "category_id": 1, "shop_id": 1, "amount": 100, "used_at": "20260101" }';
+  }
+
+  @override
+  Future<List<ExpenseHistoryContentEntity>> getHistoryContents({
+    required int historyId,
+  }) {
+    return Future.value(ExpenseHistoryContentEntity.fromListJson(_mockHistoryContent()));
+  }
+
+  String _mockHistoryContent() {
+    return
+      '[' 
+      '{ "id": 1, "history_id": 1, "title": "タイトル1", "description": "説明"},'
+      '{ "id": 2, "history_id": 1, "title": "タイトル2", "description": "説明2"}'
+      ']';
   }
 
   @override

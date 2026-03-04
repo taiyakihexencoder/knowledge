@@ -1,14 +1,15 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
+import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
 import 'package:flutter/material.dart';
 
 class HistoryDetail extends StatefulWidget{
-  HistoryDetail({
+  const HistoryDetail({
     super.key,
-    required historyId,
-  }) : _historyId = historyId;
+    required HistoryDetailViewModel viewModel,
+  }) : _viewModel = viewModel;
 
-  final int _historyId;
+  final HistoryDetailViewModel _viewModel;
 
   @override
   HistoryDetailState createState() {
