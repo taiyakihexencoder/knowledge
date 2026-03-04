@@ -66,7 +66,8 @@ class ExpenseContent extends Table {
   @override
   String get tableName => 'expense_content';
 
-  Int64Column get historyId => int64().named('history_id').autoIncrement()();
+  Int64Column get id => int64().named('id').autoIncrement()();
+  Int64Column get historyId => int64().named('history_id')();
   TextColumn get title => text().named('title').withLength(min: 0, max: 50)();
   TextColumn get description => text().named('description').withLength(min: 0, max: 300)();
 }
