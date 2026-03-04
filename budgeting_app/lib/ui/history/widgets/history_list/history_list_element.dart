@@ -70,7 +70,7 @@ class HistoryListElement extends StatelessWidget {
                     ...model.tags.map(
                       (tag) => HistoryListElementTagWidget(name: tag),
                     ),
-                  ]
+                  ],
                 )
               )
           ],

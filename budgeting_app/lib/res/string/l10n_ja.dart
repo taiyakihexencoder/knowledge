@@ -18,6 +18,33 @@ class L10nJa extends L10n {
   String get expenseHistoryDetail => '消費の詳細';
 
   @override
+  String get expenseHistoryDetailFailed => '履歴の情報が取得できませんでした';
+
+  @override
+  String get expenseHisotryDetailDateTimeFormat => 'yyyy/MM/dd (E)';
+
+  @override
+  String get expenseHistoryDetailAmount => '消費金額';
+
+  @override
+  String get expenseHistoryDetailShop => '購入先';
+
+  @override
+  String get expenseHistoryDetailCategory => 'カテゴリー';
+
+  @override
+  String get expenseHistoryDetailTag => '設定されているタグ';
+
+  @override
+  String get expenseHistoryDetailTagEmpty => 'タグが設定されていません';
+
+  @override
+  String get expenseHistoryDetailContent => '詳細情報';
+
+  @override
+  String get expenseHistoryDetailContentEmpty => '詳細の情報は設定されていません';
+
+  @override
   String get newLog => '購入情報の追加';
 
   @override

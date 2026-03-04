@@ -37,6 +37,7 @@ class HistoryListViewModel {
   final ValueNotifier<List<HistoryModel>> _models;
   ValueNotifier<List<HistoryModel>> get models => _models;
 
+  /// 履歴リストの更新
   void refreshList() async {
     List<ExpenseHistoryEntity> historyList = await _historyRepository.getHistoryList();
     Map<int, List<ExpenseHistoryTagEntity>> tagMap = await _tagRepository.getTags(

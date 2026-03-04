@@ -60,7 +60,6 @@ class HistoryDetailModel {
 /// 購入詳細UIのモデル
 class HistoryDetailContentModel {
   const HistoryDetailContentModel ({
-    required this.id,
     required this.title,
     required this.description,
   });
@@ -69,13 +68,9 @@ class HistoryDetailContentModel {
   HistoryDetailContentModel.from({
     required ExpenseHistoryContentEntity content
   }) : this(
-    id: content.id,
     title: content.title,
     description: content.description,
   );
-
-  /// ID
-  final int id;
 
   /// 詳細タイトル
   final String title;

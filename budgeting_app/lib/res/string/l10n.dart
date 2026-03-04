@@ -111,6 +111,60 @@ abstract class L10n {
   /// **'消費の詳細'**
   String get expenseHistoryDetail;
 
+  /// No description provided for @expenseHistoryDetailFailed.
+  ///
+  /// In ja, this message translates to:
+  /// **'履歴の情報が取得できませんでした'**
+  String get expenseHistoryDetailFailed;
+
+  /// No description provided for @expenseHisotryDetailDateTimeFormat.
+  ///
+  /// In ja, this message translates to:
+  /// **'yyyy/MM/dd (E)'**
+  String get expenseHisotryDetailDateTimeFormat;
+
+  /// No description provided for @expenseHistoryDetailAmount.
+  ///
+  /// In ja, this message translates to:
+  /// **'消費金額'**
+  String get expenseHistoryDetailAmount;
+
+  /// No description provided for @expenseHistoryDetailShop.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先'**
+  String get expenseHistoryDetailShop;
+
+  /// No description provided for @expenseHistoryDetailCategory.
+  ///
+  /// In ja, this message translates to:
+  /// **'カテゴリー'**
+  String get expenseHistoryDetailCategory;
+
+  /// No description provided for @expenseHistoryDetailTag.
+  ///
+  /// In ja, this message translates to:
+  /// **'設定されているタグ'**
+  String get expenseHistoryDetailTag;
+
+  /// No description provided for @expenseHistoryDetailTagEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'タグが設定されていません'**
+  String get expenseHistoryDetailTagEmpty;
+
+  /// No description provided for @expenseHistoryDetailContent.
+  ///
+  /// In ja, this message translates to:
+  /// **'詳細情報'**
+  String get expenseHistoryDetailContent;
+
+  /// No description provided for @expenseHistoryDetailContentEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'詳細の情報は設定されていません'**
+  String get expenseHistoryDetailContentEmpty;
+
   /// No description provided for @newLog.
   ///
   /// In ja, this message translates to:

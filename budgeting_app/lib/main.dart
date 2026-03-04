@@ -12,8 +12,11 @@ import 'package:budgeting_app/ui/settings/widgets/settings_top/settings_top.dart
 import 'package:flutter/material.dart';
 
 import 'package:budgeting_app/res/string/l10n.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
 
-void main() {
+void main() async {
+  initializeDateFormatting(await findSystemLocale(), null);
   runApp(const MainApp());
 }
 
@@ -78,17 +81,17 @@ class HistoryListPage extends StatelessWidget {
   }
 }
 
-class HistoryDetailPage extends StatelessWidget{
+class HistoryDetailPage extends StatelessWidget {
   HistoryDetailPage({
     super.key,
     required int historyId,
   }): _viewModel = HistoryDetailViewModel(
-    historyId: historyId, 
-    historyRepository: historyRepository, 
-    categoryRepository: categoryRepository, 
-    tagRepository: tagRepository, 
-    shopRepository: shopRepository,
-  );
+      historyId: historyId, 
+      historyRepository: historyRepository, 
+      categoryRepository: categoryRepository, 
+      tagRepository: tagRepository, 
+      shopRepository: shopRepository,
+    );
 
   final HistoryDetailViewModel _viewModel;
 

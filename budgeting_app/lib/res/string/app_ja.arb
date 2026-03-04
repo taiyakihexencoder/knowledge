@@ -5,6 +5,15 @@
   "expenseHistory": "消費履歴",
 
   "expenseHistoryDetail": "消費の詳細",
+  "expenseHistoryDetailFailed": "履歴の情報が取得できませんでした",
+  "expenseHisotryDetailDateTimeFormat": "yyyy/MM/dd (E)",
+  "expenseHistoryDetailAmount": "消費金額",
+  "expenseHistoryDetailShop": "購入先",
+  "expenseHistoryDetailCategory": "カテゴリー",
+  "expenseHistoryDetailTag": "設定されているタグ",
+  "expenseHistoryDetailTagEmpty": "タグが設定されていません", 
+  "expenseHistoryDetailContent": "詳細情報",
+  "expenseHistoryDetailContentEmpty": "詳細の情報は設定されていません",
 
   "newLog": "購入情報の追加",
   "newLogAmount": "購入金額",

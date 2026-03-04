@@ -17,6 +17,13 @@ class ExpenseHistoryRepository {
     return _historyService.getHistoryList();
   }
 
+  /// 指定した購入履歴を取得する
+  Future<ExpenseHistoryEntity?> getHistory({
+    required int historyId,
+  }) {
+    return _historyService.getHistory(historyId: historyId);
+  }
+
   /// 購入詳細を取得する
   Future<List<ExpenseHistoryContentEntity>> getHistoryContents({
     required int historyId,
