@@ -20,62 +20,60 @@ class HistoryListElement extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextStyle? styleLabel = Theme.of(context).textTheme.labelLarge;
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
-      child: InkWell(
-        onTap: () {
-          _navigateToDetail(context, model.id);
-        },
-        child: Container(
-          color: Theme.of(context).cardColor,
-          child: Column(
-            spacing: 8.0,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Divider(
-                thickness: 0.5,
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 100.0,
-                    child: Text(
-                      model.usedAt,
-                      style: styleLabel,
+    return InkWell(
+      onTap: () {
+        _navigateToDetail(context, model.id);
+      },
+      child: Container(
+        padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+        color: Theme.of(context).cardColor,
+        child: Column(
+          spacing: 8.0,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Divider(
+              thickness: 0.5,
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 100.0,
+                  child: Text(
+                    model.usedAt,
+                    style: styleLabel,
+                  ),
+                ),
+                Text(
+                  model.shop ?? L10n.of(context)!.commonEmpty,
+                  style: styleLabel,
+                ),
+                const Spacer(),
+                Text(
+                  model.category ?? L10n.of(context)!.commonEmpty,
+                  style: styleLabel,
+                ),
+                const SizedBox(
+                  width: 12.0,
+                ),
+                Text(
+                  L10n.of(context)!.commonPrice(model.amount),
+                  style: styleLabel,
+                ),
+              ],
+            ),
+            if (model.tags.isNotEmpty)
+              SingleChildScrollView(
+                child:Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 8.0,
+                  children: [
+                    ...model.tags.map(
+                      (tag) => HistoryListElementTagWidget(name: tag),
                     ),
-                  ),
-                  Text(
-                    model.shop ?? L10n.of(context)!.commonEmpty,
-                    style: styleLabel,
-                  ),
-                  const Spacer(),
-                  Text(
-                    model.category ?? L10n.of(context)!.commonEmpty,
-                    style: styleLabel,
-                  ),
-                  const SizedBox(
-                    width: 12.0,
-                  ),
-                  Text(
-                    L10n.of(context)!.commonPrice(model.amount),
-                    style: styleLabel,
-                  ),
-                ],
-              ),
-              if (model.tags.isNotEmpty)
-                SingleChildScrollView(
-                  child:Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: 8.0,
-                    children: [
-                      ...model.tags.map(
-                        (tag) => HistoryListElementTagWidget(name: tag),
-                      ),
-                    ]
-                  )
+                  ]
                 )
-            ],
-          ),
+              )
+          ],
         ),
       ),
     );
