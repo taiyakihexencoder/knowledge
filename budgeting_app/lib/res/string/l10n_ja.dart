@@ -15,6 +15,9 @@ class L10nJa extends L10n {
   String get expenseHistory => '消費履歴';
 
   @override
+  String get expenseHistoryDetail => '消費の詳細';
+
+  @override
   String get newLog => '購入情報の追加';
 
   @override
@@ -48,6 +51,12 @@ class L10nJa extends L10n {
 
   @override
   String get newLogAdd => '新規追加';
+
+  @override
+  String get newLogErrorEmptyShop => '購入先が未設定';
+
+  @override
+  String get newLogErrorEmptyCategory => '購入カテゴリーが未設定';
 
   @override
   String get settingsTop => '設定';
@@ -119,4 +128,7 @@ class L10nJa extends L10n {
 
   @override
   String get commonCancel => 'キャンセル';
+
+  @override
+  String get commonEmpty => '未設定';
 }

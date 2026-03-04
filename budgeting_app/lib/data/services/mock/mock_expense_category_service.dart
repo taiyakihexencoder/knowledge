@@ -6,17 +6,18 @@ class MockExpenseCategoryService implements ExpenseCategoryService {
   const MockExpenseCategoryService();
 
   @override
-  Future<ExpenseCategoryEntity> getCategory(int categoryId) {
-    return Future.value(ExpenseCategoryEntity.fromJson(_mockCategory(categoryId)));
+  Future<ExpenseCategoryEntity?> getCategory(int categoryId) {
+    String? mockData = _mockCategory(categoryId);
+    return Future.value(mockData == null ? null : ExpenseCategoryEntity.fromJson(mockData));
   }
 
-  String _mockCategory(int categoryId) {
+  String? _mockCategory(int categoryId) {
     return switch (categoryId){
       1 => '{"id": 1, "name": "食費"}',
       2 => '{"id": 2, "name": "水道光熱費"}',
       3 => '{"id": 3, "name": "その他サービス費"}',
       4 => '{"id": 4, "name": "交通費"}',
-      _ => '{"id": 0, "name": "Unknown"}',
+      _ => null,
     };
   }
 

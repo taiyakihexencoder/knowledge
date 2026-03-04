@@ -16,13 +16,13 @@ class HistoryModel {
 
   HistoryModel.from({
     required ExpenseHistoryEntity expenseHistory,
-    required ExpenseCategoryEntity expenseCategory,
-    required ShopEntity shop,
+    required ExpenseCategoryEntity? expenseCategory,
+    required ShopEntity? shop,
     required Iterable<ExpenseHistoryTagEntity> expenseTags
   }) : this(
     id: expenseHistory.id,
-    category: expenseCategory.name,
-    shop: shop.name,
+    category: expenseCategory?.name,
+    shop: shop?.name,
     amount: expenseHistory.amount,
     usedAt: expenseHistory.usedAt,
     tags: expenseTags.map((tag) => tag.name).toList(),
@@ -32,10 +32,10 @@ class HistoryModel {
   final int id;
 
   /// カテゴリー
-  final String category;
+  final String? category;
 
   /// 購入先
-  final String shop;
+  final String? shop;
 
   /// 購入総額
   final int amount;

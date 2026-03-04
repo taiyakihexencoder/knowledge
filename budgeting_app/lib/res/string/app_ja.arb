@@ -4,6 +4,8 @@
 
   "expenseHistory": "消費履歴",
 
+  "expenseHistoryDetail": "消費の詳細",
+
   "newLog": "購入情報の追加",
   "newLogAmount": "購入金額",
   "newLogAmountHint": "金額を入力...",
@@ -15,6 +17,8 @@
   "newLogContentTitle": "タイトル",
   "newLogContentDescription": "概要",
   "newLogAdd": "新規追加",
+  "newLogErrorEmptyShop": "購入先が未設定",
+  "newLogErrorEmptyCategory": "購入カテゴリーが未設定",
 
   "settingsTop": "設定",
   "settingsAttributes": "履歴の項目を編集",
@@ -37,5 +41,6 @@
   "commonPrice": "{price}円",
   "commonPriceSuffix": "円",
   "commonOk": "OK",
-  "commonCancel": "キャンセル"
+  "commonCancel": "キャンセル",
+  "commonEmpty": "未設定"
 }

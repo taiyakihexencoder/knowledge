@@ -105,6 +105,12 @@ abstract class L10n {
   /// **'消費履歴'**
   String get expenseHistory;
 
+  /// No description provided for @expenseHistoryDetail.
+  ///
+  /// In ja, this message translates to:
+  /// **'消費の詳細'**
+  String get expenseHistoryDetail;
+
   /// No description provided for @newLog.
   ///
   /// In ja, this message translates to:
@@ -170,6 +176,18 @@ abstract class L10n {
   /// In ja, this message translates to:
   /// **'新規追加'**
   String get newLogAdd;
+
+  /// No description provided for @newLogErrorEmptyShop.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先が未設定'**
+  String get newLogErrorEmptyShop;
+
+  /// No description provided for @newLogErrorEmptyCategory.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入カテゴリーが未設定'**
+  String get newLogErrorEmptyCategory;
 
   /// No description provided for @settingsTop.
   ///
@@ -296,6 +314,12 @@ abstract class L10n {
   /// In ja, this message translates to:
   /// **'キャンセル'**
   String get commonCancel;
+
+  /// No description provided for @commonEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'未設定'**
+  String get commonEmpty;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

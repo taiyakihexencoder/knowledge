@@ -14,12 +14,12 @@ class LocalExpenseCategoryService implements ExpenseCategoryService {
     => _database.select(_database.expenseCategory);
 
   @override
-  Future<ExpenseCategoryEntity> getCategory(int categoryId) {
+  Future<ExpenseCategoryEntity?> getCategory(int categoryId) {
     return (
       select
         ..where((column) => column.id.equals(categoryId))
-    ).getSingle().then(
-      (record) => convert(record)
+    ).getSingleOrNull().then(
+      (record) => record == null ? null : convert(record)
     );
   }
 

@@ -47,8 +47,8 @@ class HistoryListViewModel {
 
     List<HistoryModel> modelList = [];
     for (ExpenseHistoryEntity history in historyList) {
-      Future<ExpenseCategoryEntity> category = _categoryRepository.getCategory(history.categoryId);
-      Future<ShopEntity> shop = _shopRepository.getShop(history.shopId);
+      Future<ExpenseCategoryEntity?> category = _categoryRepository.getCategory(history.categoryId);
+      Future<ShopEntity?> shop = _shopRepository.getShop(history.shopId);
       modelList.add(
         HistoryModel.from(
           expenseHistory: history,

@@ -9,13 +9,16 @@ class HistoryList extends StatelessWidget {
   HistoryList({
     super.key,
     required HistoryListViewModel viewModel,
-    required Function(BuildContext context) navigateToNewLog
+    required Function(BuildContext context) navigateToNewLog,
+    required Function(BuildContext context, int historyId) navigateToDetail, 
   }) : 
   _viewModel = viewModel,
-  _navigateToNewLog = navigateToNewLog;
+  _navigateToNewLog = navigateToNewLog,
+  _navigateToDetail = navigateToDetail;
 
   final HistoryListViewModel _viewModel;
   final Function(BuildContext) _navigateToNewLog;
+  final Function(BuildContext, int) _navigateToDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,8 @@ class HistoryList extends StatelessWidget {
                 ...models.map(
                   (model) => HistoryListElement(
                     model: model,
-                  )
+                    navigateToDetail: _navigateToDetail,
+                  ),
                 ),
               ],
             ),

@@ -11,7 +11,7 @@ class ShopRepository {
   final ShopService _shopService;
 
   /// 指定した購入先情報を取得する
-  Future<ShopEntity> getShop(int shopId) {
+  Future<ShopEntity?> getShop(int shopId) {
     return _shopService.getShop(shopId);
   }
 

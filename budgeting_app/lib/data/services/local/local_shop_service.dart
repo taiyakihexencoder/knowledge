@@ -23,12 +23,12 @@ class LocalShopService implements ShopService {
   }
 
   @override
-  Future<ShopEntity> getShop(int id) {
+  Future<ShopEntity?> getShop(int id) {
     return (
       select
         ..where((column) => column.id.equals(id))
-    ).getSingle().then(
-      (record) => convert(record),
+    ).getSingleOrNull().then(
+      (record) => record == null ? null : convert(record),
     );
   }
 

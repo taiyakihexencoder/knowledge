@@ -6,16 +6,17 @@ class MockShopService implements ShopService {
   const MockShopService();
 
   @override
-  Future<ShopEntity> getShop(int id) {
-    return Future.value(ShopEntity.fromJson(_mockShop(id)));
+  Future<ShopEntity?> getShop(int id) {
+    String? mockData = _mockShop(id);
+    return Future.value(mockData == null ? null : ShopEntity.fromJson(mockData));
   }
 
-  String _mockShop(int id) {
+  String? _mockShop(int id) {
     return switch (id) {
       1 => '{"id": $id, "name":"AEON"}',
       2 => '{"id": $id, "name":"東京電力"}',
       3 => '{"id": $id, "name":"Amazon"}',
-      _ => '{"id": $id, "name":"JR"}',
+      _ => null,
     };
   }
 

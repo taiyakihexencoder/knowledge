@@ -11,7 +11,7 @@ class ExpenseCategoryRepository {
   final ExpenseCategoryService _expenseCategoryService;
 
   /// IDからカテゴリーを取得する
-  Future<ExpenseCategoryEntity> getCategory(int categoryId) {
+  Future<ExpenseCategoryEntity?> getCategory(int categoryId) {
     return _expenseCategoryService.getCategory(categoryId);
   }
 

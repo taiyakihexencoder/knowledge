@@ -1,6 +1,7 @@
 import 'package:budgeting_app/domain/repositories/repositories.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/history/view_models/history_list_view_model.dart';
+import 'package:budgeting_app/ui/history/widgets/history_detail/history_detail.dart';
 import 'package:budgeting_app/ui/history/widgets/history_list/history_list.dart';
 import 'package:budgeting_app/ui/new_log/view_models/new_log_view_model.dart';
 import 'package:budgeting_app/ui/new_log/widgets/new_log.dart';
@@ -53,6 +54,7 @@ class HistoryListPage extends StatelessWidget {
     return HistoryList(
       viewModel: _viewModel,
       navigateToNewLog: _navigateToNewLog,
+      navigateToDetail: _navigateToHistoryDetail,
     );
   }
 
@@ -61,6 +63,32 @@ class HistoryListPage extends StatelessWidget {
       MaterialPageRoute(
         builder: (context) => NewLogPage(),
       )
+    );
+  }
+
+  void _navigateToHistoryDetail(BuildContext context, int historyId) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => HistoryDetailPage(
+          historyId: historyId,
+        ),
+      )
+    );
+  }
+}
+
+class HistoryDetailPage extends StatelessWidget{
+  HistoryDetailPage({
+    super.key,
+    required int historyId,
+  }): _historyId = historyId;
+
+  int _historyId;
+
+  @override
+  Widget build(BuildContext context) {
+    return HistoryDetail(
+      historyId: _historyId,
     );
   }
 }
