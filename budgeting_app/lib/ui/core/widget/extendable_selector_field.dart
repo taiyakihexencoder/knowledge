@@ -88,20 +88,19 @@ class ExtendableSelectorFieldState<T> extends State<ExtendableSelectorField<T>> 
       width: double.infinity,
       enableFilter: true,
       dropdownMenuEntries: [
-        // emptyの場合filterCallbackの表示後にIndexでアクセスしようとしてエラーになる
-        if (entries.isEmpty)
-          DropdownMenuEntry(
-            value: null, 
-            label: '',
-            enabled: false,
-            style: null,
-          ),
-
         ...entries.map(
           (entry) => DropdownMenuEntry(
             value: entry,
             label: widget._display(entry),
           ),
+        ),
+
+        // filterCallbackで要素が増えると、Indexでアクセスしようとしてエラーになる
+        // これを回避するためにダミーの項目を置いておく
+        DropdownMenuEntry(
+          value: null, 
+          label: '',
+          enabled: false,
         ),
       ],
       onSelected:_onSelected,
@@ -129,7 +128,8 @@ class ExtendableSelectorFieldState<T> extends State<ExtendableSelectorField<T>> 
     List<DropdownMenuEntry<T?>> filteredEntries = entries.where(
       (entry) => entry.value != null && entry.label.contains(filter)
     ).toList();
-    if (filteredEntries.isEmpty) {
+
+    if (filter.isNotEmpty && !filteredEntries.any((entry) => entry.label == filter)) {
       filteredEntries.add(_emptyMenuEntry());
     }
 
