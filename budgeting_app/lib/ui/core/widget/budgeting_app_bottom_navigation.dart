@@ -67,17 +67,19 @@ class BudgetingAppBottomNavigation extends StatelessWidget {
   void _onTapIcon(BuildContext context, int index) {
     switch(index) {
       case _bottomNavigationIndexHistoryList:
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => _navigateToHitoryList(context),
-          )
+          ),
+          (_) => false,
         );
         break;
       case _bottomNavigationIndexSettings:
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => _navigateToSettings(context),
-          )
+          ),
+          (_) => false,
         );
         break;
     }
