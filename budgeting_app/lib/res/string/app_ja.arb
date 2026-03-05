@@ -51,5 +51,6 @@
   "commonPriceSuffix": "円",
   "commonOk": "OK",
   "commonCancel": "キャンセル",
+  "commonEdit": "編集",
   "commonEmpty": "未設定"
 }

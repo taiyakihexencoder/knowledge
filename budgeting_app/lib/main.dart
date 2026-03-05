@@ -3,6 +3,7 @@ import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dar
 import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_list_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_detail/history_detail.dart';
+import 'package:budgeting_app/ui/history/widgets/history_edit/history_edit.dart';
 import 'package:budgeting_app/ui/history/widgets/history_list/history_list.dart';
 import 'package:budgeting_app/ui/new_log/view_models/new_log_view_model.dart';
 import 'package:budgeting_app/ui/new_log/widgets/new_log.dart';
@@ -85,7 +86,9 @@ class HistoryDetailPage extends StatelessWidget {
   HistoryDetailPage({
     super.key,
     required int historyId,
-  }): _viewModel = HistoryDetailViewModel(
+  }):
+    _historyId = historyId,
+    _viewModel = HistoryDetailViewModel(
       historyId: historyId, 
       historyRepository: historyRepository, 
       categoryRepository: categoryRepository, 
@@ -93,13 +96,37 @@ class HistoryDetailPage extends StatelessWidget {
       shopRepository: shopRepository,
     );
 
+  final int _historyId;
   final HistoryDetailViewModel _viewModel;
 
   @override
   Widget build(BuildContext context) {
     return HistoryDetail(
       viewModel: _viewModel,
+      navigateToHistoryEdit: _navigateToHistoryEdit,
     );
+  }
+
+  void _navigateToHistoryEdit(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => HistoryEditPage(
+          historyId: _historyId,
+        ),
+      ),
+    );
+  }
+}
+
+class HistoryEditPage extends StatelessWidget {
+  HistoryEditPage({
+    super.key,
+    required int historyId,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return HistoryEdit();
   }
 }
 

@@ -369,6 +369,12 @@ abstract class L10n {
   /// **'キャンセル'**
   String get commonCancel;
 
+  /// No description provided for @commonEdit.
+  ///
+  /// In ja, this message translates to:
+  /// **'編集'**
+  String get commonEdit;
+
   /// No description provided for @commonEmpty.
   ///
   /// In ja, this message translates to:

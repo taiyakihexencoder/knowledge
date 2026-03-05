@@ -13,9 +13,13 @@ class HistoryDetail extends StatefulWidget {
   const HistoryDetail({
     super.key,
     required HistoryDetailViewModel viewModel,
-  }) : _viewModel = viewModel;
+    required Function(BuildContext) navigateToHistoryEdit,
+  }) : 
+    _viewModel = viewModel,
+    _navigateToHistoryEdit = navigateToHistoryEdit;
 
   final HistoryDetailViewModel _viewModel;
+  final Function(BuildContext) _navigateToHistoryEdit;
 
   @override
   HistoryDetailState createState() {
@@ -43,6 +47,15 @@ class HistoryDetailState extends State<HistoryDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 32.0,
                 children: [
+                  Align(
+                    alignment: AlignmentGeometry.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        widget._navigateToHistoryEdit(context);
+                      },
+                      child: Text(L10n.of(context)!.commonEdit),
+                    ),
+                  ),
                   HistoryDetailUsedAt(
                     usedAt: history.usedAt,
                   ),

@@ -157,5 +157,8 @@ class L10nJa extends L10n {
   String get commonCancel => 'キャンセル';
 
   @override
+  String get commonEdit => '編集';
+
+  @override
   String get commonEmpty => '未設定';
 }
