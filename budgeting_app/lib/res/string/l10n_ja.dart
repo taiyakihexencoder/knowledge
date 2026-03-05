@@ -48,6 +48,9 @@ class L10nJa extends L10n {
   String get newLog => '購入情報の追加';
 
   @override
+  String get newLogUsedAt => '購入日';
+
+  @override
   String get newLogAmount => '購入金額';
 
   @override
@@ -158,6 +161,12 @@ class L10nJa extends L10n {
 
   @override
   String get commonEdit => '編集';
+
+  @override
+  String get commonFullDateFormat => 'yyyy年 MM月 dd日 (E)';
+
+  @override
+  String get commonEmptyDate => '日付が選択されていません';
 
   @override
   String get commonEmpty => '未設定';

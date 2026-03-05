@@ -145,7 +145,21 @@ class NewLogPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NewLog(
-      viewModel: _viewModel
+      viewModel: _viewModel,
+      navigateOnSubmit: _navigateOnSubmit,
+    );
+  }
+
+  void _navigateOnSubmit(BuildContext context) {
+    final int removeCount = 2;
+    int count = 0;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => HistoryListPage()
+      ),
+      (_) {
+        return count++ >= removeCount;
+      }
     );
   }
 }

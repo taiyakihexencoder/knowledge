@@ -16,6 +16,7 @@
   "expenseHistoryDetailContentEmpty": "詳細の情報は設定されていません",
 
   "newLog": "購入情報の追加",
+  "newLogUsedAt": "購入日",
   "newLogAmount": "購入金額",
   "newLogAmountHint": "金額を入力...",
   "newLogShop": "購入先",
@@ -52,5 +53,7 @@
   "commonOk": "OK",
   "commonCancel": "キャンセル",
   "commonEdit": "編集",
+  "commonFullDateFormat": "yyyy年 MM月 dd日 (E)",
+  "commonEmptyDate": "日付が選択されていません",
   "commonEmpty": "未設定"
 }

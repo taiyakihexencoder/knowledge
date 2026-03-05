@@ -171,6 +171,12 @@ abstract class L10n {
   /// **'購入情報の追加'**
   String get newLog;
 
+  /// No description provided for @newLogUsedAt.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入日'**
+  String get newLogUsedAt;
+
   /// No description provided for @newLogAmount.
   ///
   /// In ja, this message translates to:
@@ -374,6 +380,18 @@ abstract class L10n {
   /// In ja, this message translates to:
   /// **'編集'**
   String get commonEdit;
+
+  /// No description provided for @commonFullDateFormat.
+  ///
+  /// In ja, this message translates to:
+  /// **'yyyy年 MM月 dd日 (E)'**
+  String get commonFullDateFormat;
+
+  /// No description provided for @commonEmptyDate.
+  ///
+  /// In ja, this message translates to:
+  /// **'日付が選択されていません'**
+  String get commonEmptyDate;
 
   /// No description provided for @commonEmpty.
   ///
