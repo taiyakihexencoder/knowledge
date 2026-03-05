@@ -108,4 +108,34 @@ class NewLogViewModel {
       ),
     );
   }
+
+  /// 購入先を追加
+  /// 
+  /// 追加後にリストを更新する
+  Future<void> onRequestAddShopName(String name) async {
+    bool result = await _shopRepository.addShop(name: name);
+    if (result) {
+      refreshShopList();
+    }
+  }
+
+  /// カテゴリーの追加
+  /// 
+  /// 追加後にリストを更新する
+  Future<void> onRequestAddCategoryName(String name) async {
+    bool result = await _categoryRepository.addCategory(name: name);
+    if (result) {
+      refreshCategoryList();
+    }
+  }
+
+  /// タグの追加
+  /// 
+  /// 追加後にリストを更新する
+  Future<void> onRequestAddTagName(String name) async {
+    bool result = await _tagRepository.addTag(name: name);
+    if (result) {
+      refreshTagList();
+    }
+  }
 }

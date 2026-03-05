@@ -108,12 +108,11 @@ class NewLogState extends State<NewLog> {
                   Spacer(),
                   SizedBox(
                     width: 200.0,
-                    child:ExtendableSelectorField(
+                    child: ExtendableSelectorField(
                       entries: widget._viewModel.shopSelections,
                       controller: _shopEditingController,
                       display: (model) => model.name,
-                      onRequestAdd: (name) async {
-                      },
+                      onRequestAdd: widget._viewModel.onRequestAddShopName,
                     ),
                   ),
                 ],
@@ -128,13 +127,11 @@ class NewLogState extends State<NewLog> {
                   Spacer(),
                   SizedBox(
                     width:200.0,
-                    child:ExtendableSelectorField(
+                    child: ExtendableSelectorField(
                       entries: widget._viewModel.categorySelections, 
                       controller: _categoryEditingController,
                       display: (model) => model.name, 
-                      onRequestAdd: (name) async {
-
-                      },
+                      onRequestAdd: widget._viewModel.onRequestAddCategoryName,
                     ),
                   ),
                 ],
@@ -150,9 +147,7 @@ class NewLogState extends State<NewLog> {
                     entries: widget._viewModel.tagSelections,
                     controller: _tagEditingControllers[i],
                     display: (model) => model.name,
-                    onRequestAdd: (name) async {
-
-                    },
+                    onRequestAdd: widget._viewModel.onRequestAddTagName,
                   ),
                   const SizedBox(height: 8.0),
                 ],
