@@ -6,12 +6,16 @@ import 'package:budgeting_app/ui/new_log/models/tag_model.dart';
 /// 入力した購入履歴モデル
 class LogModel {
   const LogModel({
+    required this.usedAt,
     required this.amount,
     required this.shop,
     required this.category,
     required this.tags,
     required this.contents,
   });
+
+  /// 日付
+  final String usedAt;
 
   /// 購入総額
   final int amount;

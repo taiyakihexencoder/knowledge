@@ -1,6 +1,6 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/comment_field.dart';
-//import 'package:budgeting_app/ui/core/widget/date_selector_field.dart';
+import 'package:budgeting_app/ui/core/widget/date_selector_field.dart';
 import 'package:budgeting_app/ui/core/widget/extendable_selector_field.dart';
 import 'package:budgeting_app/ui/core/widget/price_edit_field.dart';
 import 'package:budgeting_app/ui/new_log/models/content_model.dart';
@@ -33,7 +33,7 @@ class NewLogState extends State<NewLog> {
   static const _tagCount = 8;
   static const _contentCount = 4;
 
-//  final TextEditingController _usedAtEditingController = TextEditingController();
+  final TextEditingController _usedAtEditingController = TextEditingController();
   final TextEditingController _amountEditingController = TextEditingController();
   final TextEditingController _shopEditingController = TextEditingController();
   final TextEditingController _categoryEditingController = TextEditingController();
@@ -43,7 +43,7 @@ class NewLogState extends State<NewLog> {
 
   @override
   void dispose() {
-//    _usedAtEditingController.dispose();
+    _usedAtEditingController.dispose();
     _amountEditingController.dispose();
     _shopEditingController.dispose();
     _categoryEditingController.dispose();
@@ -77,13 +77,17 @@ class NewLogState extends State<NewLog> {
             children: [
               SizedBox(height: 16.0),
 
-/*
-              _Header(title: L10n.of(context)!.newLogUsedAt,),
-
-              DateSelectorField(
-                controller: _usedAtEditingController,
+              // 日付
+              Row(
+                children: [
+                  _Header(title: L10n.of(context)!.newLogUsedAt,),
+                  SizedBox(width:60.0),
+                  DateSelectorField(
+                    controller: _usedAtEditingController,
+                  ),
+                ],
               ),
-*/
+
               // 購入金額
               Row(
                 children: [
@@ -209,6 +213,7 @@ class NewLogState extends State<NewLog> {
     }
 
     return LogModel(
+      usedAt: _usedAtEditingController.text.replaceAll('-', ''),
       amount: int.tryParse(_amountEditingController.text) ?? 0,
       shop: widget._viewModel.shopSelections.value.firstWhereOrNull(
         (shop) => shop.name == _shopEditingController.text,

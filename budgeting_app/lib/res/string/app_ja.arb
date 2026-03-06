@@ -54,6 +54,5 @@
   "commonCancel": "キャンセル",
   "commonEdit": "編集",
   "commonFullDateFormat": "yyyy年 MM月 dd日 (E)",
-  "commonEmptyDate": "日付が選択されていません",
   "commonEmpty": "未設定"
 }

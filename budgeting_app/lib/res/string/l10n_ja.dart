@@ -166,8 +166,5 @@ class L10nJa extends L10n {
   String get commonFullDateFormat => 'yyyy年 MM月 dd日 (E)';
 
   @override
-  String get commonEmptyDate => '日付が選択されていません';
-
-  @override
   String get commonEmpty => '未設定';
 }

@@ -387,12 +387,6 @@ abstract class L10n {
   /// **'yyyy年 MM月 dd日 (E)'**
   String get commonFullDateFormat;
 
-  /// No description provided for @commonEmptyDate.
-  ///
-  /// In ja, this message translates to:
-  /// **'日付が選択されていません'**
-  String get commonEmptyDate;
-
   /// No description provided for @commonEmpty.
   ///
   /// In ja, this message translates to:

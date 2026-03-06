@@ -51,7 +51,9 @@ class DateSelectorField extends StatelessWidget {
         if (dateTime != null) {
           text = _viewFormat.format(dateTime);
         } else {
-          text = L10n.of(context)!.commonEmptyDate;
+          DateTime now = DateTime.now();
+          text = _viewFormat.format(now);
+          _controller.text = _inputFormat.format(now);
         }
         return Text(text);
       },
@@ -59,7 +61,7 @@ class DateSelectorField extends StatelessWidget {
   }
 
   Widget _calendarPicker(BuildContext context) {
-    return IconButton(
+    return IconButton.filled(
       icon: Icon(Icons.calendar_month),
       onPressed: () async {
         DateTime now = DateTime.now();

@@ -104,7 +104,7 @@ class NewLogViewModel {
             name: tag.name,
           ),
         ).toList(), 
-        usedAt: DateFormat('yyyyMMdd').format(DateTime.now()).toString(),
+        usedAt: log.usedAt,
       ),
     );
   }
