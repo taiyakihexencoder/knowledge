@@ -165,6 +165,12 @@ abstract class L10n {
   /// **'詳細の情報は設定されていません'**
   String get expenseHistoryDetailContentEmpty;
 
+  /// No description provided for @expenseHistoryEditUpdate.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入履歴の更新'**
+  String get expenseHistoryEditUpdate;
+
   /// No description provided for @newLog.
   ///
   /// In ja, this message translates to:
@@ -374,12 +380,6 @@ abstract class L10n {
   /// In ja, this message translates to:
   /// **'キャンセル'**
   String get commonCancel;
-
-  /// No description provided for @commonEdit.
-  ///
-  /// In ja, this message translates to:
-  /// **'編集'**
-  String get commonEdit;
 
   /// No description provided for @commonFullDateFormat.
   ///

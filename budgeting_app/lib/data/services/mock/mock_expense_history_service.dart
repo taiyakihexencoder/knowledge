@@ -82,4 +82,12 @@ class MockExpenseHistoryService implements ExpenseHistoryService {
     print(json);
     return 0;
   }
+
+  @override
+  Future<void> updateLog({
+    required int id,
+    required ExpenseLogEntity log,
+  }) {
+    return Future.value();
+  }
 }

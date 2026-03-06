@@ -45,6 +45,9 @@ class L10nJa extends L10n {
   String get expenseHistoryDetailContentEmpty => '詳細の情報は設定されていません';
 
   @override
+  String get expenseHistoryEditUpdate => '購入履歴の更新';
+
+  @override
   String get newLog => '購入情報の追加';
 
   @override
@@ -158,9 +161,6 @@ class L10nJa extends L10n {
 
   @override
   String get commonCancel => 'キャンセル';
-
-  @override
-  String get commonEdit => '編集';
 
   @override
   String get commonFullDateFormat => 'yyyy年 MM月 dd日 (E)';

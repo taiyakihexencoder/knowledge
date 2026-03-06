@@ -12,13 +12,15 @@ import 'package:budgeting_app/ui/core/models/edit/shop_model.dart';
 import 'package:budgeting_app/ui/core/models/edit/tag_model.dart';
 import 'package:flutter/material.dart';
 
-class NewLogViewModel {
-  NewLogViewModel({
+class HistoryEditViewModel {
+  HistoryEditViewModel({
+    required int id,
     required ExpenseHistoryRepository historyRepository,
     required ExpenseCategoryRepository categoryRepository,
     required ExpenseTagRepository tagRepository,
     required ShopRepository shopRepository,
   }):
+    _id = id,
     _historyRepository = historyRepository,
     _categoryRepository = categoryRepository,
     _tagRepository = tagRepository,
@@ -26,6 +28,9 @@ class NewLogViewModel {
     _categorySelections = ValueNotifier([]),
     _tagSelections = ValueNotifier([]),
     _shopSelections = ValueNotifier([]);
+
+  /// 購入履歴のID
+  final int _id;
 
   /// 購入履歴Repository
   final ExpenseHistoryRepository _historyRepository;
@@ -84,9 +89,10 @@ class NewLogViewModel {
     ).toList();
   }
 
-  /// 新規追加時のアクション
-  void onRequestAddLog(LogModel log) async {
-    await _historyRepository.createLog(
+  /// 更新時のアクション
+  void onRequestUpdateLog(LogModel log) async {
+    await _historyRepository.updateLog(
+      id: _id,
       log: ExpenseLogEntity(
         amount: log.amount, 
         shop: ShopEntity(id: log.shop!.id, name: log.shop!.name), 

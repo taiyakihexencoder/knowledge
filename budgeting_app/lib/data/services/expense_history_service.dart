@@ -20,4 +20,10 @@ abstract interface class ExpenseHistoryService {
   Future<int> createLog({
     required ExpenseLogEntity log,
   });
+
+  /// 購入記録を更新
+  Future<void> updateLog({
+    required int id,
+    required ExpenseLogEntity log,
+  });
 }

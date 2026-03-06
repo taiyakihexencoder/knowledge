@@ -1,6 +1,7 @@
 import 'package:budgeting_app/domain/repositories/repositories.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
+import 'package:budgeting_app/ui/history/view_models/history_edit_view_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_list_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_detail/history_detail.dart';
 import 'package:budgeting_app/ui/history/widgets/history_edit/history_edit.dart';
@@ -122,11 +123,38 @@ class HistoryEditPage extends StatelessWidget {
   HistoryEditPage({
     super.key,
     required int historyId,
-  });
+  }):
+    _historyId = historyId, 
+    _viewModel = HistoryEditViewModel(
+      id: historyId,
+      historyRepository: historyRepository, 
+      categoryRepository: categoryRepository, 
+      tagRepository: tagRepository, 
+      shopRepository: shopRepository
+    );
+
+  final int _historyId;
+  final HistoryEditViewModel _viewModel;
 
   @override
   Widget build(BuildContext context) {
-    return HistoryEdit();
+    return HistoryEdit(
+      viewModel: _viewModel,
+      navigateOnSubmit: _navigateOnSubmit,
+    );
+  }
+
+  void _navigateOnSubmit(BuildContext context) {
+    final int removeCount = 2;
+    int count = 0;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => HistoryDetailPage(historyId: _historyId)
+      ),
+      (_) {
+        return count++ >= removeCount;
+      }
+    );
   }
 }
 

@@ -37,4 +37,12 @@ class ExpenseHistoryRepository {
   }) {
     return _historyService.createLog(log: log);
   }
+
+  // ログを更新
+  Future<void> updateLog({
+    required int id,
+    required ExpenseLogEntity log,
+  }) {
+    return _historyService.updateLog(id: id, log: log);
+  }
 }

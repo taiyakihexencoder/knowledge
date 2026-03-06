@@ -59,6 +59,67 @@ class LocalExpenseHistoryService implements ExpenseHistoryService {
   }
 
   @override
+  Future<void> updateLog({
+    required int id,
+    required ExpenseLogEntity log,
+  }) async {
+    BigInt historyId = BigInt.from(id);
+
+    // コンテンツの更新
+    Future updateHistory = (_database.update(_database.expenseHistory)..where(
+      (column) => column.id.equals(historyId)
+    )).write(
+      ExpenseHistoryCompanion(
+        amount: Value(log.amount),
+        categoryId: Value(log.category.id),
+        shopId: Value(log.shop.id),
+        usedAt: Value(log.usedAt),
+      )
+    );
+    
+    // Content
+    // 今あるものを削除
+    Future updateContents = (_database.delete(_database.expenseContent)
+      ..where(
+        (column) => column.historyId.equals(historyId),
+      )
+    ).go().then(
+      // 新たに追加
+      (_) => _database.insertAll(
+        table: _database.expenseContent, 
+        records: log.contents.map(
+          (content) => ExpenseContentCompanion(
+            historyId: Value(historyId),
+            title: Value(content.title),
+            description: Value(content.description),
+          ),
+        )
+      )
+    );
+
+    // Tag
+    // 今あるものを削除
+    Future updateTags = (_database.delete(_database.expenseHistoryTag)
+      ..where(
+        (column) => column.historyId.equals(historyId)
+      )
+    ).go().then(
+      // 新たに追加
+      (_) => _database.insertAll(
+        table: _database.expenseHistoryTag,
+        records: log.tags.map(
+          (tag) => ExpenseHistoryTagCompanion(
+            historyId: Value(historyId),
+            tagId: Value(tag.id),
+          ),
+        )
+      )
+    );
+
+    await Future.wait([updateHistory, updateContents, updateTags]);
+  }
+
+  @override
   Future<List<ExpenseHistoryEntity>> getHistoryList() {
     return _select.get().then(
       (list) => list.map(
@@ -107,5 +168,4 @@ class LocalExpenseHistoryService implements ExpenseHistoryService {
       description: data.description,
     );
   }
-
 }

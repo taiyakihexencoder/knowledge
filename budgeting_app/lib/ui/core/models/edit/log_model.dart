@@ -1,7 +1,7 @@
-import 'package:budgeting_app/ui/new_log/models/category_model.dart';
-import 'package:budgeting_app/ui/new_log/models/content_model.dart';
-import 'package:budgeting_app/ui/new_log/models/shop_model.dart';
-import 'package:budgeting_app/ui/new_log/models/tag_model.dart';
+import 'package:budgeting_app/ui/core/models/edit/category_model.dart';
+import 'package:budgeting_app/ui/core/models/edit/content_model.dart';
+import 'package:budgeting_app/ui/core/models/edit/shop_model.dart';
+import 'package:budgeting_app/ui/core/models/edit/tag_model.dart';
 
 /// 入力した購入履歴モデル
 class LogModel {
