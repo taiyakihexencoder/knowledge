@@ -6,6 +6,7 @@ import 'package:budgeting_app/ui/core/widget/comment_field.dart';
 import 'package:budgeting_app/ui/core/widget/date_selector_field.dart';
 import 'package:budgeting_app/ui/core/widget/extendable_selector_field.dart';
 import 'package:budgeting_app/ui/core/widget/price_edit_field.dart';
+import 'package:budgeting_app/ui/history/models/history_detail_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_edit_view_model.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -60,127 +61,154 @@ class HistoryEditState extends State<HistoryEdit> {
 
   @override
   Widget build(BuildContext context) {
+    widget._viewModel.initDetail();
     widget._viewModel.refreshCategoryList();
     widget._viewModel.refreshTagList();
     widget._viewModel.refreshShopList();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(L10n.of(context)!.newLog),
+        title: Text(L10n.of(context)!.expenseHistoryEdit),
       ),
       body: Padding(
         padding: EdgeInsetsGeometry.fromSTEB(16.0, 0.0, 16.0, 0.0),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 16.0),
-
-              // 日付
-              Row(
+          child: ValueListenableBuilder(
+            valueListenable: widget._viewModel.detail, 
+            builder: (_, model, _) {
+              if (model != null) {
+                _applyBeforeEdit(model);
+              }
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _Header(title: L10n.of(context)!.newLogUsedAt,),
-                  SizedBox(width:60.0),
-                  DateSelectorField(
-                    controller: _usedAtEditingController,
+                  SizedBox(height: 16.0),
+
+                  // 日付
+                  Row(
+                    children: [
+                      _Header(title: L10n.of(context)!.newLogUsedAt,),
+                      SizedBox(width:60.0),
+                      DateSelectorField(
+                        controller: _usedAtEditingController,
+                      ),
+                    ],
                   ),
-                ],
-              ),
 
-              // 購入金額
-              Row(
-                children: [
-                  _Header(title: L10n.of(context)!.newLogAmount,),
-                  Spacer(),
-                  SizedBox(
-                    width: 200.0,
-                    child: PriceEditField(
-                      controller: _amountEditingController,
-                      maxLength: 8,
-                    ),
+                  // 購入金額
+                  Row(
+                    children: [
+                      _Header(title: L10n.of(context)!.newLogAmount,),
+                      Spacer(),
+                      SizedBox(
+                        width: 200.0,
+                        child: PriceEditField(
+                          controller: _amountEditingController,
+                          maxLength: 8,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
 
-              const SizedBox(height: 24.0),
+                  const SizedBox(height: 24.0),
 
-              // 購入先
-              Row(
-                children: [
-                  _Header(title: L10n.of(context)!.newLogShop,),
-                  Spacer(),
-                  SizedBox(
-                    width: 200.0,
-                    child: ExtendableSelectorField(
-                      entries: widget._viewModel.shopSelections,
-                      controller: _shopEditingController,
-                      display: (model) => model.name,
-                      onRequestAdd: widget._viewModel.onRequestAddShopName,
-                    ),
+                  // 購入先
+                  Row(
+                    children: [
+                      _Header(title: L10n.of(context)!.newLogShop,),
+                      Spacer(),
+                      SizedBox(
+                        width: 200.0,
+                        child: ExtendableSelectorField(
+                          entries: widget._viewModel.shopSelections,
+                          controller: _shopEditingController,
+                          display: (model) => model.name,
+                          onRequestAdd: widget._viewModel.onRequestAddShopName,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              
-              const SizedBox(height: 24.0),
+                  
+                  const SizedBox(height: 24.0),
 
-              // 購入カテゴリー
-              Row(
-                children: [
-                  _Header(title: L10n.of(context)!.newLogCategory,),
-                  Spacer(),
-                  SizedBox(
-                    width:200.0,
-                    child: ExtendableSelectorField(
-                      entries: widget._viewModel.categorySelections, 
-                      controller: _categoryEditingController,
-                      display: (model) => model.name, 
-                      onRequestAdd: widget._viewModel.onRequestAddCategoryName,
-                    ),
+                  // 購入カテゴリー
+                  Row(
+                    children: [
+                      _Header(title: L10n.of(context)!.newLogCategory,),
+                      Spacer(),
+                      SizedBox(
+                        width:200.0,
+                        child: ExtendableSelectorField(
+                          entries: widget._viewModel.categorySelections, 
+                          controller: _categoryEditingController,
+                          display: (model) => model.name, 
+                          onRequestAdd: widget._viewModel.onRequestAddCategoryName,
+                        ),
+                      ),
+                    ],
                   ),
+
+                  const SizedBox(height: 24.0),
+
+                  // タグ
+                  _Header(title: L10n.of(context)!.newLogTag),
+                  for (int i = 0; i < _tagCount; ++i)
+                    ...[
+                      ExtendableSelectorField(
+                        entries: widget._viewModel.tagSelections,
+                        controller: _tagEditingControllers[i],
+                        display: (model) => model.name,
+                        onRequestAdd: widget._viewModel.onRequestAddTagName,
+                      ),
+                      const SizedBox(height: 8.0),
+                    ],
+                  
+                  const SizedBox(height: 24.0),
+
+                  // 詳細
+                  _Header(title: L10n.of(context)!.newLogContent),
+                  for (int i = 0; i < _contentCount; ++i)
+                    ...[
+                      _SubHeader(title: L10n.of(context)!.newLogContentIndex(i+1)),
+
+                      Padding(
+                        padding: EdgeInsetsGeometry.fromLTRB(8.0, 12.0, 8.0, 12.0),
+                        child: CommentField(
+                          titleController: _contentTitleEditingControllers[i], 
+                          descriptionContoller: _contentDescriptionEditingControllers[i],
+                        ),
+                      ),
+                    ],
+
+                  const SizedBox(height: 24.0),
+
+                  // 追加ボタン
+                  _submitButton(context),
+                  const SizedBox(height: 16.0),           
                 ],
-              ),
-
-              const SizedBox(height: 24.0),
-
-              // タグ
-              _Header(title: L10n.of(context)!.newLogTag),
-              for (int i = 0; i < _tagCount; ++i)
-                ...[
-                  ExtendableSelectorField(
-                    entries: widget._viewModel.tagSelections,
-                    controller: _tagEditingControllers[i],
-                    display: (model) => model.name,
-                    onRequestAdd: widget._viewModel.onRequestAddTagName,
-                  ),
-                  const SizedBox(height: 8.0),
-                ],
-              
-              const SizedBox(height: 24.0),
-
-              // 詳細
-              _Header(title: L10n.of(context)!.newLogContent),
-              for (int i = 0; i < _contentCount; ++i)
-                ...[
-                  _SubHeader(title: L10n.of(context)!.newLogContentIndex(i+1)),
-
-                  Padding(
-                    padding: EdgeInsetsGeometry.fromLTRB(8.0, 12.0, 8.0, 12.0),
-                    child: CommentField(
-                      titleController: _contentTitleEditingControllers[i], 
-                      descriptionContoller: _contentDescriptionEditingControllers[i],
-                    ),
-                  ),
-                ],
-
-              const SizedBox(height: 24.0),
-
-              // 追加ボタン
-              _submitButton(context),
-              const SizedBox(height: 16.0),           
-            ],
+              );
+            }
           ),
         ),
       ),
+    );
+  }
+
+  void _applyBeforeEdit(HistoryDetailModel model) {
+    _usedAtEditingController.text = '${model.usedAt.substring(0,4)}-${model.usedAt.substring(4,6)}-${model.usedAt.substring(6,8)}';
+    _amountEditingController.text = model.amount.toString();
+    _shopEditingController.text = model.shop ?? '';
+    _categoryEditingController.text = model.category ?? '';
+    
+    model.tags.forEachIndexed(
+      (index, tag) => _tagEditingControllers[index].text = tag,
+    );
+
+    model.contents.forEachIndexed(
+      (index, content) {
+        _contentTitleEditingControllers[index].text = content.title;
+        _contentDescriptionEditingControllers[index].text = content.description;
+      }
     );
   }
 

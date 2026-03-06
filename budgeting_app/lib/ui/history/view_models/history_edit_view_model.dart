@@ -1,4 +1,7 @@
 import 'package:budgeting_app/data/entities/expense_category_entity.dart';
+import 'package:budgeting_app/data/entities/expense_history_content_entity.dart';
+import 'package:budgeting_app/data/entities/expense_history_entity.dart';
+import 'package:budgeting_app/data/entities/expense_history_tag_entity.dart';
 import 'package:budgeting_app/data/entities/expense_log_entity.dart';
 import 'package:budgeting_app/data/entities/expense_tag_entity.dart';
 import 'package:budgeting_app/data/entities/shop_entity.dart';
@@ -10,6 +13,7 @@ import 'package:budgeting_app/ui/core/models/edit/category_model.dart';
 import 'package:budgeting_app/ui/core/models/edit/log_model.dart';
 import 'package:budgeting_app/ui/core/models/edit/shop_model.dart';
 import 'package:budgeting_app/ui/core/models/edit/tag_model.dart';
+import 'package:budgeting_app/ui/history/models/history_detail_model.dart';
 import 'package:flutter/material.dart';
 
 class HistoryEditViewModel {
@@ -27,7 +31,8 @@ class HistoryEditViewModel {
     _shopRepository = shopRepository,
     _categorySelections = ValueNotifier([]),
     _tagSelections = ValueNotifier([]),
-    _shopSelections = ValueNotifier([]);
+    _shopSelections = ValueNotifier([]),
+    _detail = ValueNotifier(null);
 
   /// 購入履歴のID
   final int _id;
@@ -55,6 +60,31 @@ class HistoryEditViewModel {
   /// 購入先の選択肢
   final ValueNotifier<List<ShopModel>> _shopSelections;
   ValueNotifier<List<ShopModel>> get shopSelections => _shopSelections;
+
+  // 詳細情報
+  final ValueNotifier<HistoryDetailModel?> _detail;
+  ValueNotifier<HistoryDetailModel?> get detail => _detail;
+
+  // 詳細情報の取得
+  void initDetail() async {
+    ExpenseHistoryEntity? history = await _historyRepository.getHistory(historyId: _id);
+    if (history == null) {
+      _detail.value = null;
+    } else {
+      Map<int, List<ExpenseHistoryTagEntity>> tagMap = await _tagRepository.getTags([history.id]);
+      Future<ExpenseCategoryEntity?> category = _categoryRepository.getCategory(history.categoryId);
+      Future<ShopEntity?> shop = _shopRepository.getShop(history.shopId);
+      Future<List<ExpenseHistoryContentEntity>> contents = _historyRepository.getHistoryContents(historyId: history.id);
+
+      _detail.value = HistoryDetailModel.from(
+        expenseHistory: history,
+        expenseCategory: await category,
+        shop: await shop,
+        expenseTags: tagMap[history.id] ?? [],
+        expenseContents: await contents,
+      );
+    }
+  }
 
   /// カテゴリーリストを更新する
   void refreshCategoryList() async {

@@ -165,10 +165,16 @@ abstract class L10n {
   /// **'詳細の情報は設定されていません'**
   String get expenseHistoryDetailContentEmpty;
 
+  /// No description provided for @expenseHistoryEdit.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入情報編集'**
+  String get expenseHistoryEdit;
+
   /// No description provided for @expenseHistoryEditUpdate.
   ///
   /// In ja, this message translates to:
-  /// **'購入履歴の更新'**
+  /// **'購入情報を更新'**
   String get expenseHistoryEditUpdate;
 
   /// No description provided for @newLog.

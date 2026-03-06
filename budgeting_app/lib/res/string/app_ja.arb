@@ -15,7 +15,8 @@
   "expenseHistoryDetailContent": "詳細情報",
   "expenseHistoryDetailContentEmpty": "詳細の情報は設定されていません",
 
-  "expenseHistoryEditUpdate": "購入履歴の更新",
+  "expenseHistoryEdit": "購入情報編集",
+  "expenseHistoryEditUpdate": "購入情報を更新",
 
   "newLog": "購入情報の追加",
   "newLogUsedAt": "購入日",

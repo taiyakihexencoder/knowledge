@@ -45,7 +45,10 @@ class L10nJa extends L10n {
   String get expenseHistoryDetailContentEmpty => '詳細の情報は設定されていません';
 
   @override
-  String get expenseHistoryEditUpdate => '購入履歴の更新';
+  String get expenseHistoryEdit => '購入情報編集';
+
+  @override
+  String get expenseHistoryEditUpdate => '購入情報を更新';
 
   @override
   String get newLog => '購入情報の追加';
