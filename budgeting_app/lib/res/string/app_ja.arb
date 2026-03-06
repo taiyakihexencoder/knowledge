@@ -18,6 +18,14 @@
   "expenseHistoryEdit": "購入情報編集",
   "expenseHistoryEditUpdate": "購入情報を更新",
 
+  "expenseHistoryFilter": "履歴の検索条件",
+  "expenseHistoryFilterAmount": "金額の範囲",
+  "expenseHistoryFilterUsedAt": "期間",
+  "expenseHistoryFilterCategory": "表示するカテゴリー",
+  "expenseHistoryFilterShop": "表示する購入先",
+  "expenseHistoryFilterTag": "表示するタグ",
+  "expenseHistoryFilterApply": "指定した内容で検索", 
+
   "newLog": "購入情報の追加",
   "newLogUsedAt": "購入日",
   "newLogAmount": "購入金額",

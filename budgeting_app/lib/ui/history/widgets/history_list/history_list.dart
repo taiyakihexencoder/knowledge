@@ -11,14 +11,17 @@ class HistoryList extends StatelessWidget {
     required HistoryListViewModel viewModel,
     required Function(BuildContext context) navigateToNewLog,
     required Function(BuildContext context, int historyId) navigateToDetail, 
+    required Function(BuildContext context) navigateToHistoryFilter,
   }) : 
-  _viewModel = viewModel,
-  _navigateToNewLog = navigateToNewLog,
-  _navigateToDetail = navigateToDetail;
+    _viewModel = viewModel,
+    _navigateToNewLog = navigateToNewLog,
+    _navigateToDetail = navigateToDetail,
+    _navigateToHistoryFilter = navigateToHistoryFilter;
 
   final HistoryListViewModel _viewModel;
   final Function(BuildContext) _navigateToNewLog;
   final Function(BuildContext, int) _navigateToDetail;
+  final Function(BuildContext) _navigateToHistoryFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +35,25 @@ class HistoryList extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: bottomNavigationBar,
-      body: ValueListenableBuilder(
-        valueListenable: _viewModel.models, 
-        builder: (_, models, _) => CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: false,
-              expandedHeight: 48.0,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(L10n.of(context)!.expenseHistory),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            actions: [
+              IconButton(
+                onPressed: () => _navigateToHistoryFilter(context), 
+                icon: Icon(Icons.search),
               ),
+            ],
+            pinned: false,
+            expandedHeight: 48.0,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(L10n.of(context)!.expenseHistory),
             ),
-            SliverList.list(
+          ),
+
+          ValueListenableBuilder(
+            valueListenable: _viewModel.models, 
+            builder: (_, models, _) => SliverList.list(
               children: [
                 ...models.map(
                   (model) => HistoryListElement(
@@ -53,9 +63,9 @@ class HistoryList extends StatelessWidget {
                 ),
               ],
             ),
-          ],
-        )
-      )
+          ),
+        ],
+      ),
     );
   }
 }

@@ -51,6 +51,27 @@ class L10nJa extends L10n {
   String get expenseHistoryEditUpdate => '購入情報を更新';
 
   @override
+  String get expenseHistoryFilter => '履歴の検索条件';
+
+  @override
+  String get expenseHistoryFilterAmount => '金額の範囲';
+
+  @override
+  String get expenseHistoryFilterUsedAt => '期間';
+
+  @override
+  String get expenseHistoryFilterCategory => '表示するカテゴリー';
+
+  @override
+  String get expenseHistoryFilterShop => '表示する購入先';
+
+  @override
+  String get expenseHistoryFilterTag => '表示するタグ';
+
+  @override
+  String get expenseHistoryFilterApply => '指定した内容で検索';
+
+  @override
   String get newLog => '購入情報の追加';
 
   @override

@@ -15,6 +15,7 @@ class SettingsAttributesViewModel {
     _shopRepository = shopRepository,
     _categoryRepository = categoryRepository,
     _tagRepository = tagRepository,
+    _usedAtRange = ValueNotifier(null),
     _shops = ValueNotifier([]),
     _categories = ValueNotifier([]),
     _tags = ValueNotifier([]);
@@ -22,6 +23,9 @@ class SettingsAttributesViewModel {
   final ShopRepository _shopRepository;
   final ExpenseCategoryRepository _categoryRepository;
   final ExpenseTagRepository _tagRepository;
+
+  final ValueNotifier<DateTimeRange?> _usedAtRange;
+  ValueNotifier<DateTimeRange?> get usedAtRange => _usedAtRange;
 
   final ValueNotifier<List<ShopModel>> _shops;
   ValueNotifier<List<ShopModel>> get shops => _shops;

@@ -2,9 +2,11 @@ import 'package:budgeting_app/domain/repositories/repositories.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_edit_view_model.dart';
+import 'package:budgeting_app/ui/history/view_models/history_filter_view_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_list_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_detail/history_detail.dart';
 import 'package:budgeting_app/ui/history/widgets/history_edit/history_edit.dart';
+import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter.dart';
 import 'package:budgeting_app/ui/history/widgets/history_list/history_list.dart';
 import 'package:budgeting_app/ui/new_log/view_models/new_log_view_model.dart';
 import 'package:budgeting_app/ui/new_log/widgets/new_log.dart';
@@ -61,6 +63,7 @@ class HistoryListPage extends StatelessWidget {
       viewModel: _viewModel,
       navigateToNewLog: _navigateToNewLog,
       navigateToDetail: _navigateToHistoryDetail,
+      navigateToHistoryFilter: _navigateToHistoryFilter,
     );
   }
 
@@ -81,6 +84,14 @@ class HistoryListPage extends StatelessWidget {
       )
     );
   }
+
+  void _navigateToHistoryFilter(BuildContext context) {
+   Navigator.of(context).push(
+     MaterialPageRoute(
+       builder: (context) => HistoryFilterPage(),
+     )
+   );
+ }
 }
 
 class HistoryDetailPage extends StatelessWidget {
@@ -158,6 +169,34 @@ class HistoryEditPage extends StatelessWidget {
   }
 }
 
+class HistoryFilterPage extends StatelessWidget {
+  HistoryFilterPage({
+    super.key,
+  }): _viewModel = HistoryFilterViewModel(
+    categoryRepository: categoryRepository,
+    tagRepository: tagRepository,
+    shopRepository: shopRepository,
+  );
+
+  final HistoryFilterViewModel _viewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return HistoryFilter(
+      viewModel: _viewModel,
+      navigateOnSubmit: _navigateOnSubmit,
+    );
+  }
+
+  void _navigateOnSubmit(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => HistoryListPage(),
+      )
+    );
+  }
+}
+
 class NewLogPage extends StatelessWidget {
   NewLogPage({
     super.key,
@@ -165,7 +204,7 @@ class NewLogPage extends StatelessWidget {
     historyRepository: historyRepository,
     categoryRepository: categoryRepository,
     tagRepository: tagRepository,
-    shopRepository: shopRepository
+    shopRepository: shopRepository,
   );
 
   final NewLogViewModel _viewModel;
