@@ -166,6 +166,9 @@ class L10nJa extends L10n {
   String get commonCancel => 'キャンセル';
 
   @override
+  String get commonAbbrDateFormat => 'yyyy/MM/dd(E)';
+
+  @override
   String get commonFullDateFormat => 'yyyy年 MM月 dd日 (E)';
 
   @override

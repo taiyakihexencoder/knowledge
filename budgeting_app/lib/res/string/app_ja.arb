@@ -55,6 +55,7 @@
   "commonPriceSuffix": "円",
   "commonOk": "OK",
   "commonCancel": "キャンセル",
+  "commonAbbrDateFormat": "yyyy/MM/dd(E)",
   "commonFullDateFormat": "yyyy年 MM月 dd日 (E)",
   "commonEmpty": "未設定"
 }

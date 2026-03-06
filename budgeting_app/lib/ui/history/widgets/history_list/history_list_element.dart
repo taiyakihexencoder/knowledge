@@ -3,6 +3,7 @@ import 'package:budgeting_app/ui/core/widget/preview_wrapper.dart';
 import 'package:budgeting_app/ui/history/models/history_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:intl/intl.dart';
 
 /// 消費履歴の１個を描画するWidget
 /// 
@@ -19,6 +20,8 @@ class HistoryListElement extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle? styleLabel = Theme.of(context).textTheme.labelLarge;
+    final DateFormat dateInputFormat = DateFormat('yyyy-MM-dd');
+    final DateFormat dateViewFormat = DateFormat(L10n.of(context)!.commonAbbrDateFormat);
 
     return InkWell(
       onTap: () {
@@ -39,10 +42,20 @@ class HistoryListElement extends StatelessWidget {
                 SizedBox(
                   width: 100.0,
                   child: Text(
-                    model.usedAt,
+                    dateViewFormat.format(
+                      dateInputFormat.parse(
+                        '${model.usedAt.substring(0,4)}-${model.usedAt.substring(4,6)}-${model.usedAt.substring(6,8)}'
+                      )
+                    ),
                     style: styleLabel,
+                    maxLines: 3,
+                    overflow: TextOverflow.clip,
                   ),
                 ),
+                const SizedBox(
+                  width: 12.0,
+                ),
+
                 Text(
                   model.shop ?? L10n.of(context)!.commonEmpty,
                   style: styleLabel,
@@ -123,7 +136,7 @@ Widget previewHistoryListElement() {
       category:'通販',
       shop: 'Amazon',
       amount: 10000,
-      usedAt: '2026/2/20',
+      usedAt: '20260220',
       tags: ['趣味', 'ゲーム', ],
     ),
     navigateToDetail:(_, _) {},
@@ -141,7 +154,7 @@ Widget previewHistoryListElementEmptyTag() {
       category:'雑費',
       shop: 'AEON',
       amount: 230,
-      usedAt: '2026/2/17',
+      usedAt: '20260217',
       tags:[],
     ),
     navigateToDetail: (_, _) {},

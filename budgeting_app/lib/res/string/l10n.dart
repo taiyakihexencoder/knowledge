@@ -387,6 +387,12 @@ abstract class L10n {
   /// **'キャンセル'**
   String get commonCancel;
 
+  /// No description provided for @commonAbbrDateFormat.
+  ///
+  /// In ja, this message translates to:
+  /// **'yyyy/MM/dd(E)'**
+  String get commonAbbrDateFormat;
+
   /// No description provided for @commonFullDateFormat.
   ///
   /// In ja, this message translates to:
