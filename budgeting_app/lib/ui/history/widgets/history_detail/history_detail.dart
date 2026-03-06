@@ -36,6 +36,12 @@ class HistoryDetailState extends State<HistoryDetail> {
       appBar: AppBar(
         title: Text(L10n.of(context)!.expenseHistoryDetail),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          widget._navigateToHistoryEdit(context);
+        },
+        child: const Icon(Icons.edit),
+      ),
       bottomNavigationBar: bottomNavigationBar,
       body: SingleChildScrollView(
         padding: EdgeInsetsDirectional.fromSTEB(24.0, 32.0, 24.0, 32.0),
@@ -47,15 +53,6 @@ class HistoryDetailState extends State<HistoryDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 spacing: 32.0,
                 children: [
-                  Align(
-                    alignment: AlignmentGeometry.centerRight,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        widget._navigateToHistoryEdit(context);
-                      },
-                      child: Text(L10n.of(context)!.commonEdit),
-                    ),
-                  ),
                   HistoryDetailUsedAt(
                     usedAt: history.usedAt,
                   ),
