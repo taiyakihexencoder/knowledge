@@ -4,6 +4,7 @@ import 'package:budgeting_app/domain/repositories/shop_repository.dart';
 import 'package:budgeting_app/ui/core/util/field_notifier.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_amount_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_date_time_range_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_tag_model.dart';
@@ -20,7 +21,7 @@ class HistoryFilterViewModel {
     _tagRepository = tagRepository,
     _shopRepository = shopRepository,
     _amount = ValueNotifier(HistoryFilterAmountModel()),
-    _usedAt = ValueNotifier(null),
+    _usedAt = ValueNotifier(HistoryFilterDateTimeRangeModel()),
     _shops = ValueNotifier([]),
     _categories = ValueNotifier([]),
     _tags = ValueNotifier([]);
@@ -42,9 +43,12 @@ class HistoryFilterViewModel {
   /// 金額フィルタがアクティブかどうか
   ValueNotifier<bool> get amountFilterActive => _amountFilterActive;
 
-  final ValueNotifier<DateTimeRange?> _usedAt;
+  final ValueNotifier<HistoryFilterDateTimeRangeModel> _usedAt;
   /// 日付フィルタの状態
-  ValueNotifier<DateTimeRange?> get usedAt => _usedAt;
+  ValueNotifier<HistoryFilterDateTimeRangeModel> get usedAt => _usedAt;
+
+  late final ValueNotifier<bool> _usedAtFilterActive = _usedAt.map((usedAt) => usedAt.active);
+  ValueNotifier<bool> get usedAtFilterActive => _usedAtFilterActive;
 
   final ValueNotifier<List<HistoryFilterShopModel>> _shops;
   /// 購入先リスト
@@ -61,6 +65,7 @@ class HistoryFilterViewModel {
   void dispose() {
     _amountFilterActive.dispose();
     _amount.dispose();
+    _usedAtFilterActive.dispose();
     _usedAt.dispose();
     _shops.dispose();
     _categories.dispose();
@@ -114,12 +119,41 @@ class HistoryFilterViewModel {
     );
   }
 
-  /// 範囲の変更
-  void onRangeChanged(int min, int max) {
+  /// 金額範囲の変更
+  void onAmountRangeChanged(int min, int max) {
     _amount.value = HistoryFilterAmountModel(
       min: min,
       max: max,
       active: _amount.value.active,
+    );
+  }
+
+  /// 期間を検索条件に含めるかどうかを変更
+  void setDateTimeFilterActive(bool active) {
+    if (_usedAt.value.range == null) {
+      final DateTime now = DateTime.now();
+      final DateTimeRange range = DateTimeRange(
+        start: DateTime(now.year, now.month-1, now.day),
+        end: now,
+      );
+
+      _usedAt.value = HistoryFilterDateTimeRangeModel(
+        range: range,
+        active: active,
+      );
+    } else {
+      _usedAt.value = HistoryFilterDateTimeRangeModel(
+        range: _usedAt.value.range,
+        active: active,
+      );
+    }
+  }
+
+  /// 期間範囲の変更
+  void onDateTimeRangeChanged(DateTimeRange range) {
+    _usedAt.value = HistoryFilterDateTimeRangeModel(
+      range: range,
+      active: _usedAt.value.active,
     );
   }
 }
