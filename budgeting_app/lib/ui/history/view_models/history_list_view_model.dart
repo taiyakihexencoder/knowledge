@@ -41,6 +41,7 @@ class HistoryListViewModel {
     _models.dispose();
   }
 
+  /// 履歴リストの更新
   void refreshList() async {
     List<ExpenseHistoryEntity> historyList = await _historyRepository.getHistoryList();
     Map<int, List<ExpenseHistoryTagEntity>> tagMap = await _tagRepository.getTags(
@@ -51,8 +52,8 @@ class HistoryListViewModel {
 
     List<HistoryModel> modelList = [];
     for (ExpenseHistoryEntity history in historyList) {
-      Future<ExpenseCategoryEntity> category = _categoryRepository.getCategory(history.categoryId);
-      Future<ShopEntity> shop = _shopRepository.getShop(history.shopId);
+      Future<ExpenseCategoryEntity?> category = _categoryRepository.getCategory(history.categoryId);
+      Future<ShopEntity?> shop = _shopRepository.getShop(history.shopId);
       modelList.add(
         HistoryModel.from(
           expenseHistory: history,
