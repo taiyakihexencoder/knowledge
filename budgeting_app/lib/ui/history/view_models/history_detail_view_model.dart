@@ -42,6 +42,10 @@ class HistoryDetailViewModel {
   final ValueNotifier<HistoryDetailModel?> _model;
   ValueNotifier<HistoryDetailModel?> get model => _model;
 
+  void dispose() {
+    _model.dispose();
+  }
+
   /// 詳細情報の取得
   void init() async {
     ExpenseHistoryEntity? history = await _historyRepository.getHistory(historyId: _historyId);

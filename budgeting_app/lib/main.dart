@@ -45,7 +45,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class HistoryListPage extends StatelessWidget {
+class HistoryListPage extends StatefulWidget {
   HistoryListPage({
     super.key
   }): _viewModel = HistoryListViewModel(
@@ -58,9 +58,22 @@ class HistoryListPage extends StatelessWidget {
   final HistoryListViewModel _viewModel;
 
   @override
+  HistoryListPageState createState() {
+    return HistoryListPageState();
+  }
+}
+
+class HistoryListPageState extends State<HistoryListPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return HistoryList(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
       navigateToNewLog: _navigateToNewLog,
       navigateToDetail: _navigateToHistoryDetail,
       navigateToHistoryFilter: _navigateToHistoryFilter,
@@ -94,7 +107,7 @@ class HistoryListPage extends StatelessWidget {
  }
 }
 
-class HistoryDetailPage extends StatelessWidget {
+class HistoryDetailPage extends StatefulWidget {
   HistoryDetailPage({
     super.key,
     required int historyId,
@@ -112,9 +125,22 @@ class HistoryDetailPage extends StatelessWidget {
   final HistoryDetailViewModel _viewModel;
 
   @override
+  HistoryDetailPageState createState() {
+    return HistoryDetailPageState();
+  }
+}
+
+class HistoryDetailPageState extends State<HistoryDetailPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return HistoryDetail(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
       navigateToHistoryEdit: _navigateToHistoryEdit,
     );
   }
@@ -123,34 +149,42 @@ class HistoryDetailPage extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => HistoryEditPage(
-          historyId: _historyId,
+          historyId: widget._historyId,
         ),
       ),
     );
   }
 }
 
-class HistoryEditPage extends StatelessWidget {
+class HistoryEditPage extends StatefulWidget {
   HistoryEditPage({
     super.key,
     required int historyId,
   }):
-    _historyId = historyId, 
+    _historyId = historyId,
     _viewModel = HistoryEditViewModel(
       id: historyId,
-      historyRepository: historyRepository, 
-      categoryRepository: categoryRepository, 
-      tagRepository: tagRepository, 
+      historyRepository: historyRepository,
+      categoryRepository: categoryRepository,
+      tagRepository: tagRepository,
       shopRepository: shopRepository
     );
 
   final int _historyId;
   final HistoryEditViewModel _viewModel;
+}
+
+class HistoryEditPageState extends State<HistoryEditPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return HistoryEdit(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
       navigateOnSubmit: _navigateOnSubmit,
     );
   }
@@ -160,7 +194,7 @@ class HistoryEditPage extends StatelessWidget {
     int count = 0;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (_) => HistoryDetailPage(historyId: _historyId)
+        builder: (_) => HistoryDetailPage(historyId: widget._historyId)
       ),
       (_) {
         return count++ >= removeCount;
@@ -210,7 +244,7 @@ class HistoryFilterPageState extends State<HistoryFilterPage> {
   }
 }
 
-class NewLogPage extends StatelessWidget {
+class NewLogPage extends StatefulWidget {
   NewLogPage({
     super.key,
   }): _viewModel = NewLogViewModel(
@@ -223,9 +257,22 @@ class NewLogPage extends StatelessWidget {
   final NewLogViewModel _viewModel;
 
   @override
+  NewLogPageState createState() {
+    return NewLogPageState();
+  }
+}
+
+class NewLogPageState extends State<NewLogPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return NewLog(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
       navigateOnSubmit: _navigateOnSubmit,
     );
   }
@@ -265,7 +312,7 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-class SettingsAttributesPage extends StatelessWidget {
+class SettingsAttributesPage extends StatefulWidget {
   SettingsAttributesPage({
     super.key,
   }): _viewModel = SettingsAttributesViewModel(
@@ -277,9 +324,22 @@ class SettingsAttributesPage extends StatelessWidget {
   final SettingsAttributesViewModel _viewModel;
 
   @override
+  SettingsAttributesPageState createState() {
+    return SettingsAttributesPageState();
+  }
+}
+
+class SettingsAttributesPageState extends State<SettingsAttributesPage>{
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SettingsAttributes(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
     );
   }
 }
