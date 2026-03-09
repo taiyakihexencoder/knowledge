@@ -94,7 +94,7 @@ class HistoryListPageState extends State<HistoryListPage> {
   }
 }
 
-class HistoryDetailPage extends StatelessWidget {
+class HistoryDetailPage extends StatefulWidget {
   HistoryDetailPage({
     super.key,
     required int historyId,
@@ -109,9 +109,22 @@ class HistoryDetailPage extends StatelessWidget {
   final HistoryDetailViewModel _viewModel;
 
   @override
+  HistoryDetailPageState createState() {
+    return HistoryDetailPageState();
+  }
+}
+
+class HistoryDetailPageState extends State<HistoryDetailPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return HistoryDetail(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
     );
   }
 }
