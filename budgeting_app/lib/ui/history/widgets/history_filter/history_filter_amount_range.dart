@@ -11,16 +11,19 @@ class HistoryFilterAmountRange extends StatelessWidget {
     required TextEditingController minFieldController,
     required TextEditingController maxFieldController,
     required bool active,
+    required Function(int, int) rangeChanged
   }): 
     _minFieldController = minFieldController,
     _maxFieldController = maxFieldController,
-    _active = active;
+    _active = active,
+    _rangeChanged = rangeChanged;
 
   static const int _maxLength = 8;
 
   final TextEditingController _minFieldController;
   final TextEditingController _maxFieldController;
   final bool _active;
+  final Function(int, int) _rangeChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,14 @@ class HistoryFilterAmountRange extends StatelessWidget {
               child: PriceEditField(
                 controller: _minFieldController, 
                 maxLength: _maxLength,
+                onSubmitted: (text) {
+                  final int? min = int.tryParse(text);
+                  final int max = int.tryParse(_maxFieldController.text) ?? 99999999;
+
+                  if (min != null) {
+                    _rangeChanged(min, max);
+                  }
+                }
               )
             ),
             SizedBox(
@@ -46,7 +57,16 @@ class HistoryFilterAmountRange extends StatelessWidget {
             Expanded(
               child: PriceEditField(
                 controller: _maxFieldController, 
-                maxLength: _maxLength
+                maxLength: _maxLength,
+                onSubmitted: (text) {
+                  final int min = int.tryParse(_maxFieldController.text) ?? 0;
+                  final int? max = int.tryParse(text);
+
+                  if (max != null) {
+                    _rangeChanged(min, max);
+                  }
+                }
+
               ),
             ),
           ],
@@ -66,6 +86,7 @@ Widget previewAmountRangeActive() {
       minFieldController: controllers[0], 
       maxFieldController: controllers[1],
       active: true,
+      rangeChanged: (_, _) {},
     ),
     controllerCount: 2,
   );
@@ -81,6 +102,7 @@ Widget previewAmountRangeInactive() {
       minFieldController: controllers[0], 
       maxFieldController: controllers[1],
       active: false,
+      rangeChanged: (_, _) {},
     ),
     controllerCount: 2,
   );

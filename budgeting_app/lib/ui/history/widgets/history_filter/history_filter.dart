@@ -118,6 +118,7 @@ class HistoryFilterState extends State<HistoryFilter> {
             minFieldController: _amountRangeMinController, 
             maxFieldController: _amountRangeMaxController,
             active: amountFilter.active,
+            rangeChanged: widget._viewModel.onRangeChanged,
           );
         },
       ),

@@ -113,4 +113,13 @@ class HistoryFilterViewModel {
       active: active,
     );
   }
+
+  /// 範囲の変更
+  void onRangeChanged(int min, int max) {
+    _amount.value = HistoryFilterAmountModel(
+      min: min,
+      max: max,
+      active: _amount.value.active,
+    );
+  }
 }
