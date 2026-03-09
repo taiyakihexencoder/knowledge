@@ -169,7 +169,7 @@ class HistoryEditPage extends StatelessWidget {
   }
 }
 
-class HistoryFilterPage extends StatelessWidget {
+class HistoryFilterPage extends StatefulWidget {
   HistoryFilterPage({
     super.key,
   }): _viewModel = HistoryFilterViewModel(
@@ -181,9 +181,22 @@ class HistoryFilterPage extends StatelessWidget {
   final HistoryFilterViewModel _viewModel;
 
   @override
+  HistoryFilterPageState createState() {
+    return HistoryFilterPageState();
+  }
+}
+
+class HistoryFilterPageState extends State<HistoryFilterPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return HistoryFilter(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
       navigateOnSubmit: _navigateOnSubmit,
     );
   }

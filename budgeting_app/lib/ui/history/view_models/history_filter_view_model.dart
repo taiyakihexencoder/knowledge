@@ -53,6 +53,14 @@ class HistoryFilterViewModel {
   /// タグリスト
   ValueNotifier<List<HistoryFilterTagModel>> get tags => _tags;
 
+  void dispose() {
+    _amount.dispose();
+    _usedAt.dispose();
+    _shops.dispose();
+    _categories.dispose();
+    _tags.dispose();
+  }
+
   /// 購入先・カテゴリー・タグのリストを取得する
   Future<void> loadData() async {
     Future fetchShopList = _shopRepository.getAllShopList().then(
