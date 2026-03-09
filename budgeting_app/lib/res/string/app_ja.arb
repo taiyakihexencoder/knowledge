@@ -25,6 +25,7 @@
   "expenseHistoryFilterShop": "表示する購入先",
   "expenseHistoryFilterTag": "表示するタグ",
   "expenseHistoryFilterApply": "指定した内容で検索", 
+  "expenseHistoryFilterActive": "条件に含める",
 
   "newLog": "購入情報の追加",
   "newLogUsedAt": "購入日",

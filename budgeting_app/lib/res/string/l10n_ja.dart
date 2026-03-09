@@ -72,6 +72,9 @@ class L10nJa extends L10n {
   String get expenseHistoryFilterApply => '指定した内容で検索';
 
   @override
+  String get expenseHistoryFilterActive => '条件に含める';
+
+  @override
   String get newLog => '購入情報の追加';
 
   @override

@@ -219,6 +219,12 @@ abstract class L10n {
   /// **'指定した内容で検索'**
   String get expenseHistoryFilterApply;
 
+  /// No description provided for @expenseHistoryFilterActive.
+  ///
+  /// In ja, this message translates to:
+  /// **'条件に含める'**
+  String get expenseHistoryFilterActive;
+
   /// No description provided for @newLog.
   ///
   /// In ja, this message translates to:

@@ -1,8 +1,10 @@
 import 'package:budgeting_app/res/string/l10n.dart';
+import 'package:budgeting_app/ui/core/widget/stateful_checkbox.dart';
 import 'package:budgeting_app/ui/history/view_models/history_filter_view_model.dart';
+import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_amount_range.dart';
 import 'package:flutter/material.dart';
 
-class HistoryFilter extends StatelessWidget{
+class HistoryFilter extends StatefulWidget {
   const HistoryFilter({
     super.key,
     required HistoryFilterViewModel viewModel,
@@ -15,8 +17,26 @@ class HistoryFilter extends StatelessWidget{
   final Function(BuildContext) _navigateOnSubmit;
 
   @override
+  HistoryFilterState createState() {
+    return HistoryFilterState();
+  }
+}
+
+class HistoryFilterState extends State<HistoryFilter> {
+
+  final TextEditingController _amountRangeMinController = TextEditingController();
+  final TextEditingController _amountRangeMaxController = TextEditingController();
+
+  @override
+  void dispose() {
+    _amountRangeMinController.dispose();
+    _amountRangeMaxController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _viewModel.loadData();
+    widget._viewModel.loadData();
 
     return Scaffold(
       appBar: AppBar(
@@ -75,9 +95,31 @@ class HistoryFilter extends StatelessWidget{
   /// 金額範囲のフィルタ
   List<Widget> _amountFilterWidget(BuildContext context) {
     return [
+      Row(
+        children: [
+          Text(
+            L10n.of(context)!.expenseHistoryFilterAmount,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          SizedBox(width:25.0),
+          Text(L10n.of(context)!.expenseHistoryFilterActive),
+          StatefulCheckbox(
+            notifier: widget._viewModel.amountFilterActive, 
+            onChanged: (active) => widget._viewModel.setAmountFilterActive(active ?? false),
+          ),
+        ],
+      ),
       ValueListenableBuilder(
-        valueListenable: _viewModel.amount, 
-        builder: (_, amountFilter, _) => Container(),
+        valueListenable: widget._viewModel.amount, 
+        builder: (_, amountFilter, _) {
+          _amountRangeMinController.text = amountFilter.min.toString();
+          _amountRangeMaxController.text = amountFilter.max.toString();
+          return HistoryFilterAmountRange(
+            minFieldController: _amountRangeMinController, 
+            maxFieldController: _amountRangeMaxController,
+            active: amountFilter.active,
+          );
+        },
       ),
     ];
   }
@@ -86,7 +128,7 @@ class HistoryFilter extends StatelessWidget{
   List<Widget> _usedAtFilterWidget(BuildContext context) {
     return [
       ValueListenableBuilder(
-        valueListenable: _viewModel.usedAt, 
+        valueListenable: widget._viewModel.usedAt, 
         builder: (_, dateTimeRange, _) => Container(),
       ),
     ];
@@ -102,7 +144,7 @@ class HistoryFilter extends StatelessWidget{
         ),
 
         ValueListenableBuilder(
-          valueListenable: _viewModel.categories,
+          valueListenable: widget._viewModel.categories,
           builder: (_, tags, _) => SliverList.list(
             children:[]
           ),
@@ -121,7 +163,7 @@ class HistoryFilter extends StatelessWidget{
         ),
 
         ValueListenableBuilder(
-          valueListenable: _viewModel.shops,
+          valueListenable: widget._viewModel.shops,
           builder: (_, tags, _) => SliverList.list(
             children:[]
           ),
@@ -140,7 +182,7 @@ class HistoryFilter extends StatelessWidget{
         ),
 
         ValueListenableBuilder(
-          valueListenable: _viewModel.tags,
+          valueListenable: widget._viewModel.tags,
           builder: (_, tags, _) => SliverList.list(
             children:[]
           ),
@@ -154,7 +196,7 @@ class HistoryFilter extends StatelessWidget{
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () => _navigateOnSubmit(context), 
+        onPressed: () => widget._navigateOnSubmit(context), 
         child: Text(
           L10n.of(context)!.expenseHistoryFilterApply,
         ),

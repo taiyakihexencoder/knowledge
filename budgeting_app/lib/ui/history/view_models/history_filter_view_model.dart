@@ -1,6 +1,7 @@
 import 'package:budgeting_app/domain/repositories/expense_category_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_tag_repository.dart';
 import 'package:budgeting_app/domain/repositories/shop_repository.dart';
+import 'package:budgeting_app/ui/core/util/field_notifier.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_amount_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_model.dart';
@@ -36,6 +37,10 @@ class HistoryFilterViewModel {
   final ValueNotifier<HistoryFilterAmountModel> _amount;
   /// 金額フィルタの状態
   ValueNotifier<HistoryFilterAmountModel> get amount => _amount;
+  
+  late final ValueNotifier<bool> _amountFilterActive = _amount.map((amount) => amount.active);
+  /// 金額フィルタがアクティブかどうか
+  ValueNotifier<bool> get amountFilterActive => _amountFilterActive;
 
   final ValueNotifier<DateTimeRange?> _usedAt;
   /// 日付フィルタの状態
@@ -54,6 +59,7 @@ class HistoryFilterViewModel {
   ValueNotifier<List<HistoryFilterTagModel>> get tags => _tags;
 
   void dispose() {
+    _amountFilterActive.dispose();
     _amount.dispose();
     _usedAt.dispose();
     _shops.dispose();
@@ -97,5 +103,14 @@ class HistoryFilterViewModel {
     );
 
     Future.wait([fetchShopList, fetchCategoryList, fetchTagList]);
+  }
+
+  /// 金額を検索条件に含めるかどうかを変更
+  void setAmountFilterActive(bool active) {
+    _amount.value = HistoryFilterAmountModel(
+      min: _amount.value.min,
+      max: _amount.value.max,
+      active: active,
+    );
   }
 }

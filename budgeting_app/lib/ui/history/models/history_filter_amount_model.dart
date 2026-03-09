@@ -3,6 +3,7 @@ class HistoryFilterAmountModel {
   const HistoryFilterAmountModel({
     this.min = 0,
     this.max = 99999999, // 入力可能な最大値
+    this.active = false,
   });
 
   /// 最小値
@@ -10,4 +11,7 @@ class HistoryFilterAmountModel {
 
   /// 最大値
   final int max;
+
+  /// 有効かどうか
+  final bool active;
 }
