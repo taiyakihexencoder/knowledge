@@ -32,6 +32,12 @@ class SettingsAttributesViewModel {
   final ValueNotifier<List<TagModel>> _tags;
   ValueNotifier<List<TagModel>> get tags => _tags;
 
+  void dispose() {
+    _shops.dispose();
+    _categories.dispose();
+    _tags.dispose();
+  }
+
   /// 購入先リストを更新(async)
   void updateShopList() async {
     _shops.value = await _shopRepository.getAllShopList().then(
