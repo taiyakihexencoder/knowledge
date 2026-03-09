@@ -65,6 +65,13 @@ class HistoryEditViewModel {
   final ValueNotifier<HistoryDetailModel?> _detail;
   ValueNotifier<HistoryDetailModel?> get detail => _detail;
 
+  void dispose() {
+    _categorySelections.dispose();
+    _tagSelections.dispose();
+    _shopSelections.dispose();
+    _detail.dispose();
+  }
+
   // 詳細情報の取得
   void initDetail() async {
     ExpenseHistoryEntity? history = await _historyRepository.getHistory(historyId: _id);

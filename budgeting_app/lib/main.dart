@@ -138,14 +138,14 @@ class HistoryDetailPageState extends State<HistoryDetailPage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => HistoryEditPage(
-          historyId: _historyId,
+          historyId: widget._historyId,
         ),
       ),
     );
   }
 }
 
-class HistoryEditPage extends StatelessWidget {
+class HistoryEditPage extends StatefulWidget {
   HistoryEditPage({
     super.key,
     required int historyId,
@@ -161,11 +161,19 @@ class HistoryEditPage extends StatelessWidget {
 
   final int _historyId;
   final HistoryEditViewModel _viewModel;
+}
+
+class HistoryEditPageState extends State<HistoryEditPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return HistoryEdit(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
       navigateOnSubmit: _navigateOnSubmit,
     );
   }
@@ -175,7 +183,7 @@ class HistoryEditPage extends StatelessWidget {
     int count = 0;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (_) => HistoryDetailPage(historyId: _historyId)
+        builder: (_) => HistoryDetailPage(historyId: widget._historyId)
       ),
       (_) {
         return count++ >= removeCount;
