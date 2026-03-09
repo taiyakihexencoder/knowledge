@@ -36,7 +36,7 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class HistoryListPage extends StatelessWidget {
+class HistoryListPage extends StatefulWidget {
   HistoryListPage({
     super.key
   }): _viewModel = HistoryListViewModel(
@@ -49,9 +49,22 @@ class HistoryListPage extends StatelessWidget {
   final HistoryListViewModel _viewModel;
 
   @override
+  HistoryListPageState createState() {
+    return HistoryListPageState();
+  }
+}
+
+class HistoryListPageState extends State<HistoryListPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return HistoryList(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
       navigateToNewLog: _navigateToNewLog,
     );
   }
@@ -65,7 +78,7 @@ class HistoryListPage extends StatelessWidget {
   }
 }
 
-class NewLogPage extends StatelessWidget {
+class NewLogPage extends StatefulWidget {
   NewLogPage({
     super.key,
   }): _viewModel = NewLogViewModel(
@@ -78,9 +91,22 @@ class NewLogPage extends StatelessWidget {
   final NewLogViewModel _viewModel;
 
   @override
+  NewLogPageState createState() {
+    return NewLogPageState();
+  }
+}
+
+class NewLogPageState extends State<NewLogPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return NewLog(
-      viewModel: _viewModel
+      viewModel: widget._viewModel
     );
   }
 }
