@@ -52,6 +52,12 @@ class NewLogViewModel {
   final ValueNotifier<List<ShopModel>> _shopSelections;
   ValueNotifier<List<ShopModel>> get shopSelections => _shopSelections;
 
+  void dispose() {
+    _categorySelections.dispose();
+    _tagSelections.dispose();
+    _shopSelections.dispose();
+  }
+
   /// カテゴリーリストを更新する
   void refreshCategoryList() async {
     List<ExpenseCategoryEntity> categoryList = await _categoryRepository.getAllCategoryList();
