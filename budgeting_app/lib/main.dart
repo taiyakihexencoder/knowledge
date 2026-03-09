@@ -161,6 +161,11 @@ class HistoryEditPage extends StatefulWidget {
 
   final int _historyId;
   final HistoryEditViewModel _viewModel;
+
+  @override
+  HistoryEditPageState createState() {
+    return HistoryEditPageState();
+  }
 }
 
 class HistoryEditPageState extends State<HistoryEditPage> {
