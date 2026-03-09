@@ -170,7 +170,7 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-class SettingsAttributesPage extends StatelessWidget {
+class SettingsAttributesPage extends StatefulWidget {
   SettingsAttributesPage({
     super.key,
   }): _viewModel = SettingsAttributesViewModel(
@@ -182,9 +182,22 @@ class SettingsAttributesPage extends StatelessWidget {
   final SettingsAttributesViewModel _viewModel;
 
   @override
+  SettingsAttributesPageState createState() {
+    return SettingsAttributesPageState();
+  }
+}
+
+class SettingsAttributesPageState extends State<SettingsAttributesPage>{
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SettingsAttributes(
-      viewModel: _viewModel,
+      viewModel: widget._viewModel,
     );
   }
 }
