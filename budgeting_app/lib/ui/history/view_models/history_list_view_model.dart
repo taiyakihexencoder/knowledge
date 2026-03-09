@@ -37,6 +37,10 @@ class HistoryListViewModel {
   final ValueNotifier<List<HistoryModel>> _models;
   ValueNotifier<List<HistoryModel>> get models => _models;
 
+  void dispose() {
+    _models.dispose();
+  }
+
   void refreshList() async {
     List<ExpenseHistoryEntity> historyList = await _historyRepository.getHistoryList();
     Map<int, List<ExpenseHistoryTagEntity>> tagMap = await _tagRepository.getTags(
