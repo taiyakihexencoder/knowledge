@@ -1,15 +1,16 @@
 import 'package:budgeting_app/domain/repositories/expense_category_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_tag_repository.dart';
 import 'package:budgeting_app/domain/repositories/shop_repository.dart';
+import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
 import 'package:budgeting_app/ui/core/util/field_notifier.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_amount_model.dart';
+import 'package:budgeting_app/ui/core/models/filter/amount_filter_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_category_selected_list_model.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_date_time_range_model.dart';
+import 'package:budgeting_app/ui/core/models/filter/category_filter_model.dart';
+import 'package:budgeting_app/ui/core/models/filter/date_filter_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_shop_selected_list_model.dart';
+import 'package:budgeting_app/ui/core/models/filter/shop_filter_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_tag_model.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_tag_selected_list_model.dart';
+import 'package:budgeting_app/ui/core/models/filter/tag_filter_model.dart';
 import 'package:flutter/material.dart';
 
 class HistoryFilterViewModel {
@@ -17,18 +18,19 @@ class HistoryFilterViewModel {
     required ExpenseCategoryRepository categoryRepository,
     required ExpenseTagRepository tagRepository,
     required ShopRepository shopRepository,
+    required SearchFilterModel searchFilter,
   }) : 
     _categoryRepository = categoryRepository,
     _tagRepository = tagRepository,
     _shopRepository = shopRepository,
-    _amount = ValueNotifier(HistoryFilterAmountModel()),
-    _usedAt = ValueNotifier(HistoryFilterDateTimeRangeModel()),
+    _amount = ValueNotifier(searchFilter.amount),
+    _usedAt = ValueNotifier(searchFilter.usedAt),
     _shops = ValueNotifier([]),
     _categories = ValueNotifier([]),
     _tags = ValueNotifier([]),
-    _selectedShops = ValueNotifier(HistoryFilterShopSelectedListModel(selectedList: [])),
-    _selectedCategories = ValueNotifier(HistoryFilterCategorySelectedListModel(selectedList: [])),
-    _selectedTags = ValueNotifier(HistoryFilterTagSelectedListModel(selectedList: []));
+    _selectedShops = ValueNotifier(searchFilter.shops),
+    _selectedCategories = ValueNotifier(searchFilter.categories),
+    _selectedTags = ValueNotifier(searchFilter.tags);
 
   /// 購入カテゴリーReposiotry
   final ExpenseCategoryRepository _categoryRepository;
@@ -39,17 +41,17 @@ class HistoryFilterViewModel {
   /// 購入先Repository
   final ShopRepository _shopRepository;
 
-  final ValueNotifier<HistoryFilterAmountModel> _amount;
+  final ValueNotifier<AmountFilterModel> _amount;
   /// 金額フィルタの状態
-  ValueNotifier<HistoryFilterAmountModel> get amount => _amount;
+  ValueNotifier<AmountFilterModel> get amount => _amount;
   
   late final ValueNotifier<bool> _amountFilterActive = _amount.map((amount) => amount.active);
   /// 金額フィルタがアクティブかどうか
   ValueNotifier<bool> get amountFilterActive => _amountFilterActive;
 
-  final ValueNotifier<HistoryFilterDateTimeRangeModel> _usedAt;
+  final ValueNotifier<DateFilterModel> _usedAt;
   /// 日付フィルタの状態
-  ValueNotifier<HistoryFilterDateTimeRangeModel> get usedAt => _usedAt;
+  ValueNotifier<DateFilterModel> get usedAt => _usedAt;
 
   late final ValueNotifier<bool> _usedAtFilterActive = _usedAt.map((usedAt) => usedAt.active);
   /// 日付フィルタがアクティブかどうか
@@ -71,25 +73,25 @@ class HistoryFilterViewModel {
   /// 購入先フィルタがアクティブかどうか
   ValueNotifier<bool> get shopsFilterActive => _shopsFilterActive;
 
-  final ValueNotifier<HistoryFilterShopSelectedListModel> _selectedShops;
+  final ValueNotifier<ShopFilterModel> _selectedShops;
   /// 選択済の購入先リスト
-  ValueNotifier<HistoryFilterShopSelectedListModel> get selectedShops => _selectedShops;
+  ValueNotifier<ShopFilterModel> get selectedShops => _selectedShops;
 
   late final ValueNotifier<bool> _categoriesFilterActive = _selectedCategories.map((categories) => categories.active);
   // カテゴリーフィルタがアクティブかどうか
   ValueNotifier<bool> get categoriesFilterActive => _categoriesFilterActive;
 
-  final ValueNotifier<HistoryFilterCategorySelectedListModel> _selectedCategories;
+  final ValueNotifier<CategoryFilterModel> _selectedCategories;
   /// 選択済のカテゴリーリスト
-  ValueNotifier<HistoryFilterCategorySelectedListModel> get selectedCategories => _selectedCategories;
+  ValueNotifier<CategoryFilterModel> get selectedCategories => _selectedCategories;
 
   late final ValueNotifier<bool> _tagsFilterActive = _selectedTags.map((tags) => tags.active);
   /// タグフィルタがアクティブかどうか
   ValueNotifier<bool> get tagsFilterActive => _tagsFilterActive;
 
-  final ValueNotifier<HistoryFilterTagSelectedListModel> _selectedTags;
+  final ValueNotifier<TagFilterModel> _selectedTags;
   /// 選択済のタグリスト
-  ValueNotifier<HistoryFilterTagSelectedListModel> get selectedTags => _selectedTags;
+  ValueNotifier<TagFilterModel> get selectedTags => _selectedTags;
 
   void dispose() {
     _amountFilterActive.dispose();
@@ -147,7 +149,7 @@ class HistoryFilterViewModel {
 
   /// 金額を検索条件に含めるかどうかを変更
   void setAmountFilterActive(bool active) {
-    _amount.value = HistoryFilterAmountModel(
+    _amount.value = AmountFilterModel(
       min: _amount.value.min,
       max: _amount.value.max,
       active: active,
@@ -156,7 +158,7 @@ class HistoryFilterViewModel {
 
   /// 金額範囲の変更
   void onAmountRangeChanged(int min, int max) {
-    _amount.value = HistoryFilterAmountModel(
+    _amount.value = AmountFilterModel(
       min: min,
       max: max,
       active: _amount.value.active,
@@ -172,12 +174,12 @@ class HistoryFilterViewModel {
         end: now,
       );
 
-      _usedAt.value = HistoryFilterDateTimeRangeModel(
+      _usedAt.value = DateFilterModel(
         range: range,
         active: active,
       );
     } else {
-      _usedAt.value = HistoryFilterDateTimeRangeModel(
+      _usedAt.value = DateFilterModel(
         range: _usedAt.value.range,
         active: active,
       );
@@ -186,7 +188,7 @@ class HistoryFilterViewModel {
 
   /// 期間範囲の変更
   void onDateTimeRangeChanged(DateTimeRange range) {
-    _usedAt.value = HistoryFilterDateTimeRangeModel(
+    _usedAt.value = DateFilterModel(
       range: range,
       active: _usedAt.value.active,
     );
@@ -194,7 +196,7 @@ class HistoryFilterViewModel {
 
   /// 購入先フィルタを検索条件に含めるか変更
   void setShopFilterActive(bool active) {
-    _selectedShops.value = HistoryFilterShopSelectedListModel(
+    _selectedShops.value = ShopFilterModel(
       selectedList: _selectedShops.value.selectedList,
       active: active,
     );
@@ -203,8 +205,8 @@ class HistoryFilterViewModel {
   /// 購入先のフィルタ追加
   void onShopSelected(int id) {
     if (!_selectedShops.value.selectedList.contains(id)) {
-      _selectedShops.value = HistoryFilterShopSelectedListModel(
-        selectedList: _selectedShops.value.selectedList..add(id),
+      _selectedShops.value = ShopFilterModel(
+        selectedList: _selectedShops.value.selectedList.toList()..add(id),
         active: _selectedShops.value.active,
       );
     }
@@ -213,8 +215,8 @@ class HistoryFilterViewModel {
   /// 購入先のフィルタ解除
   void onShopDeselect(int id) {
     if (_selectedShops.value.selectedList.contains(id)) {
-      _selectedShops.value = HistoryFilterShopSelectedListModel(
-        selectedList: _selectedShops.value.selectedList..remove(id),
+      _selectedShops.value = ShopFilterModel(
+        selectedList: _selectedShops.value.selectedList.toList()..remove(id),
         active: _selectedShops.value.active,
       );
     }
@@ -222,7 +224,7 @@ class HistoryFilterViewModel {
 
   /// カテゴリーフィルタを検索条件に含めるか変更
   void setCategoryFilterActive(bool active) {
-    _selectedCategories.value = HistoryFilterCategorySelectedListModel(
+    _selectedCategories.value = CategoryFilterModel(
       selectedList: _selectedCategories.value.selectedList,
       active: active,
     );
@@ -231,8 +233,8 @@ class HistoryFilterViewModel {
   /// カテゴリーのフィルタ追加
   void onCategorySelected(int id) {
     if (!_selectedCategories.value.selectedList.contains(id)) {
-      _selectedCategories.value = HistoryFilterCategorySelectedListModel(
-        selectedList: _selectedCategories.value.selectedList..add(id),
+      _selectedCategories.value = CategoryFilterModel(
+        selectedList: _selectedCategories.value.selectedList.toList()..add(id),
         active: _selectedCategories.value.active,
       );
     }
@@ -241,8 +243,8 @@ class HistoryFilterViewModel {
   /// カテゴリーのフィルタ解除
   void onCategoryDeselect(int id) {
     if (_selectedCategories.value.selectedList.contains(id)) {
-      _selectedCategories.value = HistoryFilterCategorySelectedListModel(
-        selectedList: _selectedCategories.value.selectedList..remove(id),
+      _selectedCategories.value = CategoryFilterModel(
+        selectedList: _selectedCategories.value.selectedList.toList()..remove(id),
         active: _selectedCategories.value.active,
       );
     }
@@ -250,7 +252,7 @@ class HistoryFilterViewModel {
 
   /// タグフィルタを検索条件に含めるか変更
   void setTagFilterActive(bool active) {
-    _selectedTags.value = HistoryFilterTagSelectedListModel(
+    _selectedTags.value = TagFilterModel(
       selectedList: _selectedTags.value.selectedList,
       active: active,
     );
@@ -259,8 +261,8 @@ class HistoryFilterViewModel {
   /// タグのフィルタ追加
   void onTagSelected(int id) {
     if (!_selectedTags.value.selectedList.contains(id)) {
-      _selectedTags.value = HistoryFilterTagSelectedListModel(
-        selectedList: _selectedTags.value.selectedList..add(id),
+      _selectedTags.value = TagFilterModel(
+        selectedList: _selectedTags.value.selectedList.toList()..add(id),
         active: _selectedTags.value.active,
       );
     }
@@ -269,10 +271,21 @@ class HistoryFilterViewModel {
   /// タグのフィルタ解除
   void onTagDeselect(int id) {
     if (_selectedTags.value.selectedList.contains(id)) {
-      _selectedTags.value = HistoryFilterTagSelectedListModel(
-        selectedList: _selectedTags.value.selectedList..remove(id),
+      _selectedTags.value = TagFilterModel(
+        selectedList: _selectedTags.value.selectedList.toList()..remove(id),
         active: _selectedTags.value.active,
       );
     }
+  }
+
+  /// 検索フィルターを作成する
+  SearchFilterModel createSearchFilter() {
+    return SearchFilterModel(
+      amount: _amount.value,
+      usedAt: _usedAt.value,
+      categories: _selectedCategories.value,
+      shops: _selectedShops.value,
+      tags: _selectedTags.value,
+    );
   }
 }
