@@ -6,7 +6,6 @@ import 'package:budgeting_app/ui/history/models/history_filter_amount_model.dart
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_category_selected_list_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_date_time_range_model.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_selected_list_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_tag_model.dart';
@@ -18,7 +17,6 @@ class HistoryFilterViewModel {
     required ExpenseCategoryRepository categoryRepository,
     required ExpenseTagRepository tagRepository,
     required ShopRepository shopRepository,
-    HistoryFilterModel? filter,
   }) : 
     _categoryRepository = categoryRepository,
     _tagRepository = tagRepository,
