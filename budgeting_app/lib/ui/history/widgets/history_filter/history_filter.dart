@@ -219,7 +219,7 @@ class HistoryFilterState extends State<HistoryFilter> {
                 ValueListenableBuilder(
                   valueListenable: widget._viewModel.categories,
                   builder: (_, categories, _) {
-                    final List<HistoryFilterCategoryModel> modelList = [];
+                    List<HistoryFilterCategoryModel> modelList = [];
                     for (int selected in selectedCategories.selectedList) {
                       HistoryFilterCategoryModel? model = categories.firstWhereOrNull((model) => model.id == selected);
                       if (model != null) {
@@ -301,7 +301,7 @@ class HistoryFilterState extends State<HistoryFilter> {
                 ValueListenableBuilder(
                   valueListenable: widget._viewModel.shops,
                   builder: (_, shops, _) {
-                    final List<HistoryFilterShopModel> modelList = [];
+                    List<HistoryFilterShopModel> modelList = [];
                     for (int selected in selectedShops.selectedList) {
                       HistoryFilterShopModel? model = shops.firstWhereOrNull((model) => model.id == selected);
                       if (model != null) {
@@ -383,7 +383,7 @@ class HistoryFilterState extends State<HistoryFilter> {
                 ValueListenableBuilder(
                   valueListenable: widget._viewModel.tags,
                   builder: (_, tags, _) {
-                    final List<HistoryFilterTagModel> modelList = [];
+                    List<HistoryFilterTagModel> modelList = [];
                     for (int selected in selectedTags.selectedList) {
                       HistoryFilterTagModel? model = tags.firstWhereOrNull((model) => model.id == selected);
                       if (model != null) {
