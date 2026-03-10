@@ -59,7 +59,7 @@ class HistoryFilterAmountRange extends StatelessWidget {
                 controller: _maxFieldController, 
                 maxLength: _maxLength,
                 onSubmitted: (text) {
-                  final int min = int.tryParse(_maxFieldController.text) ?? 0;
+                  final int min = int.tryParse(_minFieldController.text) ?? 0;
                   final int? max = int.tryParse(text);
 
                   if (max != null) {
