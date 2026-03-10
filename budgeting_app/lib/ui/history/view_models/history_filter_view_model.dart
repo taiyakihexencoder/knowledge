@@ -10,6 +10,7 @@ import 'package:budgeting_app/ui/history/models/history_filter_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_selected_list_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_tag_model.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_tag_selected_list_model.dart';
 import 'package:flutter/material.dart';
 
 class HistoryFilterViewModel {
@@ -28,7 +29,8 @@ class HistoryFilterViewModel {
     _categories = ValueNotifier([]),
     _tags = ValueNotifier([]),
     _selectedShops = ValueNotifier(HistoryFilterShopSelectedListModel(selectedList: [])),
-    _selectedCategories = ValueNotifier(HistoryFilterCategorySelectedListModel(selectedList: []));
+    _selectedCategories = ValueNotifier(HistoryFilterCategorySelectedListModel(selectedList: [])),
+    _selectedTags = ValueNotifier(HistoryFilterTagSelectedListModel(selectedList: []));
 
   /// 購入カテゴリーReposiotry
   final ExpenseCategoryRepository _categoryRepository;
@@ -83,6 +85,14 @@ class HistoryFilterViewModel {
   /// 選択済のカテゴリーリスト
   ValueNotifier<HistoryFilterCategorySelectedListModel> get selectedCategories => _selectedCategories;
 
+  late final ValueNotifier<bool> _tagsFilterActive = _selectedTags.map((tags) => tags.active);
+  /// タグフィルタがアクティブかどうか
+  ValueNotifier<bool> get tagsFilterActive => _tagsFilterActive;
+
+  final ValueNotifier<HistoryFilterTagSelectedListModel> _selectedTags;
+  /// 選択済のタグリスト
+  ValueNotifier<HistoryFilterTagSelectedListModel> get selectedTags => _selectedTags;
+
   void dispose() {
     _amountFilterActive.dispose();
     _amount.dispose();
@@ -95,6 +105,8 @@ class HistoryFilterViewModel {
     _selectedShops.dispose();
     _categoriesFilterActive.dispose();
     _selectedCategories.dispose();
+    _tagsFilterActive.dispose();
+    _selectedTags.dispose();
   }
 
   /// 購入先・カテゴリー・タグのリストを取得する
@@ -234,6 +246,34 @@ class HistoryFilterViewModel {
       _selectedCategories.value = HistoryFilterCategorySelectedListModel(
         selectedList: _selectedCategories.value.selectedList..remove(id),
         active: _selectedCategories.value.active,
+      );
+    }
+  }
+
+  /// タグフィルタを検索条件に含めるか変更
+  void setTagFilterActive(bool active) {
+    _selectedTags.value = HistoryFilterTagSelectedListModel(
+      selectedList: _selectedTags.value.selectedList,
+      active: active,
+    );
+  }
+
+  /// タグのフィルタ追加
+  void onTagSelected(int id) {
+    if (!_selectedTags.value.selectedList.contains(id)) {
+      _selectedTags.value = HistoryFilterTagSelectedListModel(
+        selectedList: _selectedTags.value.selectedList..add(id),
+        active: _selectedTags.value.active,
+      );
+    }
+  }
+
+  /// タグのフィルタ解除
+  void onTagDeselect(int id) {
+    if (_selectedTags.value.selectedList.contains(id)) {
+      _selectedTags.value = HistoryFilterTagSelectedListModel(
+        selectedList: _selectedTags.value.selectedList..remove(id),
+        active: _selectedTags.value.active,
       );
     }
   }

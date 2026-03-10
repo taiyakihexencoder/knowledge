@@ -2,6 +2,7 @@ import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/stateful_checkbox.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_tag_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_filter_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_amount_range.dart';
 import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_selected_element.dart';
@@ -331,13 +332,76 @@ class HistoryFilterState extends State<HistoryFilter> {
       slivers: [
         SliverPersistentHeader(
           pinned: true,
-          delegate: _SliverHeader(title: L10n.of(context)!.expenseHistoryFilterTag),
+          delegate: _SliverHeader(
+            title: L10n.of(context)!.expenseHistoryFilterTag,
+            contents: (context) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(L10n.of(context)!.expenseHistoryFilterActive),
+                StatefulCheckbox(
+                  notifier: widget._viewModel.tagsFilterActive, 
+                  onChanged: (active) => widget._viewModel.setTagFilterActive(active ?? false),
+                ),
+              ],
+            ),
+          ),
         ),
 
         ValueListenableBuilder(
-          valueListenable: widget._viewModel.tags,
-          builder: (_, tags, _) => SliverList.list(
-            children:[]
+          valueListenable: widget._viewModel.selectedTags,
+          builder: (_, selectedTags, _) => SliverList.list(
+            children:[
+              SizedBox(height: 8.0,),
+
+              Opacity(
+                opacity: selectedTags.active ? 1.0 : 0.5,
+                child: AbsorbPointer(
+                  absorbing: !selectedTags.active,
+                  child: ValueListenableBuilder(
+                    valueListenable: widget._viewModel.tags, 
+                    builder: (_, tags, _) => DropdownMenu(
+                      dropdownMenuEntries: tags.map(
+                        (tag) => DropdownMenuEntry(
+                          value: tag.id, 
+                          label: tag.name,
+                        )
+                      ).toList(),
+                      onSelected: (id) { 
+                        if (id != null) {
+                          widget._viewModel.onTagSelected(id);
+                        }
+                      },
+                    ),
+                  ),   
+                ),
+              ),
+
+              SizedBox(height: 8.0,),
+
+              if (selectedTags.active)
+                ValueListenableBuilder(
+                  valueListenable: widget._viewModel.tags,
+                  builder: (_, tags, _) {
+                    final List<HistoryFilterTagModel> modelList = [];
+                    for (int selected in selectedTags.selectedList) {
+                      HistoryFilterTagModel? model = tags.firstWhereOrNull((model) => model.id == selected);
+                      if (model != null) {
+                        modelList.add(model);
+                      }
+                    }
+                    
+                    return Wrap(
+                      children: modelList.map(
+                        (model) => HistoryFilterSelectedElement(
+                          id: model.id, 
+                          name: model.name, 
+                          onClickCloseIcon: widget._viewModel.onTagDeselect,
+                        ),
+                      ).toList(),
+                    );
+                  },
+                ),
+            ],
           ),
         ),
       ],
