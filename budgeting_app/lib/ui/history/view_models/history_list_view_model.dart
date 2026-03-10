@@ -18,12 +18,12 @@ class HistoryListViewModel {
     required ShopRepository shopRepository,
     SearchFilterModel? searchFilter,
   }) : 
-  _historyRepository = historyRepository,
-  _categoryRepository = categoryRepository,
-  _tagRepository = tagRepository,
-  _shopRepository = shopRepository,
-  _models = ValueNotifier([]),
-  _searchFilter = searchFilter;
+    _historyRepository = historyRepository,
+    _categoryRepository = categoryRepository,
+    _tagRepository = tagRepository,
+    _shopRepository = shopRepository,
+    _models = ValueNotifier([]),
+    _searchFilter = searchFilter;
 
   /// 購入履歴Repository
   final ExpenseHistoryRepository _historyRepository;

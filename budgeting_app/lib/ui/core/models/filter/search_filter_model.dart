@@ -22,9 +22,18 @@ class SearchFilterModel {
     tags: const TagFilterModel(selectedList: []),
   );
 
+  /// 金額フィルター
   final AmountFilterModel amount;
+
+  /// 日付フィルター
   final DateFilterModel usedAt;
+
+  /// 購入先フィルター
   final ShopFilterModel shops;
+
+  /// カテゴリーフィルター
   final CategoryFilterModel categories;
+
+  /// タグフィルター
   final TagFilterModel tags;
 }
