@@ -1,4 +1,5 @@
 import 'package:budgeting_app/res/string/l10n.dart';
+import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/history/view_models/history_list_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_list/history_list_element.dart';
@@ -11,7 +12,7 @@ class HistoryList extends StatelessWidget {
     required HistoryListViewModel viewModel,
     required Function(BuildContext context) navigateToNewLog,
     required Function(BuildContext context, int historyId) navigateToDetail, 
-    required Function(BuildContext context) navigateToHistoryFilter,
+    required Function(BuildContext context, SearchFilterModel?) navigateToHistoryFilter,
   }) : 
     _viewModel = viewModel,
     _navigateToNewLog = navigateToNewLog,
@@ -21,7 +22,7 @@ class HistoryList extends StatelessWidget {
   final HistoryListViewModel _viewModel;
   final Function(BuildContext) _navigateToNewLog;
   final Function(BuildContext, int) _navigateToDetail;
-  final Function(BuildContext) _navigateToHistoryFilter;
+  final Function(BuildContext, SearchFilterModel?) _navigateToHistoryFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class HistoryList extends StatelessWidget {
           SliverAppBar(
             actions: [
               IconButton(
-                onPressed: () => _navigateToHistoryFilter(context), 
+                onPressed: () => _navigateToHistoryFilter(context, _viewModel.searchFilter), 
                 icon: Icon(Icons.search),
               ),
             ],

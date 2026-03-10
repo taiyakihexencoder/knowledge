@@ -1,4 +1,5 @@
 import 'package:budgeting_app/res/string/l10n.dart';
+import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
 import 'package:budgeting_app/ui/core/widget/stateful_checkbox.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
@@ -14,13 +15,13 @@ class HistoryFilter extends StatefulWidget {
   const HistoryFilter({
     super.key,
     required HistoryFilterViewModel viewModel,
-    required Function(BuildContext) navigateOnSubmit,
+    required Function(BuildContext, SearchFilterModel) navigateOnSubmit,
   }): 
     _viewModel = viewModel,
     _navigateOnSubmit = navigateOnSubmit;
 
   final HistoryFilterViewModel _viewModel;
-  final Function(BuildContext) _navigateOnSubmit;
+  final Function(BuildContext, SearchFilterModel) _navigateOnSubmit;
 
   @override
   HistoryFilterState createState() {
@@ -413,7 +414,7 @@ class HistoryFilterState extends State<HistoryFilter> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () => widget._navigateOnSubmit(context), 
+        onPressed: () => widget._navigateOnSubmit(context, widget._viewModel.createSearchFilter()), 
         child: Text(
           L10n.of(context)!.expenseHistoryFilterApply,
         ),

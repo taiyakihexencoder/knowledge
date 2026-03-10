@@ -101,10 +101,10 @@ class HistoryListPageState extends State<HistoryListPage> {
     );
   }
 
-  void _navigateToHistoryFilter(BuildContext context) {
+  void _navigateToHistoryFilter(BuildContext context, SearchFilterModel? searchFilter) {
    Navigator.of(context).push(
      MaterialPageRoute(
-       builder: (context) => HistoryFilterPage(),
+       builder: (context) => HistoryFilterPage(searchFilter: searchFilter),
      )
    );
  }
@@ -245,10 +245,10 @@ class HistoryFilterPageState extends State<HistoryFilterPage> {
     );
   }
 
-  void _navigateOnSubmit(BuildContext context) {
+  void _navigateOnSubmit(BuildContext context, SearchFilterModel searchFilter) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => HistoryListPage(),
+        builder: (_) => HistoryListPage(searchFilter: searchFilter),
       )
     );
   }

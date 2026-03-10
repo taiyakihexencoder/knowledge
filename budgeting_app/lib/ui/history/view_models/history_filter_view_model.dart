@@ -277,4 +277,15 @@ class HistoryFilterViewModel {
       );
     }
   }
+
+  /// 検索フィルターを作成する
+  SearchFilterModel createSearchFilter() {
+    return SearchFilterModel(
+      amount: _amount.value,
+      usedAt: _usedAt.value,
+      categories: _selectedCategories.value,
+      shops: _selectedShops.value,
+      tags: _selectedTags.value,
+    );
+  }
 }

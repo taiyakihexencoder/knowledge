@@ -42,6 +42,7 @@ class HistoryListViewModel {
 
   /// 表示条件
   final SearchFilterModel? _searchFilter;
+  SearchFilterModel? get searchFilter => _searchFilter;
 
   void dispose() {
     _models.dispose();
