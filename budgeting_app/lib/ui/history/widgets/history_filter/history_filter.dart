@@ -1,12 +1,11 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/stateful_checkbox.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_shop_list_model.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_filter_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_amount_range.dart';
 import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_selected_element.dart';
 import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_term_range.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HistoryFilter extends StatefulWidget {
@@ -202,40 +201,43 @@ class HistoryFilterState extends State<HistoryFilter> {
         ),
 
         ValueListenableBuilder(
-          valueListenable: widget._viewModel.shops,
-          builder: (_, shops, _) => SliverList.list(
+          valueListenable: widget._viewModel.selectedShops,
+          builder: (_, selectedShops, _) => SliverList.list(
             children:[
               SizedBox(height: 8.0,),
 
               Opacity(
-                opacity: shops.active ? 1.0 : 0.5,
+                opacity: selectedShops.active ? 1.0 : 0.5,
                 child: AbsorbPointer(
-                  absorbing: !shops.active,
-                  child: DropdownMenu(
-                    dropdownMenuEntries: shops.shopList.map(
-                      (shop) => DropdownMenuEntry(
-                        value: shop.id, 
-                        label: shop.name,
-                      )
-                    ).toList(),
-                    onSelected: (id) { 
-                      if (id != null) {
-                        widget._viewModel.onShopSelected(id);
-                      }
-                    },
-                  ),
+                  absorbing: !selectedShops.active,
+                  child: ValueListenableBuilder(
+                    valueListenable: widget._viewModel.shops, 
+                    builder: (_, shops, _) => DropdownMenu(
+                      dropdownMenuEntries: shops.map(
+                        (shop) => DropdownMenuEntry(
+                          value: shop.id, 
+                          label: shop.name,
+                        )
+                      ).toList(),
+                      onSelected: (id) { 
+                        if (id != null) {
+                          widget._viewModel.onShopSelected(id);
+                        }
+                      },
+                    ),
+                  ),   
                 ),
               ),
 
               SizedBox(height: 8.0,),
 
-              if (shops.active)
+              if (selectedShops.active)
                 ValueListenableBuilder(
-                  valueListenable: widget._viewModel.selectedShops,
-                  builder: (_, selectedShops, _) {
+                  valueListenable: widget._viewModel.shops,
+                  builder: (_, shops, _) {
                     final List<HistoryFilterShopModel> modelList = [];
                     for (int selected in selectedShops.selectedList) {
-                      HistoryFilterShopModel? model = shops.shopList.firstWhereOrNull((model) => model.id == selected);
+                      HistoryFilterShopModel? model = shops.firstWhereOrNull((model) => model.id == selected);
                       if (model != null) {
                         modelList.add(model);
                       }
@@ -251,7 +253,7 @@ class HistoryFilterState extends State<HistoryFilter> {
                       ).toList(),
                     );
                   },
-                ),          
+                ),
             ],
           ),
         ),

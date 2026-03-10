@@ -6,7 +6,7 @@ import 'package:budgeting_app/ui/history/models/history_filter_amount_model.dart
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_date_time_range_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_model.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_shop_list_model.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_selected_list_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_tag_model.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +23,10 @@ class HistoryFilterViewModel {
     _shopRepository = shopRepository,
     _amount = ValueNotifier(HistoryFilterAmountModel()),
     _usedAt = ValueNotifier(HistoryFilterDateTimeRangeModel()),
-    _shops = ValueNotifier(HistoryFilterShopListModel(shopList: [])),
-    _selectedShops = ValueNotifier(HistoryFilterShopSelectedListModel(selectedList: [])),
+    _shops = ValueNotifier([]),
     _categories = ValueNotifier([]),
-    _tags = ValueNotifier([]);
+    _tags = ValueNotifier([]),
+    _selectedShops = ValueNotifier(HistoryFilterShopSelectedListModel(selectedList: []));
 
   /// 購入カテゴリーReposiotry
   final ExpenseCategoryRepository _categoryRepository;
@@ -53,11 +53,11 @@ class HistoryFilterViewModel {
   /// 日付フィルタがアクティブかどうか
   ValueNotifier<bool> get usedAtFilterActive => _usedAtFilterActive;
 
-  final ValueNotifier<HistoryFilterShopListModel> _shops;
+  final ValueNotifier<List<HistoryFilterShopModel>> _shops;
   /// 購入先リスト
-  ValueNotifier<HistoryFilterShopListModel> get shops => _shops;
+  ValueNotifier<List<HistoryFilterShopModel>> get shops => _shops;
 
-  late final ValueNotifier<bool> _shopsFilterActive = _shops.map((shops) => shops.active);
+  late final ValueNotifier<bool> _shopsFilterActive = _selectedShops.map((shops) => shops.active);
   /// 購入先フィルタがアクティブかどうか
   ValueNotifier<bool> get shopsFilterActive => _shopsFilterActive;
 
@@ -88,15 +88,13 @@ class HistoryFilterViewModel {
   /// 購入先・カテゴリー・タグのリストを取得する
   Future<void> loadData() async {
     Future fetchShopList = _shopRepository.getAllShopList().then(
-      (list) => {
-        _shops.value = HistoryFilterShopListModel(
-          shopList:  list.map(
-            (shop) => HistoryFilterShopModel(
-              id: shop.id, 
-              name: shop.name,
-            ),
-          ).toList(),
-        )
+      (list) {
+        _shops.value = list.map(
+          (shop) => HistoryFilterShopModel(
+            id: shop.id, 
+            name: shop.name,
+          ),
+        ).toList();
       }
     );
 
@@ -174,8 +172,8 @@ class HistoryFilterViewModel {
 
   /// 購入先フィルタを検索条件に含めるか変更
   void setShopFilterActive(bool active) {
-    _shops.value = HistoryFilterShopListModel(
-      shopList: _shops.value.shopList,
+    _selectedShops.value = HistoryFilterShopSelectedListModel(
+      selectedList: _selectedShops.value.selectedList,
       active: active,
     );
   }
@@ -185,6 +183,7 @@ class HistoryFilterViewModel {
     if (!_selectedShops.value.selectedList.contains(id)) {
       _selectedShops.value = HistoryFilterShopSelectedListModel(
         selectedList: _selectedShops.value.selectedList..add(id),
+        active: _selectedShops.value.active,
       );
     }
   }
@@ -194,6 +193,7 @@ class HistoryFilterViewModel {
     if (_selectedShops.value.selectedList.contains(id)) {
       _selectedShops.value = HistoryFilterShopSelectedListModel(
         selectedList: _selectedShops.value.selectedList..remove(id),
+        active: _selectedShops.value.active,
       );
     }
   }
