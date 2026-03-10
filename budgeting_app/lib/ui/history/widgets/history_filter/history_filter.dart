@@ -1,5 +1,6 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/stateful_checkbox.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_filter_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_amount_range.dart';
@@ -166,13 +167,76 @@ class HistoryFilterState extends State<HistoryFilter> {
       slivers: [
         SliverPersistentHeader(
           pinned: true,
-          delegate: _SliverHeader(title: L10n.of(context)!.expenseHistoryFilterCategory),
+          delegate: _SliverHeader(
+            title: L10n.of(context)!.expenseHistoryFilterCategory,
+            contents: (context) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(L10n.of(context)!.expenseHistoryFilterActive),
+                StatefulCheckbox(
+                  notifier: widget._viewModel.categoriesFilterActive, 
+                  onChanged: (active) => widget._viewModel.setCategoryFilterActive(active ?? false),
+                ),
+              ],
+            ),
+          ),
         ),
 
         ValueListenableBuilder(
-          valueListenable: widget._viewModel.categories,
-          builder: (_, categories, _) => SliverList.list(
-            children:[]
+          valueListenable: widget._viewModel.selectedCategories,
+          builder: (_, selectedCategories, _) => SliverList.list(
+            children:[
+              SizedBox(height: 8.0,),
+
+              Opacity(
+                opacity: selectedCategories.active ? 1.0 : 0.5,
+                child: AbsorbPointer(
+                  absorbing: !selectedCategories.active,
+                  child: ValueListenableBuilder(
+                    valueListenable: widget._viewModel.categories, 
+                    builder: (_, categories, _) => DropdownMenu(
+                      dropdownMenuEntries: categories.map(
+                        (category) => DropdownMenuEntry(
+                          value: category.id, 
+                          label: category.name,
+                        )
+                      ).toList(),
+                      onSelected: (id) { 
+                        if (id != null) {
+                          widget._viewModel.onCategorySelected(id);
+                        }
+                      },
+                    ),
+                  ),   
+                ),
+              ),
+
+              SizedBox(height: 8.0,),
+
+              if (selectedCategories.active)
+                ValueListenableBuilder(
+                  valueListenable: widget._viewModel.categories,
+                  builder: (_, categories, _) {
+                    final List<HistoryFilterCategoryModel> modelList = [];
+                    for (int selected in selectedCategories.selectedList) {
+                      HistoryFilterCategoryModel? model = categories.firstWhereOrNull((model) => model.id == selected);
+                      if (model != null) {
+                        modelList.add(model);
+                      }
+                    }
+                    
+                    return Wrap(
+                      children: modelList.map(
+                        (model) => HistoryFilterSelectedElement(
+                          id: model.id, 
+                          name: model.name, 
+                          onClickCloseIcon: widget._viewModel.onCategoryDeselect,
+                        ),
+                      ).toList(),
+                    );
+                  },
+                ),
+            ],
           ),
         ),
       ],

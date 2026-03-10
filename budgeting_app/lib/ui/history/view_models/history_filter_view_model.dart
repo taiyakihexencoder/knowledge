@@ -4,6 +4,7 @@ import 'package:budgeting_app/domain/repositories/shop_repository.dart';
 import 'package:budgeting_app/ui/core/util/field_notifier.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_amount_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_category_selected_list_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_date_time_range_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
@@ -26,7 +27,8 @@ class HistoryFilterViewModel {
     _shops = ValueNotifier([]),
     _categories = ValueNotifier([]),
     _tags = ValueNotifier([]),
-    _selectedShops = ValueNotifier(HistoryFilterShopSelectedListModel(selectedList: []));
+    _selectedShops = ValueNotifier(HistoryFilterShopSelectedListModel(selectedList: [])),
+    _selectedCategories = ValueNotifier(HistoryFilterCategorySelectedListModel(selectedList: []));
 
   /// 購入カテゴリーReposiotry
   final ExpenseCategoryRepository _categoryRepository;
@@ -73,6 +75,14 @@ class HistoryFilterViewModel {
   /// 選択済の購入先リスト
   ValueNotifier<HistoryFilterShopSelectedListModel> get selectedShops => _selectedShops;
 
+  late final ValueNotifier<bool> _categoriesFilterActive = _selectedCategories.map((categories) => categories.active);
+  // カテゴリーフィルタがアクティブかどうか
+  ValueNotifier<bool> get categoriesFilterActive => _categoriesFilterActive;
+
+  final ValueNotifier<HistoryFilterCategorySelectedListModel> _selectedCategories;
+  /// 選択済のカテゴリーリスト
+  ValueNotifier<HistoryFilterCategorySelectedListModel> get selectedCategories => _selectedCategories;
+
   void dispose() {
     _amountFilterActive.dispose();
     _amount.dispose();
@@ -83,6 +93,8 @@ class HistoryFilterViewModel {
     _tags.dispose();
     _shopsFilterActive.dispose();
     _selectedShops.dispose();
+    _categoriesFilterActive.dispose();
+    _selectedCategories.dispose();
   }
 
   /// 購入先・カテゴリー・タグのリストを取得する
@@ -194,6 +206,34 @@ class HistoryFilterViewModel {
       _selectedShops.value = HistoryFilterShopSelectedListModel(
         selectedList: _selectedShops.value.selectedList..remove(id),
         active: _selectedShops.value.active,
+      );
+    }
+  }
+
+  /// カテゴリーフィルタを検索条件に含めるか変更
+  void setCategoryFilterActive(bool active) {
+    _selectedCategories.value = HistoryFilterCategorySelectedListModel(
+      selectedList: _selectedCategories.value.selectedList,
+      active: active,
+    );
+  }
+
+  /// カテゴリーのフィルタ追加
+  void onCategorySelected(int id) {
+    if (!_selectedCategories.value.selectedList.contains(id)) {
+      _selectedCategories.value = HistoryFilterCategorySelectedListModel(
+        selectedList: _selectedCategories.value.selectedList..add(id),
+        active: _selectedCategories.value.active,
+      );
+    }
+  }
+
+  /// カテゴリーのフィルタ解除
+  void onCategoryDeselect(int id) {
+    if (_selectedCategories.value.selectedList.contains(id)) {
+      _selectedCategories.value = HistoryFilterCategorySelectedListModel(
+        selectedList: _selectedCategories.value.selectedList..remove(id),
+        active: _selectedCategories.value.active,
       );
     }
   }
