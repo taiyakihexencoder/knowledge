@@ -33,6 +33,15 @@ class LocalShopService implements ShopService {
   }
 
   @override
+  Future<List<ShopEntity>> getShops(Iterable<int> ids) {
+    return (select..where((column) => column.id.isIn(ids)))
+      .get()
+      .then(
+        (records) => records.map((record) => convert(record)).toList(),
+      );
+  }
+
+  @override
   Future<bool> addShop({
     required String name,
   }) async {

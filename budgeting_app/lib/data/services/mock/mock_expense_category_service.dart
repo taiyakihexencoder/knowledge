@@ -22,6 +22,18 @@ class MockExpenseCategoryService implements ExpenseCategoryService {
   }
 
   @override
+  Future<List<ExpenseCategoryEntity>> getCategories(Iterable<int> categoryIds) {
+    List<ExpenseCategoryEntity> result = [];
+    for (int categoryId in categoryIds) {
+      final String? mock = _mockCategory(categoryId);
+      if (mock != null) {
+        result.add(ExpenseCategoryEntity.fromJson(mock));
+      }
+    }
+    return Future.value(result);
+  }
+
+  @override
   Future<List<ExpenseCategoryEntity>> getAllCategoryList() {
     return Future.value(ExpenseCategoryEntity.fromListJson(_mockAllCategoryList()));
   }

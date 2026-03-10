@@ -21,6 +21,11 @@ class ExpenseTagRepository {
     );
   }
 
+  /// 指定したタグIDに対応するExpenseTagEntityを返す
+  Future<List<ExpenseTagEntity>> getRegisteredTags(Iterable<int> ids) {
+    return _expenseTagService.getTags(ids);
+  }
+
   /// 登録済のすべてのタグを取得する
   Future<List<ExpenseTagEntity>> getAllTags() {
     return _expenseTagService.getAllExpenseTagList();

@@ -23,7 +23,10 @@ class HistoryListViewModel {
     _tagRepository = tagRepository,
     _shopRepository = shopRepository,
     _models = ValueNotifier([]),
-    _searchFilter = searchFilter;
+    _searchFilter = searchFilter,
+    _filterCategories = ValueNotifier([]),
+    _filterShops = ValueNotifier([]),
+    _filterTags = ValueNotifier([]);
 
   /// 購入履歴Repository
   final ExpenseHistoryRepository _historyRepository;
@@ -44,8 +47,24 @@ class HistoryListViewModel {
   final SearchFilterModel? _searchFilter;
   SearchFilterModel? get searchFilter => _searchFilter;
 
+  final ValueNotifier<List<String>> _filterCategories;
+  // フィルタ表示用のリスト
+  ValueNotifier<List<String>> get filterCategories => _filterCategories;
+
+  final ValueNotifier<List<String>> _filterShops;
+  // フィルタ表示用のリスト
+  ValueNotifier<List<String>> get filterShops => _filterShops;
+
+  final ValueNotifier<List<String>> _filterTags;
+  // フィルタ表示用のリスト
+  ValueNotifier<List<String>> get filterTags => _filterTags;
+
   void dispose() {
     _models.dispose();
+
+    _filterCategories.dispose();
+    _filterShops.dispose();
+    _filterTags.dispose();
   }
 
   /// 履歴リストの更新
@@ -71,5 +90,31 @@ class HistoryListViewModel {
       );
     }
     _models.value = modelList;
+
+    if (_searchFilter != null) {
+      if (_searchFilter.categories.active && _searchFilter.categories.selectedList.isNotEmpty) {
+        _filterCategories.value = await _categoryRepository
+          .getCategories(_searchFilter.categories.selectedList)
+          .then(
+            (categories) => categories.map((category) => category.name,).toList()
+          );
+      }
+
+      if (_searchFilter.shops.active && _searchFilter.shops.selectedList.isNotEmpty) {
+        _filterShops.value = await _shopRepository
+          .getShops(_searchFilter.shops.selectedList)
+          .then(
+            (shops) => shops.map((shop) => shop.name,).toList()
+          );
+      }
+
+      if (_searchFilter.tags.active && _searchFilter.tags.selectedList.isNotEmpty) {
+        _filterTags.value = await _tagRepository
+          .getRegisteredTags(_searchFilter.tags.selectedList)
+          .then(
+            (tags) => tags.map((tag) => tag.name,).toList()
+          );
+      }
+    }
   }
 }

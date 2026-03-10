@@ -11,6 +11,16 @@ class MockShopService implements ShopService {
     return Future.value(mockData == null ? null : ShopEntity.fromJson(mockData));
   }
 
+  @override
+  Future<List<ShopEntity>> getShops(Iterable<int> ids) {
+    List<ShopEntity> result = [];
+    for (int id in ids) {
+      final String? mock = _mockShop(id);
+      if (mock != null) result.add(ShopEntity.fromJson(mock));
+    }
+    return Future.value(result);
+  }
+
   String? _mockShop(int id) {
     return switch (id) {
       1 => '{"id": $id, "name":"AEON"}',

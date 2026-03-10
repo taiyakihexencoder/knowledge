@@ -24,6 +24,14 @@ class LocalExpenseCategoryService implements ExpenseCategoryService {
   }
 
   @override
+  Future<List<ExpenseCategoryEntity>> getCategories(Iterable<int> categoryIds) {
+    return (select..where((column) => column.id.isIn(categoryIds))).get()
+      .then(
+        (records) => records.map((record) => convert(record)).toList()
+      );
+  }
+
+  @override
   Future<List<ExpenseCategoryEntity>> getAllCategoryList() {
     return select.get()
       .then(

@@ -105,6 +105,42 @@ abstract class L10n {
   /// **'消費履歴'**
   String get expenseHistory;
 
+  /// No description provided for @expenseHistoryListFilter.
+  ///
+  /// In ja, this message translates to:
+  /// **'検索条件'**
+  String get expenseHistoryListFilter;
+
+  /// No description provided for @expenseHistoryListFilterAmount.
+  ///
+  /// In ja, this message translates to:
+  /// **'金額'**
+  String get expenseHistoryListFilterAmount;
+
+  /// No description provided for @expenseHistoryListFilterUsedAt.
+  ///
+  /// In ja, this message translates to:
+  /// **'期間'**
+  String get expenseHistoryListFilterUsedAt;
+
+  /// No description provided for @expenseHistoryListFilterShop.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先'**
+  String get expenseHistoryListFilterShop;
+
+  /// No description provided for @expenseHistoryListFilterCategory.
+  ///
+  /// In ja, this message translates to:
+  /// **'カテゴリー'**
+  String get expenseHistoryListFilterCategory;
+
+  /// No description provided for @expenseHistoryListFilterTag.
+  ///
+  /// In ja, this message translates to:
+  /// **'以下のいずれかのタグを含む'**
+  String get expenseHistoryListFilterTag;
+
   /// No description provided for @expenseHistoryDetail.
   ///
   /// In ja, this message translates to:

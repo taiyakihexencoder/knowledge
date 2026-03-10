@@ -15,6 +15,11 @@ class ShopRepository {
     return _shopService.getShop(shopId);
   }
 
+  /// 指定した購入先情報を取得する
+  Future<List<ShopEntity>> getShops(Iterable<int> shopIds) {
+    return _shopService.getShops(shopIds);
+  }
+
   /// 登録済のすべての購入先をリストとして取得する
   Future<List<ShopEntity>> getAllShopList() {
     return _shopService.getAllShopList();

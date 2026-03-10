@@ -36,4 +36,13 @@ class SearchFilterModel {
 
   /// タグフィルター
   final TagFilterModel tags;
+
+  /// フィルターが有効かどうか
+  bool valid() {
+    return (amount.active && amount.min <= amount.max) ||
+      (usedAt.active && usedAt.range != null) ||
+      (shops.active && shops.selectedList.isNotEmpty) ||
+      (categories.active && categories.selectedList.isNotEmpty) ||
+      (tags.active && tags.selectedList.isNotEmpty);
+  }
 }

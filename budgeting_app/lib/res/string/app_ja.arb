@@ -3,6 +3,12 @@
   "applicationTitle": "家計簿アプリ",
 
   "expenseHistory": "消費履歴",
+  "expenseHistoryListFilter": "検索条件",
+  "expenseHistoryListFilterAmount": "金額",
+  "expenseHistoryListFilterUsedAt": "期間",
+  "expenseHistoryListFilterShop": "購入先",
+  "expenseHistoryListFilterCategory": "カテゴリー",
+  "expenseHistoryListFilterTag": "以下のいずれかのタグを含む",
 
   "expenseHistoryDetail": "消費の詳細",
   "expenseHistoryDetailFailed": "履歴の情報が取得できませんでした",

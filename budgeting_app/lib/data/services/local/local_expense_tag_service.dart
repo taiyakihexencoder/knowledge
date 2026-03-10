@@ -50,7 +50,15 @@ class LocalExpenseTagService implements ExpenseTagService {
       );
   }
 
-  
+  @override
+  Future<List<ExpenseTagEntity>> getTags(Iterable<int> ids) {
+    return (_database.select(_database.expenseTag)..where((column) => column.id.isIn(ids)))
+      .get()
+      .then(
+        (records) => records.map((record) => convert(record)).toList()
+      );
+  }
+
   @override
   Future<bool> addTag({
     required String name,

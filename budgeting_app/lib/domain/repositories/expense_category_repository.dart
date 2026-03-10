@@ -15,6 +15,11 @@ class ExpenseCategoryRepository {
     return _expenseCategoryService.getCategory(categoryId);
   }
 
+  // IDかあｒカテゴリーを取得する
+  Future<List<ExpenseCategoryEntity>> getCategories(Iterable<int> categoryIds) {
+    return _expenseCategoryService.getCategories(categoryIds);
+  }
+
   /// 登録済のすべてのカテゴリーをリストとして取得する
   Future<List<ExpenseCategoryEntity>> getAllCategoryList() {
     return _expenseCategoryService.getAllCategoryList();

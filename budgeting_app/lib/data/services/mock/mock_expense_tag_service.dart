@@ -38,6 +38,13 @@ class MockExpenseTagService implements ExpenseTagService {
   }
 
   @override
+  Future<List<ExpenseTagEntity>> getTags(Iterable<int> ids) {
+    return getAllExpenseTagList().then(
+      (list) => list.where( (tag) => ids.contains(tag.id) ).toList(),
+    );
+  }
+
+  @override
   Future<List<ExpenseTagEntity>> getAllExpenseTagList() {
     return Future.value(ExpenseTagEntity.fromListJson(_mockAllExpenseTagList()));
   }
