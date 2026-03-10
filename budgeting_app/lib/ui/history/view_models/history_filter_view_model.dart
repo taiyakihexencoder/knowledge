@@ -206,7 +206,7 @@ class HistoryFilterViewModel {
   void onShopSelected(int id) {
     if (!_selectedShops.value.selectedList.contains(id)) {
       _selectedShops.value = ShopFilterModel(
-        selectedList: _selectedShops.value.selectedList..add(id),
+        selectedList: _selectedShops.value.selectedList.toList()..add(id),
         active: _selectedShops.value.active,
       );
     }
@@ -216,7 +216,7 @@ class HistoryFilterViewModel {
   void onShopDeselect(int id) {
     if (_selectedShops.value.selectedList.contains(id)) {
       _selectedShops.value = ShopFilterModel(
-        selectedList: _selectedShops.value.selectedList..remove(id),
+        selectedList: _selectedShops.value.selectedList.toList()..remove(id),
         active: _selectedShops.value.active,
       );
     }
@@ -234,7 +234,7 @@ class HistoryFilterViewModel {
   void onCategorySelected(int id) {
     if (!_selectedCategories.value.selectedList.contains(id)) {
       _selectedCategories.value = CategoryFilterModel(
-        selectedList: _selectedCategories.value.selectedList..add(id),
+        selectedList: _selectedCategories.value.selectedList.toList()..add(id),
         active: _selectedCategories.value.active,
       );
     }
@@ -244,7 +244,7 @@ class HistoryFilterViewModel {
   void onCategoryDeselect(int id) {
     if (_selectedCategories.value.selectedList.contains(id)) {
       _selectedCategories.value = CategoryFilterModel(
-        selectedList: _selectedCategories.value.selectedList..remove(id),
+        selectedList: _selectedCategories.value.selectedList.toList()..remove(id),
         active: _selectedCategories.value.active,
       );
     }
@@ -262,7 +262,7 @@ class HistoryFilterViewModel {
   void onTagSelected(int id) {
     if (!_selectedTags.value.selectedList.contains(id)) {
       _selectedTags.value = TagFilterModel(
-        selectedList: _selectedTags.value.selectedList..add(id),
+        selectedList: _selectedTags.value.selectedList.toList()..add(id),
         active: _selectedTags.value.active,
       );
     }
@@ -272,7 +272,7 @@ class HistoryFilterViewModel {
   void onTagDeselect(int id) {
     if (_selectedTags.value.selectedList.contains(id)) {
       _selectedTags.value = TagFilterModel(
-        selectedList: _selectedTags.value.selectedList..remove(id),
+        selectedList: _selectedTags.value.selectedList.toList()..remove(id),
         active: _selectedTags.value.active,
       );
     }
