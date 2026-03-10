@@ -1,8 +1,12 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/stateful_checkbox.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_shop_list_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_filter_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_amount_range.dart';
+import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_selected_element.dart';
 import 'package:budgeting_app/ui/history/widgets/history_filter/history_filter_term_range.dart';
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HistoryFilter extends StatefulWidget {
@@ -168,7 +172,7 @@ class HistoryFilterState extends State<HistoryFilter> {
 
         ValueListenableBuilder(
           valueListenable: widget._viewModel.categories,
-          builder: (_, tags, _) => SliverList.list(
+          builder: (_, categories, _) => SliverList.list(
             children:[]
           ),
         ),
@@ -182,13 +186,73 @@ class HistoryFilterState extends State<HistoryFilter> {
       slivers: [
         SliverPersistentHeader(
           pinned: true,
-          delegate: _SliverHeader(title: L10n.of(context)!.expenseHistoryFilterShop),
+          delegate: _SliverHeader(
+            title: L10n.of(context)!.expenseHistoryFilterShop,
+            contents: (context) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(L10n.of(context)!.expenseHistoryFilterActive),
+                StatefulCheckbox(
+                  notifier: widget._viewModel.shopsFilterActive, 
+                  onChanged: (active) => widget._viewModel.setShopFilterActive(active ?? false),
+                ),
+              ],
+            ),
+          ),
         ),
 
         ValueListenableBuilder(
           valueListenable: widget._viewModel.shops,
-          builder: (_, tags, _) => SliverList.list(
-            children:[]
+          builder: (_, shops, _) => SliverList.list(
+            children:[
+              SizedBox(height: 8.0,),
+
+              Opacity(
+                opacity: shops.active ? 1.0 : 0.5,
+                child: AbsorbPointer(
+                  absorbing: !shops.active,
+                  child: DropdownMenu(
+                    dropdownMenuEntries: shops.shopList.map(
+                      (shop) => DropdownMenuEntry(
+                        value: shop.id, 
+                        label: shop.name,
+                      )
+                    ).toList(),
+                    onSelected: (id) { 
+                      if (id != null) {
+                        widget._viewModel.onShopSelected(id);
+                      }
+                    },
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 8.0,),
+
+              if (shops.active)
+                ValueListenableBuilder(
+                  valueListenable: widget._viewModel.selectedShops,
+                  builder: (_, selectedShops, _) {
+                    final List<HistoryFilterShopModel> modelList = [];
+                    for (int selected in selectedShops.selectedList) {
+                      HistoryFilterShopModel? model = shops.shopList.firstWhereOrNull((model) => model.id == selected);
+                      if (model != null) {
+                        modelList.add(model);
+                      }
+                    }
+                    
+                    return Wrap(
+                      children: modelList.map(
+                        (model) => HistoryFilterSelectedElement(
+                          id: model.id, 
+                          name: model.name, 
+                          onClickCloseIcon: widget._viewModel.onShopDeselect,
+                        ),
+                      ).toList(),
+                    );
+                  },
+                ),          
+            ],
           ),
         ),
       ],
@@ -232,9 +296,14 @@ class HistoryFilterState extends State<HistoryFilter> {
 class _SliverHeader extends SliverPersistentHeaderDelegate {
   const _SliverHeader({
     required String title,
-  }): _title = title;
+    Widget Function(BuildContext)? contents,
+  }): 
+    _title = title, 
+    _contents = contents;
 
   final String _title;
+
+  final Widget Function(BuildContext)? _contents;
 
   @override
   double get maxExtent => 50.0;
@@ -259,9 +328,17 @@ class _SliverHeader extends SliverPersistentHeaderDelegate {
       padding: EdgeInsets.fromLTRB(
         0.0, 8.0, 0.0, 8.0
       ),
-      child: Text(
-        _title,
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+      child: Row(
+        children:[
+          Text(
+            _title,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+          ),
+
+          SizedBox(width: 25.0),
+
+          if (_contents != null) _contents(context),
+        ],
       ),
     );
   }

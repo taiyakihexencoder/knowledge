@@ -6,7 +6,8 @@ import 'package:budgeting_app/ui/history/models/history_filter_amount_model.dart
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_date_time_range_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_model.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_shop_list_model.dart';
+import 'package:budgeting_app/ui/history/models/history_filter_shop_selected_list_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_tag_model.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,8 @@ class HistoryFilterViewModel {
     _shopRepository = shopRepository,
     _amount = ValueNotifier(HistoryFilterAmountModel()),
     _usedAt = ValueNotifier(HistoryFilterDateTimeRangeModel()),
-    _shops = ValueNotifier([]),
+    _shops = ValueNotifier(HistoryFilterShopListModel(shopList: [])),
+    _selectedShops = ValueNotifier(HistoryFilterShopSelectedListModel(selectedList: [])),
     _categories = ValueNotifier([]),
     _tags = ValueNotifier([]);
 
@@ -48,11 +50,20 @@ class HistoryFilterViewModel {
   ValueNotifier<HistoryFilterDateTimeRangeModel> get usedAt => _usedAt;
 
   late final ValueNotifier<bool> _usedAtFilterActive = _usedAt.map((usedAt) => usedAt.active);
+  /// 日付フィルタがアクティブかどうか
   ValueNotifier<bool> get usedAtFilterActive => _usedAtFilterActive;
 
-  final ValueNotifier<List<HistoryFilterShopModel>> _shops;
+  final ValueNotifier<HistoryFilterShopListModel> _shops;
   /// 購入先リスト
-  ValueNotifier<List<HistoryFilterShopModel>> get shops => _shops;
+  ValueNotifier<HistoryFilterShopListModel> get shops => _shops;
+
+  late final ValueNotifier<bool> _shopsFilterActive = _shops.map((shops) => shops.active);
+  /// 購入先フィルタがアクティブかどうか
+  ValueNotifier<bool> get shopsFilterActive => _shopsFilterActive;
+
+  final ValueNotifier<HistoryFilterShopSelectedListModel> _selectedShops;
+  /// 選択済の購入先リスト
+  ValueNotifier<HistoryFilterShopSelectedListModel> get selectedShops => _selectedShops;
 
   final ValueNotifier<List<HistoryFilterCategoryModel>> _categories;
   /// カテゴリーリスト
@@ -67,7 +78,9 @@ class HistoryFilterViewModel {
     _amount.dispose();
     _usedAtFilterActive.dispose();
     _usedAt.dispose();
+    _shopsFilterActive.dispose();
     _shops.dispose();
+    _selectedShops.dispose();
     _categories.dispose();
     _tags.dispose();
   }
@@ -76,12 +89,14 @@ class HistoryFilterViewModel {
   Future<void> loadData() async {
     Future fetchShopList = _shopRepository.getAllShopList().then(
       (list) => {
-        _shops.value = list.map(
-          (shop) => HistoryFilterShopModel(
-            id: shop.id, 
-            name: shop.name,
-          ),
-        ).toList(),
+        _shops.value = HistoryFilterShopListModel(
+          shopList:  list.map(
+            (shop) => HistoryFilterShopModel(
+              id: shop.id, 
+              name: shop.name,
+            ),
+          ).toList(),
+        )
       }
     );
 
@@ -155,5 +170,31 @@ class HistoryFilterViewModel {
       range: range,
       active: _usedAt.value.active,
     );
+  }
+
+  /// 購入先フィルタを検索条件に含めるか変更
+  void setShopFilterActive(bool active) {
+    _shops.value = HistoryFilterShopListModel(
+      shopList: _shops.value.shopList,
+      active: active,
+    );
+  }
+
+  /// 購入先のフィルタ追加
+  void onShopSelected(int id) {
+    if (!_selectedShops.value.selectedList.contains(id)) {
+      _selectedShops.value = HistoryFilterShopSelectedListModel(
+        selectedList: _selectedShops.value.selectedList..add(id),
+      );
+    }
+  }
+
+  /// 購入先のフィルタ解除
+  void onShopDeselect(int id) {
+    if (_selectedShops.value.selectedList.contains(id)) {
+      _selectedShops.value = HistoryFilterShopSelectedListModel(
+        selectedList: _selectedShops.value.selectedList..remove(id),
+      );
+    }
   }
 }
