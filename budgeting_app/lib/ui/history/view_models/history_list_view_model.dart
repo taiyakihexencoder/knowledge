@@ -9,6 +9,7 @@ import 'package:budgeting_app/domain/repositories/shop_repository.dart';
 import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
 import 'package:budgeting_app/ui/history/models/history_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HistoryListViewModel {
   HistoryListViewModel({
@@ -69,7 +70,24 @@ class HistoryListViewModel {
 
   /// 履歴リストの更新
   void refreshList() async {
-    List<ExpenseHistoryEntity> historyList = await _historyRepository.getHistoryList();
+    DateFormat inputFormat = DateFormat('yyyyMMdd');
+    final (minAmount, maxAmount) = searchFilter?.amount.active == true 
+      ? (searchFilter?.amount.min, searchFilter?.amount.max) 
+      : (null, null);
+    final (minUsedAt, maxUsedAt) = searchFilter?.usedAt.active == true && searchFilter?.usedAt.range != null
+      ? (inputFormat.format(searchFilter!.usedAt.range!.start), inputFormat.format(searchFilter!.usedAt.range!.end))
+      : (null, null);
+
+    List<ExpenseHistoryEntity> historyList = await _historyRepository.getHistoryList(
+      minAmount: minAmount,
+      maxAmount: maxAmount,
+      minUsedAt: minUsedAt,
+      maxUsedAt: maxUsedAt,
+      categories: searchFilter?.categories.selectedList,
+      shops: searchFilter?.shops.selectedList,
+      tags: searchFilter?.tags.selectedList,
+    );
+    
     Map<int, List<ExpenseHistoryTagEntity>> tagMap = await _tagRepository.getTags(
       historyList.map(
         (history) => history.id

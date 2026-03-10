@@ -10,7 +10,15 @@ class MockExpenseHistoryService implements ExpenseHistoryService {
   const MockExpenseHistoryService();
 
   @override
-  Future<List<ExpenseHistoryEntity>> getHistoryList() {
+  Future<List<ExpenseHistoryEntity>> getHistoryList({
+    Iterable<int>? historyIds,
+    int? minAmount,
+    int? maxAmount,
+    String? minUsedAt,
+    String? maxUsedAt,
+    Iterable<int>? categories,
+    Iterable<int>? shops,
+  }) {
     return Future.value(ExpenseHistoryEntity.fromListJson(_mockHistoryList()));
   }
 

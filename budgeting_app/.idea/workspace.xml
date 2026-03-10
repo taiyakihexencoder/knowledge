@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e58d30b3-06df-42e3-8f73-c9fbc2bad6d5" name="Changes" comment="" />
+    <list default="true" id="e58d30b3-06df-42e3-8f73-c9fbc2bad6d5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/lib/ui/history/view_models/history_filter_view_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/history/view_models/history_filter_view_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/history/view_models/history_list_view_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/history/view_models/history_list_view_model.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,7 +58,7 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "Cherry-picking in samples/flutter-budgeting-app/chapter-10",
+    "git-widget-placeholder": "samples/flutter-budgeting-app/chapter-11",
     "kotlin-language-version-configured": "true"
   }
 }]]></component>

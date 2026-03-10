@@ -60,6 +60,16 @@ class LocalExpenseTagService implements ExpenseTagService {
   }
 
   @override
+  Future<List<int>> getAssignedHistoryIds(Iterable<int> tagIds) {
+    return (_database.select(_database.expenseHistoryTag, distinct: true)..where(
+      (column) => column.tagId.isIn(tagIds)
+    )).get()
+      .then(
+        (records) => records.map( (record) => record.historyId.toInt() ).toList()
+      );
+  }
+
+  @override
   Future<bool> addTag({
     required String name,
   }) async {

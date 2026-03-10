@@ -6,6 +6,9 @@ abstract interface class ExpenseTagService {
   Future<List<ExpenseTagEntity>> getTags(Iterable<int> ids);
   Future<List<ExpenseTagEntity>> getAllExpenseTagList();
 
+  /// タグIDからそのタグが付いた履歴IDを取得する
+  Future<List<int>> getAssignedHistoryIds(Iterable<int> tagIds);
+
   /// タグの追加
   /// 
   /// 他と重複する名称になる場合はfalse

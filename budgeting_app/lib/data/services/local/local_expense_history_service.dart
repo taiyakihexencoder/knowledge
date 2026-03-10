@@ -120,8 +120,36 @@ class LocalExpenseHistoryService implements ExpenseHistoryService {
   }
 
   @override
-  Future<List<ExpenseHistoryEntity>> getHistoryList() {
-    return _select.get().then(
+  Future<List<ExpenseHistoryEntity>> getHistoryList({
+    Iterable<int>? historyIds,
+    int? minAmount,
+    int? maxAmount,
+    String? minUsedAt,
+    String? maxUsedAt,
+    Iterable<int>? categories,
+    Iterable<int>? shops,
+  }) {
+    return (_select..where(
+      (column) {
+        List<Expression<bool>> expressionList = [];
+        if (minAmount != null && maxAmount != null) {
+          expressionList.add(column.amount.isBetweenValues(minAmount, maxAmount));
+        }
+        if (minUsedAt != null && maxUsedAt != null) {
+          expressionList.add(column.usedAt.isBetweenValues(minUsedAt, maxUsedAt));
+        }
+        if (historyIds != null && historyIds.isNotEmpty) {
+          expressionList.add(column.id.isIn(historyIds.map((id) => BigInt.from(id))));
+        }
+        if (categories != null && categories.isNotEmpty) {
+          expressionList.add(column.categoryId.isIn(categories));
+        }
+        if (shops != null && shops.isNotEmpty) {
+          expressionList.add(column.categoryId.isIn(shops));
+        }
+        return Expression.and(expressionList);
+      }
+    )).get().then(
       (list) => list.map(
         (data) => _convert(data)
       ).toList()
