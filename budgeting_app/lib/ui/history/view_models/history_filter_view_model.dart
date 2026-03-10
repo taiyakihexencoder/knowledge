@@ -57,14 +57,6 @@ class HistoryFilterViewModel {
   /// 購入先リスト
   ValueNotifier<List<HistoryFilterShopModel>> get shops => _shops;
 
-  late final ValueNotifier<bool> _shopsFilterActive = _selectedShops.map((shops) => shops.active);
-  /// 購入先フィルタがアクティブかどうか
-  ValueNotifier<bool> get shopsFilterActive => _shopsFilterActive;
-
-  final ValueNotifier<HistoryFilterShopSelectedListModel> _selectedShops;
-  /// 選択済の購入先リスト
-  ValueNotifier<HistoryFilterShopSelectedListModel> get selectedShops => _selectedShops;
-
   final ValueNotifier<List<HistoryFilterCategoryModel>> _categories;
   /// カテゴリーリスト
   ValueNotifier<List<HistoryFilterCategoryModel>> get categories => _categories;
@@ -73,16 +65,24 @@ class HistoryFilterViewModel {
   /// タグリスト
   ValueNotifier<List<HistoryFilterTagModel>> get tags => _tags;
 
+  late final ValueNotifier<bool> _shopsFilterActive = _selectedShops.map((shops) => shops.active);
+  /// 購入先フィルタがアクティブかどうか
+  ValueNotifier<bool> get shopsFilterActive => _shopsFilterActive;
+
+  final ValueNotifier<HistoryFilterShopSelectedListModel> _selectedShops;
+  /// 選択済の購入先リスト
+  ValueNotifier<HistoryFilterShopSelectedListModel> get selectedShops => _selectedShops;
+
   void dispose() {
     _amountFilterActive.dispose();
     _amount.dispose();
     _usedAtFilterActive.dispose();
     _usedAt.dispose();
-    _shopsFilterActive.dispose();
     _shops.dispose();
-    _selectedShops.dispose();
     _categories.dispose();
     _tags.dispose();
+    _shopsFilterActive.dispose();
+    _selectedShops.dispose();
   }
 
   /// 購入先・カテゴリー・タグのリストを取得する
