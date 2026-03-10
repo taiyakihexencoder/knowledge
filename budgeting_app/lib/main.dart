@@ -1,4 +1,5 @@
 import 'package:budgeting_app/domain/repositories/repositories.dart';
+import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_edit_view_model.dart';
@@ -47,12 +48,14 @@ class MainApp extends StatelessWidget {
 
 class HistoryListPage extends StatefulWidget {
   HistoryListPage({
-    super.key
+    super.key,
+    SearchFilterModel? searchFilter,
   }): _viewModel = HistoryListViewModel(
     historyRepository: historyRepository, 
     categoryRepository: categoryRepository, 
     tagRepository: tagRepository, 
-    shopRepository: shopRepository
+    shopRepository: shopRepository,
+    searchFilter: searchFilter,
   );
 
   final HistoryListViewModel _viewModel;
@@ -211,10 +214,12 @@ class HistoryEditPageState extends State<HistoryEditPage> {
 class HistoryFilterPage extends StatefulWidget {
   HistoryFilterPage({
     super.key,
+    SearchFilterModel? searchFilter,
   }): _viewModel = HistoryFilterViewModel(
     categoryRepository: categoryRepository,
     tagRepository: tagRepository,
     shopRepository: shopRepository,
+    searchFilter: searchFilter ?? SearchFilterModel.empty()
   );
 
   final HistoryFilterViewModel _viewModel;

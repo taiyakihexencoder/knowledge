@@ -1,6 +1,6 @@
 /// 検索フィルタ・選択済のカテゴリーリスト
-class HistoryFilterCategorySelectedListModel {
-  const HistoryFilterCategorySelectedListModel({
+class CategoryFilterModel {
+  const CategoryFilterModel({
     required this.selectedList,
     this.active = false,
   });

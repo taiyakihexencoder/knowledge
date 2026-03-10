@@ -6,6 +6,7 @@ import 'package:budgeting_app/domain/repositories/expense_category_repository.da
 import 'package:budgeting_app/domain/repositories/expense_history_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_tag_repository.dart';
 import 'package:budgeting_app/domain/repositories/shop_repository.dart';
+import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
 import 'package:budgeting_app/ui/history/models/history_model.dart';
 import 'package:flutter/material.dart';
 
@@ -15,12 +16,14 @@ class HistoryListViewModel {
     required ExpenseCategoryRepository categoryRepository,
     required ExpenseTagRepository tagRepository,
     required ShopRepository shopRepository,
+    SearchFilterModel? searchFilter,
   }) : 
   _historyRepository = historyRepository,
   _categoryRepository = categoryRepository,
   _tagRepository = tagRepository,
   _shopRepository = shopRepository,
-  _models = ValueNotifier([]);
+  _models = ValueNotifier([]),
+  _searchFilter = searchFilter;
 
   /// 購入履歴Repository
   final ExpenseHistoryRepository _historyRepository;
@@ -36,6 +39,9 @@ class HistoryListViewModel {
 
   final ValueNotifier<List<HistoryModel>> _models;
   ValueNotifier<List<HistoryModel>> get models => _models;
+
+  /// 表示条件
+  final SearchFilterModel? _searchFilter;
 
   void dispose() {
     _models.dispose();

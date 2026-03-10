@@ -1,6 +1,6 @@
-/// 検索フィルタ・選択済のタグリスト
-class HistoryFilterTagSelectedListModel {
-  const HistoryFilterTagSelectedListModel({
+/// 検索フィルタ・選択済の購入先リスト
+class ShopFilterModel {
+  const ShopFilterModel({
     required this.selectedList,
     this.active = false,
   });
@@ -10,5 +10,4 @@ class HistoryFilterTagSelectedListModel {
 
   /// 有効かどうか
   final bool active;
-
 }

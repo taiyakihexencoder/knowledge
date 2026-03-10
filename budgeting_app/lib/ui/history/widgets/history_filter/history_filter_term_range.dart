@@ -1,6 +1,6 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/preview_wrapper.dart';
-import 'package:budgeting_app/ui/history/models/history_filter_date_time_range_model.dart';
+import 'package:budgeting_app/ui/core/models/filter/date_filter_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 class HistoryFilterTermRange extends StatelessWidget {
   const HistoryFilterTermRange({
     super.key,
-    required HistoryFilterDateTimeRangeModel model,
+    required DateFilterModel model,
     required bool active,
     required Function(DateTimeRange) onRangeChanged,
   }) : 
@@ -16,7 +16,7 @@ class HistoryFilterTermRange extends StatelessWidget {
     _active = active,
     _onRangeChanged = onRangeChanged;
 
-  final HistoryFilterDateTimeRangeModel _model;
+  final DateFilterModel _model;
   final Function(DateTimeRange) _onRangeChanged;
   final bool _active;
 
@@ -70,7 +70,7 @@ class HistoryFilterTermRange extends StatelessWidget {
 )
 Widget previewTermRangeActive() {
   return HistoryFilterTermRange(
-    model: HistoryFilterDateTimeRangeModel(), 
+    model: DateFilterModel(), 
     active: true, 
     onRangeChanged: (_) {} 
   );
@@ -82,7 +82,7 @@ Widget previewTermRangeActive() {
 )
 Widget previewTermRangeInactive() {
   return HistoryFilterTermRange(
-    model: HistoryFilterDateTimeRangeModel(), 
+    model: DateFilterModel(), 
     active: false, 
     onRangeChanged: (_) {} 
   );

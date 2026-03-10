@@ -1,6 +1,6 @@
 // 検索フィルタ用：金額の範囲
-class HistoryFilterAmountModel {
-  const HistoryFilterAmountModel({
+class AmountFilterModel {
+  const AmountFilterModel({
     this.min = 0,
     this.max = 99999999, // 入力可能な最大値
     this.active = false,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// 検索期間モデル
-class HistoryFilterDateTimeRangeModel {
-  HistoryFilterDateTimeRangeModel({
+class DateFilterModel {
+  const DateFilterModel({
     this.range,
     this.active = false,
   });
