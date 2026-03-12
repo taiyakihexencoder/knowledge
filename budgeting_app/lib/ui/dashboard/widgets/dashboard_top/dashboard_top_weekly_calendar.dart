@@ -1,6 +1,7 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/preview_listenable_provider.dart';
 import 'package:budgeting_app/ui/core/widget/preview_wrapper.dart';
+import 'package:budgeting_app/ui/dashboard/models/dashboard_top_expense_log_model.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_weekly_calendar_model.dart';
 import 'package:budgeting_app/ui/dashboard/values/date_type.dart';
 import 'package:collection/collection.dart';
@@ -138,6 +139,7 @@ class DashboardTopWeeklyCalendarState extends State<DashboardTopWeeklyCalendar> 
             date: date,
             selected: widget._notifiers[index],
             onClick: _onSelect,
+            builder: getBuilder(index, date),
           ),
         ),
       ],
@@ -158,6 +160,68 @@ class DashboardTopWeeklyCalendarState extends State<DashboardTopWeeklyCalendar> 
         widget._notifiers[i].value = date == widget._dateList[i];
       }
     }
+  }
+
+  Widget Function(BuildContext)? getBuilder(int offset, int date) {
+    final DateType dateType = _calcDateType(offset);
+    final datePattern = date.toString().padLeft(2, '0');
+    final DashboardTopExpenseLogModel? model = widget._model.expenseLog.firstWhereOrNull((log) => log.usedAt.endsWith(datePattern));
+    return model == null ? null : (_) => _DashboardWeeklyContents(model: model, dateType: dateType);
+  }
+}
+
+/// 表の中身
+class _DashboardWeeklyContents extends StatelessWidget {
+  const _DashboardWeeklyContents({
+    required DashboardTopExpenseLogModel model,
+    required DateType dateType,
+  }): 
+    _model = model,
+    _dateType = dateType;
+
+  final DashboardTopExpenseLogModel _model;
+  final DateType _dateType;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color logColor = Color.from(red:0.75, green: 0.75, blue: 0.75, alpha: 0.5);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 2.0, right: 2.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+            border: Border.all(color:_dateType.fgColor),
+          ),
+          child: Text(
+            L10n.of(context)!.dashboardTopWeeklyLogCount(_model.logs.length),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: _dateType.fgColor),
+          ),
+        ),
+        SizedBox(height: 4.0),
+        Wrap(
+          spacing: 4.0,
+          runSpacing: 2.0,
+          children: [
+            ..._model.logs.map(
+              (log) => Container(
+                padding: EdgeInsets.only(left:4.0, right:4.0,),
+                decoration: ShapeDecoration(
+                  shape: StadiumBorder(side: BorderSide()),
+                  color: logColor,
+                ),
+                child: Text(
+                  L10n.of(context)!.commonPrice(log),
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              )
+            ),
+          ]
+        ),
+      ],
+    );
   }
 }
 
@@ -241,24 +305,26 @@ class _DashboardTopWeeklyCalendarCell extends StatelessWidget {
                   thickness: 1.0,
                 ),
 
-                Padding(
-                  padding: EdgeInsetsGeometry.only(
-                    right: selected ? 2.0 : 4.0,
-                    top: selected ? 2.0 : 4.0,
-                    bottom: selected ? 2.0 : 4.0,
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        dateExpression,
-                        style: textStyle,
-                      ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsetsGeometry.only(
+                      right: selected ? 2.0 : 4.0,
+                      top: selected ? 2.0 : 4.0,
+                      bottom: selected ? 2.0 : 4.0,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          dateExpression,
+                          style: textStyle,
+                        ),
 
-                      if (_builder != null)
-                        _builder(context),
-                    ],
+                        if (_builder != null)
+                          _builder(context),
+                      ],
+                    ),
                   ),
-
                 ),
               ],
             ),
@@ -282,6 +348,16 @@ Widget previewWeeklyCalendarNewYear() {
       endYear: 2026, 
       endMonth: 1, 
       endDate: 3,
+      expenseLog: [
+        DashboardTopExpenseLogModel(
+          usedAt: '20261228', 
+          logs: [1000, 2000, 3000,1000, 2000, 3000,1000, 2000, 3000,],
+        ),
+        DashboardTopExpenseLogModel(
+          usedAt: '20251231', 
+          logs: [10000],
+        ),
+      ]
     ),
     onClickPrevWeek: (){},
     onClickNextWeek: (){},
@@ -303,6 +379,7 @@ Widget previewWeeklyCalendarNewMonth() {
       endYear: 2026,
       endMonth: 4, 
       endDate: 4,
+      expenseLog: [],
     ),
     onClickPrevWeek: (){},
     onClickNextWeek: (){},
@@ -324,6 +401,12 @@ Widget previewWeeklyCalendar() {
       endYear: 2026,
       endMonth: 1, 
       endDate: 10,
+      expenseLog: [
+        DashboardTopExpenseLogModel(
+          usedAt: '20261228', 
+          logs: [1000, 2000, 3000],
+        ),
+      ]
     ),
     onClickPrevWeek: (){},
     onClickNextWeek: (){},

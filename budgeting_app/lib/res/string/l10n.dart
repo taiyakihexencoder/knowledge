@@ -111,6 +111,18 @@ abstract class L10n {
   /// **'消費総額'**
   String get dashboardTopAmountSum;
 
+  /// No description provided for @dashboardTopWeeklyLogCount.
+  ///
+  /// In ja, this message translates to:
+  /// **'{number}件'**
+  String dashboardTopWeeklyLogCount(Object number);
+
+  /// No description provided for @dashboardTopMonthlyLogCount.
+  ///
+  /// In ja, this message translates to:
+  /// **'{number}件の合計'**
+  String dashboardTopMonthlyLogCount(Object number);
+
   /// No description provided for @expenseHistory.
   ///
   /// In ja, this message translates to:

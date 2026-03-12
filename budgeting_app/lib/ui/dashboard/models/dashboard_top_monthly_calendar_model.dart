@@ -1,3 +1,5 @@
+import 'package:budgeting_app/ui/dashboard/models/dashboard_top_expense_log_model.dart';
+
 /// カレンダー表示のためのデータモデル
 /// 
 /// year: 対象年
@@ -14,22 +16,28 @@ class DashboardTopMonthlyCalendarModel {
     required this.month,
     required this.prevMonthDates,
     required this.days,
+    required this.expenseLog,
   });
 
   /// DateTime型から生成
-  DashboardTopMonthlyCalendarModel.fromDateTime(DateTime dateTime): this(
+  /// 
+  /// dateTime: 必ず〇月1日を設定する
+  DashboardTopMonthlyCalendarModel.fromDateTime({
+    required DateTime dateTime,
+    required List<DashboardTopExpenseLogModel> expenseLog,
+  }): this(
     year: dateTime.year,
     month: dateTime.month,
     prevMonthDates: List.generate(
-      dateTime.copyWith(day: 1).weekday % 7, 
+      dateTime.weekday % 7, 
       (index) {
-        final firstDate = DateTime(dateTime.year, dateTime.month, 1);
-        final int count = firstDate.weekday % 7;
-        final int lastDay = firstDate.add(Duration(days: -1)).day;
+        final int count = dateTime.weekday % 7;
+        final int lastDay = dateTime.add(Duration(days: -1)).day;
         return lastDay - count + index + 1;
       }
     ),
     days: DateTime(dateTime.year, dateTime.month+1, 1).add(Duration(days: -1)).day,
+    expenseLog: expenseLog,
   );
 
   /// 何年か（西暦）
@@ -43,4 +51,7 @@ class DashboardTopMonthlyCalendarModel {
 
   /// この月は何日あるか
   final int days;
+
+  /// 消費のログ
+  final List<DashboardTopExpenseLogModel> expenseLog;
 }

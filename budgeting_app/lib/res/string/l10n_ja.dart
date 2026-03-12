@@ -20,6 +20,16 @@ class L10nJa extends L10n {
   String get dashboardTopAmountSum => '消費総額';
 
   @override
+  String dashboardTopWeeklyLogCount(Object number) {
+    return '$number件';
+  }
+
+  @override
+  String dashboardTopMonthlyLogCount(Object number) {
+    return '$number件の合計';
+  }
+
+  @override
   String get expenseHistory => '消費履歴';
 
   @override

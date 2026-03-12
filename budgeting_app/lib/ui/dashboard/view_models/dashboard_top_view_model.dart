@@ -1,8 +1,11 @@
+import 'package:budgeting_app/data/entities/expense_history_entity.dart';
 import 'package:budgeting_app/domain/repositories/expense_history_repository.dart';
+import 'package:budgeting_app/ui/dashboard/models/dashboard_top_expense_log_model.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_monthly_calendar_model.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_summary_model.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_weekly_calendar_model.dart';
 import 'package:budgeting_app/ui/dashboard/values/calendar_mode.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 class DashboardTopViewModel {
@@ -74,7 +77,7 @@ class DashboardTopViewModel {
     if (model != null) {
       DateTime targetDateTime = DateTime(model.year, model.month-1);
       if (targetDateTime.millisecondsSinceEpoch >= 0) {
-        _monthlyModel.value = DashboardTopMonthlyCalendarModel.fromDateTime(targetDateTime);
+        _updateCalendarMonth(targetDateTime);
       }
     }
   }
@@ -89,14 +92,15 @@ class DashboardTopViewModel {
       DateTime now = DateTime.now();
       DateTime limit = now.copyWith(year: now.year + 20);
       if (limit.isAfter(targetDateTime)) {
-        _monthlyModel.value = DashboardTopMonthlyCalendarModel.fromDateTime(targetDateTime);
+        _updateCalendarMonth(targetDateTime);
       }
     }
   }
 
   /// カレンダーデータを今の月に
   void setCalendarCurrentMonth() {
-    _monthlyModel.value = DashboardTopMonthlyCalendarModel.fromDateTime(DateTime.now());
+    DateTime now = DateTime.now();
+    _updateCalendarMonth(DateTime(now.year, now.month));
   }
 
   /// カレンダーデータを前の週に
@@ -105,7 +109,7 @@ class DashboardTopViewModel {
     if (model != null) {
       DateTime targetDateTime = DateTime(model.startYear, model.startMonth, model.startDate - 7);
       if (targetDateTime.millisecondsSinceEpoch >= 0) {
-        _weeklyModel.value = DashboardTopWeeklyCalendarModel.fromDateTime(targetDateTime);
+        _updateCalendarWeek(targetDateTime);
       }
     }
   }
@@ -118,7 +122,7 @@ class DashboardTopViewModel {
       DateTime now = DateTime.now();
       DateTime limit = now.copyWith(year: now.year + 20);
       if (limit.isAfter(targetDateTime)) {
-        _weeklyModel.value = DashboardTopWeeklyCalendarModel.fromDateTime(targetDateTime);
+        _updateCalendarWeek(targetDateTime);
       }
     }
   }
@@ -127,7 +131,7 @@ class DashboardTopViewModel {
   void setCalendarCurrentWeek() {
     DateTime now = DateTime.now();
     DateTime targetDateTime = now.add(Duration(days: -(now.weekday % 7)));
-    _weeklyModel.value = DashboardTopWeeklyCalendarModel.fromDateTime(targetDateTime);
+    _updateCalendarWeek(targetDateTime);
   }
 
   /// カレンダーの切り替え
@@ -137,7 +141,7 @@ class DashboardTopViewModel {
       if (model == null) {
         setCalendarCurrentWeek();
       } else {
-        _weeklyModel.value = DashboardTopWeeklyCalendarModel.fromDateTime(DateTime(model.year, model.month));
+        _updateCalendarWeek(DateTime(model.year, model.month));
       }
       _calendarMode.value = CalendarMode.weekly;
     } else if (_calendarMode.value == CalendarMode.weekly) {
@@ -145,10 +149,51 @@ class DashboardTopViewModel {
       if (model == null) {
         setCalendarCurrentMonth();
       } else {
-        _monthlyModel.value = DashboardTopMonthlyCalendarModel.fromDateTime(DateTime(model.startYear, model.startMonth));
+        _updateCalendarMonth(DateTime(model.startYear, model.startMonth));
       }
       _calendarMode.value = CalendarMode.monthly;
     }
+  }
+
+  /// 週間カレンダー表示の更新
+  Future _updateCalendarWeek(DateTime targetDate) async {
+    final DateTime endDate = targetDate.copyWith(day: targetDate.day + 6);
+
+    List<ExpenseHistoryEntity> historyList = await _expenseHistoryRepository.getHistoryList(
+      minUsedAt: '${targetDate.year}${targetDate.month.toString().padLeft(2,'0')}${targetDate.day.toString().padLeft(2,'0')}',
+      maxUsedAt: '${endDate.year}${endDate.month.toString().padLeft(2,'0')}${endDate.day.toString().padLeft(2,'0')}',
+    );
+
+    _weeklyModel.value = DashboardTopWeeklyCalendarModel.fromDateTime(
+      dateTime: targetDate, 
+      expenseLog: historyList
+        .groupListsBy((record) => record.usedAt).entries.map(
+          (entry) => DashboardTopExpenseLogModel(
+            usedAt: entry.key, 
+            logs: entry.value.map((record) => record.amount).toList(),
+          )
+        ).toList()
+    );
+  }
+
+  /// 月間カレンダー表示の更新
+  Future _updateCalendarMonth(DateTime targetDate) async {
+    final DateTime endDate = DateTime(targetDate.year, targetDate.month+1, targetDate.day-1);
+    List<ExpenseHistoryEntity> historyList = await _expenseHistoryRepository.getHistoryList(
+      minUsedAt: '${targetDate.year}${targetDate.month.toString().padLeft(2,'0')}${targetDate.day.toString().padLeft(2,'0')}',
+      maxUsedAt: '${endDate.year}${endDate.month.toString().padLeft(2,'0')}${endDate.day.toString().padLeft(2,'0')}',
+    );
+
+    _monthlyModel.value = DashboardTopMonthlyCalendarModel.fromDateTime(
+      dateTime: targetDate,
+      expenseLog: historyList
+        .groupListsBy((record) => record.usedAt).entries.map(
+          (entry) => DashboardTopExpenseLogModel(
+            usedAt: entry.key, 
+            logs: entry.value.map((record) => record.amount).toList(),
+          )
+        ).toList(),
+    );
   }
 
   /// 集計情報を取得.

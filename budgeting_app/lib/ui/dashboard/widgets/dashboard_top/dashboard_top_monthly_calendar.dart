@@ -1,6 +1,7 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/preview_listenable_provider.dart';
 import 'package:budgeting_app/ui/core/widget/preview_wrapper.dart';
+import 'package:budgeting_app/ui/dashboard/models/dashboard_top_expense_log_model.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_monthly_calendar_model.dart';
 import 'package:budgeting_app/ui/dashboard/values/date_type.dart';
 import 'package:collection/collection.dart';
@@ -157,6 +158,7 @@ class DashboardTopMonthlyCalendarState extends State<DashboardTopMonthlyCalendar
                 dateType: _calcDateType(date + prevDays-1),
                 selected: widget._notifiers[date-1],
                 onClick: _onClickCell,
+                model: widget._model.expenseLog.firstWhereOrNull((log) => log.usedAt.endsWith(date.toString().padLeft(2, '0'))),
               ),
             
             // 来月表示
@@ -193,7 +195,7 @@ class DashboardTopMonthlyCalendarState extends State<DashboardTopMonthlyCalendar
 }
 
 /// 曜日ヘッダ
-class _DashboardTopCalendarMonthlyHeaderCell  extends StatelessWidget {
+class _DashboardTopCalendarMonthlyHeaderCell extends StatelessWidget {
   const _DashboardTopCalendarMonthlyHeaderCell({
     required String text,
     required DateType dateType,
@@ -304,16 +306,19 @@ class _DashboardTopMonthlyCalendarCell extends StatelessWidget {
     required int date,
     required DateType dateType,
     required ValueListenable<bool> selected,
+    required DashboardTopExpenseLogModel? model,
     required Function(int) onClick,
   }):
     _date = date,
     _dateType = dateType,
     _selected = selected,
+    _model = model,
     _onClick = onClick;
 
   final int _date;
   final DateType _dateType;
   final ValueListenable<bool> _selected;
+  final DashboardTopExpenseLogModel? _model;
   final Function(int) _onClick;
 
   @override
@@ -328,9 +333,55 @@ class _DashboardTopMonthlyCalendarCell extends StatelessWidget {
             dateType: _dateType,
             selected: selected, 
             isCurrentMonth: true,
+            builder: _model == null ? null : (_) => _DashboardTopCalendarMonthlyContents(model: _model, dateType: _dateType,),
           ),
         ),
       ),
+    );
+  }
+}
+
+/// セル内コンテンツ
+class _DashboardTopCalendarMonthlyContents extends StatelessWidget {
+  const _DashboardTopCalendarMonthlyContents({
+    required DashboardTopExpenseLogModel model,
+    required DateType dateType,
+  }):
+    _model = model,
+    _dateType = dateType;
+
+  final DashboardTopExpenseLogModel _model;
+  final DateType _dateType;
+
+  @override
+  Widget build(BuildContext context) {
+    final sum = _model.logs.isEmpty ? 0 : _model.logs.reduce((a, b) => a + b);
+    final Color logColor = Color.from(red:0.75, green: 0.75, blue: 0.75, alpha: 0.5);
+
+    return Column(
+      children: [
+        Spacer(),
+        Text(
+          L10n.of(context)!.dashboardTopMonthlyLogCount(_model.logs.length),
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(color: _dateType.fgColor),
+          ),
+        Container(
+          padding: EdgeInsets.only(left:4.0, right:4.0),
+          decoration: ShapeDecoration(
+            color: logColor,
+            shape: StadiumBorder(
+              side: BorderSide(
+                color: _dateType.fgColor,
+              ),
+            ),
+          ),
+          child: Text(
+            L10n.of(context)!.commonPrice(sum),
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: _dateType.fgColor),
+          )
+        ),
+        Spacer(),
+      ],
     );
   }
 }
@@ -345,7 +396,13 @@ Widget previewMonthlyCalendar() {
       year: 2026, 
       month: 3,
       prevMonthDates: [28],
-      days: 31
+      days: 31,
+      expenseLog: [
+        DashboardTopExpenseLogModel(
+          usedAt: '20260314',
+          logs: [170, 2320, 5431, 9807, 11398, 499,],
+        )
+      ]
     ),
     onClickPrevMonth: (){},
     onClickNextMonth: (){},
@@ -371,7 +428,6 @@ Widget previewHeaderCell() {
           ),
         ),
       ),
-        
     ],
   );
 }
@@ -413,6 +469,12 @@ Widget previewCell() {
               date: i, 
               dateType: i == 1 ? DateType.red : (i == 7 ? DateType.blue : DateType.normal),
               selected: listenable, 
+              model: DashboardTopExpenseLogModel(
+                usedAt: '20260302', 
+                logs: [
+                  100, 145, 1980, 3314,
+                ]
+              ),
               onClick: (_) {},
             ),
           ),

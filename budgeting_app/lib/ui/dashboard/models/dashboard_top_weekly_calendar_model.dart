@@ -1,3 +1,5 @@
+import 'package:budgeting_app/ui/dashboard/models/dashboard_top_expense_log_model.dart';
+
 /// 週間カレンダー表示モデル
 /// 
 /// 開始年月日と終了年月日さえわかれば、
@@ -10,16 +12,21 @@ class DashboardTopWeeklyCalendarModel {
     required this.endYear,
     required this.endMonth,
     required this.endDate,
+    required this.expenseLog,
   });
 
   /// 注意：dateTimeは日曜日想定
-  DashboardTopWeeklyCalendarModel.fromDateTime(DateTime dateTime) : this(
+  DashboardTopWeeklyCalendarModel.fromDateTime({
+    required DateTime dateTime,
+    required List<DashboardTopExpenseLogModel> expenseLog,
+  }) : this(
     startYear: dateTime.year,
     startMonth: dateTime.month,
     startDate: dateTime.day,
     endYear: dateTime.add(Duration(days: 7)).year,
     endMonth: dateTime.add(Duration(days: 7)).month,
     endDate: dateTime.add(Duration(days: 7)).day,
+    expenseLog: expenseLog,
   );
 
   /// 開始年
@@ -34,4 +41,7 @@ class DashboardTopWeeklyCalendarModel {
   final int endMonth;
   /// 終了日付
   final int endDate;
+
+  /// 消費のログ
+  final List<DashboardTopExpenseLogModel> expenseLog;
 }
