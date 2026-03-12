@@ -99,6 +99,12 @@ abstract class L10n {
   /// **'家計簿アプリ'**
   String get applicationTitle;
 
+  /// No description provided for @dashboardTopWeekNo.
+  ///
+  /// In ja, this message translates to:
+  /// **'第{number}週'**
+  String dashboardTopWeekNo(Object number);
+
   /// No description provided for @expenseHistory.
   ///
   /// In ja, this message translates to:
@@ -447,6 +453,48 @@ abstract class L10n {
   /// **'タグ \"{name}\" を削除しますか？'**
   String settingsAttributesDeleteTag(Object name);
 
+  /// No description provided for @commonAbbrSunDay.
+  ///
+  /// In ja, this message translates to:
+  /// **'日'**
+  String get commonAbbrSunDay;
+
+  /// No description provided for @commonAbbrMonDay.
+  ///
+  /// In ja, this message translates to:
+  /// **'月'**
+  String get commonAbbrMonDay;
+
+  /// No description provided for @commonAbbrTuesDay.
+  ///
+  /// In ja, this message translates to:
+  /// **'火'**
+  String get commonAbbrTuesDay;
+
+  /// No description provided for @commonAbbrWednesDay.
+  ///
+  /// In ja, this message translates to:
+  /// **'水'**
+  String get commonAbbrWednesDay;
+
+  /// No description provided for @commonAbbrThursDay.
+  ///
+  /// In ja, this message translates to:
+  /// **'木'**
+  String get commonAbbrThursDay;
+
+  /// No description provided for @commonAbbrFriDay.
+  ///
+  /// In ja, this message translates to:
+  /// **'金'**
+  String get commonAbbrFriDay;
+
+  /// No description provided for @commonAbbrSaturDay.
+  ///
+  /// In ja, this message translates to:
+  /// **'土'**
+  String get commonAbbrSaturDay;
+
   /// No description provided for @commonPrice.
   ///
   /// In ja, this message translates to:
@@ -482,6 +530,18 @@ abstract class L10n {
   /// In ja, this message translates to:
   /// **'yyyy年 MM月 dd日 (E)'**
   String get commonFullDateFormat;
+
+  /// No description provided for @commonMonthDate.
+  ///
+  /// In ja, this message translates to:
+  /// **'{month}/{date}'**
+  String commonMonthDate(Object date, Object month);
+
+  /// No description provided for @commonYearMonthDate.
+  ///
+  /// In ja, this message translates to:
+  /// **'{year}/{month}/{date}'**
+  String commonYearMonthDate(Object date, Object month, Object year);
 
   /// No description provided for @commonEmpty.
   ///

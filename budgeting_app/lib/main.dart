@@ -1,6 +1,8 @@
 import 'package:budgeting_app/domain/repositories/repositories.dart';
 import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
+import 'package:budgeting_app/ui/dashboard/view_models/dashboard_top_view_model.dart';
+import 'package:budgeting_app/ui/dashboard/widgets/dashboard_top/dashboard_top.dart';
 import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_edit_view_model.dart';
 import 'package:budgeting_app/ui/history/view_models/history_filter_view_model.dart';
@@ -34,6 +36,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // budgeting_app_bottom_navigation.dart
     bottomNavigationBar = BudgetingAppBottomNavigation(
+      navigateToDashboard: (_) => DashboardTopPage(),
       navigateToHitoryList: (_) => HistoryListPage(), 
       navigateToSettings: (_) => SettingsPage(),
     );
@@ -41,7 +44,36 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       localizationsDelegates: L10n.localizationsDelegates,
       supportedLocales: L10n.supportedLocales,
-      home: HistoryListPage(),
+      home: DashboardTopPage(),
+    );
+  }
+}
+
+class DashboardTopPage extends StatefulWidget {
+  DashboardTopPage({
+    super.key,
+  }):
+    _viewModel = DashboardTopViewModel();
+
+  final DashboardTopViewModel _viewModel;
+
+  @override
+  DashboardTopPageState createState() {
+    return DashboardTopPageState();
+  }
+}
+
+class DashboardTopPageState extends State<DashboardTopPage> {
+  @override
+  void dispose() {
+    widget._viewModel.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DashboardTop(
+      viewModel: widget._viewModel,
     );
   }
 }

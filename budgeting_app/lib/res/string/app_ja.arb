@@ -2,6 +2,8 @@
   "@@locale": "ja",
   "applicationTitle": "家計簿アプリ",
 
+  "dashboardTopWeekNo": "第{number}週",
+
   "expenseHistory": "消費履歴",
   "expenseHistoryListFilter": "検索条件",
   "expenseHistoryListFilterAmount": "金額",
@@ -66,11 +68,20 @@
   "settingsAttributesEditTagDescription": "タグを入力",
   "settingsAttributesDeleteTag": "タグ \"{name}\" を削除しますか？",
 
+  "commonAbbrSunDay": "日",
+  "commonAbbrMonDay": "月",
+  "commonAbbrTuesDay": "火",
+  "commonAbbrWednesDay": "水",
+  "commonAbbrThursDay": "木",
+  "commonAbbrFriDay": "金",
+  "commonAbbrSaturDay": "土",
   "commonPrice": "{price}円",
   "commonPriceSuffix": "円",
   "commonOk": "OK",
   "commonCancel": "キャンセル",
   "commonAbbrDateFormat": "yyyy/MM/dd(E)",
   "commonFullDateFormat": "yyyy年 MM月 dd日 (E)",
+  "commonMonthDate": "{month}/{date}",
+  "commonYearMonthDate": "{year}/{month}/{date}",
   "commonEmpty": "未設定"
 }

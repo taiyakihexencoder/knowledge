@@ -12,6 +12,11 @@ class L10nJa extends L10n {
   String get applicationTitle => '家計簿アプリ';
 
   @override
+  String dashboardTopWeekNo(Object number) {
+    return '第$number週';
+  }
+
+  @override
   String get expenseHistory => '消費履歴';
 
   @override
@@ -194,6 +199,27 @@ class L10nJa extends L10n {
   }
 
   @override
+  String get commonAbbrSunDay => '日';
+
+  @override
+  String get commonAbbrMonDay => '月';
+
+  @override
+  String get commonAbbrTuesDay => '火';
+
+  @override
+  String get commonAbbrWednesDay => '水';
+
+  @override
+  String get commonAbbrThursDay => '木';
+
+  @override
+  String get commonAbbrFriDay => '金';
+
+  @override
+  String get commonAbbrSaturDay => '土';
+
+  @override
   String commonPrice(Object price) {
     return '$price円';
   }
@@ -212,6 +238,16 @@ class L10nJa extends L10n {
 
   @override
   String get commonFullDateFormat => 'yyyy年 MM月 dd日 (E)';
+
+  @override
+  String commonMonthDate(Object date, Object month) {
+    return '$month/$date';
+  }
+
+  @override
+  String commonYearMonthDate(Object date, Object month, Object year) {
+    return '$year/$month/$date';
+  }
 
   @override
   String get commonEmpty => '未設定';
