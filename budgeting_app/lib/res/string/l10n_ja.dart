@@ -17,6 +17,9 @@ class L10nJa extends L10n {
   }
 
   @override
+  String get dashboardTopAmountSum => '消費総額';
+
+  @override
   String get expenseHistory => '消費履歴';
 
   @override

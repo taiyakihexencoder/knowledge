@@ -14,8 +14,12 @@ class DashboardTopCalendarDateExpenseModel {
     required this.tags,
   });
 
+  /// 購入金額
   final int amount;
+  /// カテゴリー
   final String category;
+  /// 店舗
   final String shop;
+  /// タグ
   final List<String> tags;
 }

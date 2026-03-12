@@ -50,4 +50,10 @@ abstract interface class ExpenseHistoryService {
     required int id,
     required ExpenseLogEntity log,
   });
+
+  /// 期間内の消費合計金額を取得
+  Future<int> getAmountSum({
+    required String from, 
+    required String to,
+  });
 }

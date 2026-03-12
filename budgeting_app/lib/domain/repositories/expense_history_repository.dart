@@ -88,4 +88,17 @@ class ExpenseHistoryRepository {
   }) {
     return _historyService.updateLog(id: id, log: log);
   }
+
+  // 指定した期間の合計金額
+  Future<int> getAmountSum({
+    required String from,
+    required String to,
+  }) {
+    try {
+      return _historyService.getAmountSum(from: from, to: to);
+    } on Exception catch (e){
+      print(e);
+      return Future.value(0);
+    }
+  }
 }

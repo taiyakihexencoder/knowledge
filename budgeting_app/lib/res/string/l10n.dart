@@ -105,6 +105,12 @@ abstract class L10n {
   /// **'第{number}週'**
   String dashboardTopWeekNo(Object number);
 
+  /// No description provided for @dashboardTopAmountSum.
+  ///
+  /// In ja, this message translates to:
+  /// **'消費総額'**
+  String get dashboardTopAmountSum;
+
   /// No description provided for @expenseHistory.
   ///
   /// In ja, this message translates to:

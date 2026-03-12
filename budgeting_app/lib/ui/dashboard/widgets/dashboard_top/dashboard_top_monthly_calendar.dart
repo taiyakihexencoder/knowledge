@@ -125,11 +125,11 @@ class DashboardTopMonthlyCalendarState extends State<DashboardTopMonthlyCalendar
           childAspectRatio: 1.6,
           children: [
             ...dows.mapIndexed(
-              (index, dow) => _DashboardTopCalendarMonthlyHeaderCell(
+              (index, dow) =>_DashboardTopCalendarMonthlyHeaderCell(
                 text: dow,
                 dateType: _calcDateType(index),
               ),
-            )
+            ),  
           ],
         ),
 
@@ -206,19 +206,17 @@ class _DashboardTopCalendarMonthlyHeaderCell  extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          color: _dateType.bgColor,
-          border: Border.all(),
+    return Container(
+      decoration: BoxDecoration(
+        color: _dateType.bgColor,
+        border: Border.all(),
+      ),
+      child: Center(
+        child: Text(
+          _text,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: _dateType.fgColor),            
         ),
-        child: Center(
-          child: Text(
-            _text,
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: _dateType.fgColor),            
-          ),
-        ),
-      )
+      ),
     );
   }
 }
@@ -366,9 +364,11 @@ Widget previewHeaderCell() {
   return Row(
     children: [
       ...textList.mapIndexed(
-        (index, text) => _DashboardTopCalendarMonthlyHeaderCell(
-          text: text,
-          dateType: index == 0 ? DateType.red : index == 6 ? DateType.blue : DateType.normal,
+        (index, text) => Expanded(
+          child:_DashboardTopCalendarMonthlyHeaderCell(
+            text: text,
+            dateType: index == 0 ? DateType.red : index == 6 ? DateType.blue : DateType.normal,
+          ),
         ),
       ),
         

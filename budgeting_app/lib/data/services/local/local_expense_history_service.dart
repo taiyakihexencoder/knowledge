@@ -178,6 +178,19 @@ class LocalExpenseHistoryService implements ExpenseHistoryService {
       );
   }
 
+  @override
+  Future<int> getAmountSum({
+    required String from,
+    required String to,
+  }) {
+    Expression<int> exp = _database.expenseHistory.amount.sum();
+    return (_database.selectOnly(_database.expenseHistory)
+      ..addColumns([exp])
+      ..where(_database.expenseHistory.usedAt.isBetweenValues(from, to)))
+        .getSingle()
+        .then((result) => result.read(exp) ?? 0);
+  }
+
   ExpenseHistoryEntity _convert(ExpenseHistoryData data) {
     return ExpenseHistoryEntity(
       id: data.id.toInt(), 

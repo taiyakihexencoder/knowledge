@@ -3,6 +3,7 @@
   "applicationTitle": "家計簿アプリ",
 
   "dashboardTopWeekNo": "第{number}週",
+  "dashboardTopAmountSum": "消費総額",
 
   "expenseHistory": "消費履歴",
   "expenseHistoryListFilter": "検索条件",

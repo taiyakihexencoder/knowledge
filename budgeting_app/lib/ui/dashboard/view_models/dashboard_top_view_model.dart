@@ -1,14 +1,45 @@
+import 'package:budgeting_app/domain/repositories/expense_history_repository.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_monthly_calendar_model.dart';
+import 'package:budgeting_app/ui/dashboard/models/dashboard_top_summary_model.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_weekly_calendar_model.dart';
 import 'package:budgeting_app/ui/dashboard/values/calendar_mode.dart';
 import 'package:flutter/foundation.dart';
 
 class DashboardTopViewModel {
-  DashboardTopViewModel(
-  ) : 
+  DashboardTopViewModel({
+    required ExpenseHistoryRepository expenseHistoryRepository,
+  }) : 
     _monthlyModel = ValueNotifier(null),
     _weeklyModel = ValueNotifier(null),
-    _calendarMode = ValueNotifier(CalendarMode.weekly);
+    _calendarMode = ValueNotifier(CalendarMode.weekly),
+    _expenseHistoryRepository = expenseHistoryRepository,
+    _summary = ValueNotifier(null) {
+
+    // 日付が変化したらsummaryを更新する
+    _monthlyModel.addListener(
+      () {
+        final DashboardTopMonthlyCalendarModel? model = _monthlyModel.value;
+        if (model != null) {
+          DateTime end = DateTime(model.year, model.month+1).add(Duration(days:-1));
+          _fetchSummary(
+            from: '${model.year}${model.month.toString().padLeft(2,'0')}01',
+            to: '${end.year}${end.month.toString().padLeft(2,'0')}${end.day.toString().padLeft(2,'0')}',
+          );
+        }
+      }
+    );
+    _weeklyModel.addListener(
+      () {
+        final DashboardTopWeeklyCalendarModel? model = _weeklyModel.value;
+        if (model != null) {
+          _fetchSummary(
+            from: '${model.startYear}${model.startMonth.toString().padLeft(2,'0')}${model.startDate.toString().padLeft(2,'0')}', 
+            to: '${model.endYear}${model.endMonth.toString().padLeft(2,'0')}${model.endDate.toString().padLeft(2,'0')}'
+          );
+        }
+      }
+    );
+  }
   
   final ValueNotifier<DashboardTopMonthlyCalendarModel?> _monthlyModel; 
   /// 月カレンダーの情報
@@ -22,10 +53,17 @@ class DashboardTopViewModel {
   /// どちらのカレンダーを表示しているか
   ValueNotifier<CalendarMode> get calendarMode => _calendarMode;
 
+  final ExpenseHistoryRepository _expenseHistoryRepository;
+
+  final ValueNotifier<DashboardTopSummaryModel?> _summary;
+  /// 集計情報
+  ValueNotifier<DashboardTopSummaryModel?> get summary => _summary;
+
   void dispose() {
     _monthlyModel.dispose();
     _weeklyModel.dispose();
     _calendarMode.dispose();
+    _summary.dispose();
   }
 
   /// カレンダーデータを1つ前の月に
@@ -111,5 +149,27 @@ class DashboardTopViewModel {
       }
       _calendarMode.value = CalendarMode.monthly;
     }
+  }
+
+  /// 集計情報を取得.
+  /// 実運用では連続で呼び出されないように中断なりUIをブロックするなり対応した方がいいが、
+  /// ここでは省略する
+  /// 
+  /// from: yyyyMMdd
+  /// 
+  /// to: yyyyMMdd
+  Future _fetchSummary({
+    required String from,
+    required String to,
+  }) async {
+    _summary.value = null;
+
+    final int amountSum = await _expenseHistoryRepository.getAmountSum(from: from, to: to);
+
+    _summary.value = DashboardTopSummaryModel(
+      amountSum: amountSum, 
+      fromDate: from, 
+      toDate: to,
+    );
   }
 }

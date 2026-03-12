@@ -98,4 +98,12 @@ class MockExpenseHistoryService implements ExpenseHistoryService {
   }) {
     return Future.value();
   }
+
+  @override
+  Future<int> getAmountSum({
+    required String from,
+    required String to,
+  }) {
+    return Future.value(123456);
+  }
 }

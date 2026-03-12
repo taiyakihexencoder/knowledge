@@ -2,6 +2,7 @@ import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dar
 import 'package:budgeting_app/ui/dashboard/values/calendar_mode.dart';
 import 'package:budgeting_app/ui/dashboard/view_models/dashboard_top_view_model.dart';
 import 'package:budgeting_app/ui/dashboard/widgets/dashboard_top/dashboard_top_monthly_calendar.dart';
+import 'package:budgeting_app/ui/dashboard/widgets/dashboard_top/dashboard_top_summary.dart';
 import 'package:budgeting_app/ui/dashboard/widgets/dashboard_top/dashboard_top_weekly_calendar.dart';
 import 'package:flutter/material.dart';
 
@@ -64,7 +65,20 @@ class DashboardTop extends StatelessWidget {
                     );
                 }
               }
-            )
+            ),
+
+            ValueListenableBuilder(
+              valueListenable: _viewModel.summary, 
+              builder: (_, summary, _) {
+                if (summary != null) {
+                  return DashboardTopSummary(
+                    model: summary,
+                  );
+                } else {
+                  return Container();
+                }
+              }
+            ),
           ],
         ),
       ),
