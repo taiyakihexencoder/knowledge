@@ -22,65 +22,67 @@ class DashboardTop extends StatelessWidget {
 
     return Scaffold(
       bottomNavigationBar: bottomNavigationBar,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ValueListenableBuilder(
-              valueListenable: _viewModel.calendarMode, 
-              builder: (_, mode, _) {
-                switch (mode) {
-                  case CalendarMode.monthly: // 月間カレンダー
-                    return ValueListenableBuilder(
-                      valueListenable: _viewModel.monthlyModel, 
-                      builder: (_, calendar, _) {
-                        if (calendar != null) {
-                          return DashboardTopMonthlyCalendar(
-                            model: calendar, 
-                            onClickPrevMonth: _viewModel.setCalendarPrevMonth, 
-                            onClickNextMonth: _viewModel.setCalendarNextMonth,
-                            onClickToday: _viewModel.setCalendarCurrentMonth,
-                            onClickSwitch: _viewModel.switchCalender,
-                          );
-                        } else {
-                          return Container();
+      body: CustomScrollView(
+        slivers: [
+          SliverList.list(
+            children:[
+              ValueListenableBuilder(
+                valueListenable: _viewModel.calendarMode, 
+                builder: (_, mode, _) {
+                  switch (mode) {
+                    case CalendarMode.monthly: // 月間カレンダー
+                      return ValueListenableBuilder(
+                        valueListenable: _viewModel.monthlyModel, 
+                        builder: (_, calendar, _) {
+                          if (calendar != null) {
+                            return DashboardTopMonthlyCalendar(
+                              model: calendar, 
+                              onClickPrevMonth: _viewModel.setCalendarPrevMonth, 
+                              onClickNextMonth: _viewModel.setCalendarNextMonth,
+                              onClickToday: _viewModel.setCalendarCurrentMonth,
+                              onClickSwitch: _viewModel.switchCalender,
+                            );
+                          } else {
+                            return Container();
+                          }
                         }
-                      }
-                    );
-                  case CalendarMode.weekly: // 週間カレンダー
-                    return ValueListenableBuilder(
-                      valueListenable: _viewModel.weeklyModel, 
-                      builder: (_, calendar, _) {
-                        if (calendar != null) {
-                          return DashboardTopWeeklyCalendar(
-                            model: calendar, 
-                            onClickPrevWeek: _viewModel.setCalendarPrevWeek, 
-                            onClickNextWeek: _viewModel.setCalendarNextWeek, 
-                            onClickToday: _viewModel.setCalendarCurrentWeek,
-                            onClickSwitch: _viewModel.switchCalender,
-                          );
-                        } else {
-                          return Container();
+                      );
+                    case CalendarMode.weekly: // 週間カレンダー
+                      return ValueListenableBuilder(
+                        valueListenable: _viewModel.weeklyModel, 
+                        builder: (_, calendar, _) {
+                          if (calendar != null) {
+                            return DashboardTopWeeklyCalendar(
+                              model: calendar, 
+                              onClickPrevWeek: _viewModel.setCalendarPrevWeek, 
+                              onClickNextWeek: _viewModel.setCalendarNextWeek, 
+                              onClickToday: _viewModel.setCalendarCurrentWeek,
+                              onClickSwitch: _viewModel.switchCalender,
+                            );
+                          } else {
+                            return Container();
+                          }
                         }
-                      }
-                    );
+                      );
+                  }
                 }
-              }
-            ),
+              ),
 
-            ValueListenableBuilder(
-              valueListenable: _viewModel.summary, 
-              builder: (_, summary, _) {
-                if (summary != null) {
-                  return DashboardTopSummary(
-                    model: summary,
-                  );
-                } else {
-                  return Container();
+              ValueListenableBuilder(
+                valueListenable: _viewModel.summary, 
+                builder: (_, summary, _) {
+                  if (summary != null) {
+                    return DashboardTopSummary(
+                      model: summary,
+                    );
+                  } else {
+                    return Container();
+                  }
                 }
-              }
-            ),
-          ],
-        ),
+              ),
+            ]
+          )
+        ],
       ),
     );
   }
