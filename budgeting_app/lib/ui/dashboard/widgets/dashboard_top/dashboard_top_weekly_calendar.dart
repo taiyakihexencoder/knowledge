@@ -20,12 +20,14 @@ class DashboardTopWeeklyCalendar extends StatefulWidget {
     required Function() onClickNextWeek,
     required Function() onClickToday,
     required Function() onClickSwitch,
+    required Function(int) onClickCell,
   }): 
     _model = model,
     _onClickPrevWeek = onClickPrevWeek,
     _onClickNextWeek = onClickNextWeek,
     _onClickToday = onClickToday,
     _onClickSwitch = onClickSwitch,
+    _onClickCell = onClickCell,
     _dateList = List.generate(
       7, 
       (index) {
@@ -45,6 +47,7 @@ class DashboardTopWeeklyCalendar extends StatefulWidget {
   final Function() _onClickNextWeek;
   final Function() _onClickToday;
   final Function() _onClickSwitch;
+  final Function(int) _onClickCell;
 
   final List<int> _dateList;
   final List<ValueNotifier<bool>> _notifiers;
@@ -155,6 +158,7 @@ class DashboardTopWeeklyCalendarState extends State<DashboardTopWeeklyCalendar> 
 
   /// タップ時に日付の選択状態を切り替える
   void _onSelect(int date) {
+    widget._onClickCell(date);
     for (int i = 0; i < 7; ++i) {
       if (widget._notifiers[i].value != (date == widget._dateList[i])) {
         widget._notifiers[i].value = date == widget._dateList[i];
@@ -363,6 +367,7 @@ Widget previewWeeklyCalendarNewYear() {
     onClickNextWeek: (){},
     onClickToday: (){},
     onClickSwitch: (){},
+    onClickCell: (_){},
   );
 }
 
@@ -385,6 +390,7 @@ Widget previewWeeklyCalendarNewMonth() {
     onClickNextWeek: (){},
     onClickToday: (){},
     onClickSwitch: (){},
+    onClickCell: (_){},
   );
 }
 
@@ -412,6 +418,7 @@ Widget previewWeeklyCalendar() {
     onClickNextWeek: (){},
     onClickToday: (){},
     onClickSwitch: (){},
+    onClickCell: (_){},
   );
 }
 

@@ -55,6 +55,9 @@ class DashboardTopPage extends StatefulWidget {
   }):
     _viewModel = DashboardTopViewModel(
       expenseHistoryRepository: historyRepository,
+      expenseCategoryRepository: categoryRepository,
+      shopRepository: shopRepository,
+      expenseTagRepository: tagRepository,
     );
 
   final DashboardTopViewModel _viewModel;

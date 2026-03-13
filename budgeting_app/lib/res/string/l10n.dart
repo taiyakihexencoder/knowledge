@@ -123,6 +123,12 @@ abstract class L10n {
   /// **'{number}件の合計'**
   String dashboardTopMonthlyLogCount(Object number);
 
+  /// No description provided for @dashboardTopDailyLogEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'登録された履歴はありません。'**
+  String get dashboardTopDailyLogEmpty;
+
   /// No description provided for @expenseHistory.
   ///
   /// In ja, this message translates to:

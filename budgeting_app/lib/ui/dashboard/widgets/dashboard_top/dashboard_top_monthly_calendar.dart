@@ -19,12 +19,14 @@ class DashboardTopMonthlyCalendar extends StatefulWidget {
     required Function() onClickNextMonth,
     required Function() onClickToday,
     required Function() onClickSwitch,
+    required Function(int) onClickCell,
   }):
     _model = model,
     _onClickPrevMonth = onClickPrevMonth,
     _onClickNextMonth = onClickNextMonth,
     _onClickToday = onClickToday,
     _onClickSwitch = onClickSwitch,
+    _onClickCell = onClickCell,
     _notifiers = List.generate(model.days, (_) => ValueNotifier(false));
 
   /// データモデル
@@ -38,6 +40,8 @@ class DashboardTopMonthlyCalendar extends StatefulWidget {
   final Function() _onClickToday;
   /// 画面切り替え
   final Function() _onClickSwitch;
+  /// セルがクリックされたとき
+  final Function(int) _onClickCell;
 
   /// 各セルの選択状態を管理
   final List<ValueNotifier<bool>> _notifiers;
@@ -178,6 +182,7 @@ class DashboardTopMonthlyCalendarState extends State<DashboardTopMonthlyCalendar
   /// セルをタップしたらそのセルを選択状態にして、
   /// 他の選択状態のセルを選択解除する
   void _onClickCell(int date) {
+    widget._onClickCell(date);
     for (int i = 1; i <= widget._model.days; ++i) {
       if ( widget._notifiers[i-1].value != (i == date) ) {
         widget._notifiers[i-1].value = (i == date);
@@ -408,6 +413,7 @@ Widget previewMonthlyCalendar() {
     onClickNextMonth: (){},
     onClickToday: (){},
     onClickSwitch: (){},
+    onClickCell: (_){}
   );
 }
 

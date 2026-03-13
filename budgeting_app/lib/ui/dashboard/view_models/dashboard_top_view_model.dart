@@ -1,5 +1,13 @@
+import 'package:budgeting_app/data/entities/expense_category_entity.dart';
 import 'package:budgeting_app/data/entities/expense_history_entity.dart';
+import 'package:budgeting_app/data/entities/expense_history_tag_entity.dart';
+import 'package:budgeting_app/data/entities/shop_entity.dart';
+import 'package:budgeting_app/domain/repositories/expense_category_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_history_repository.dart';
+import 'package:budgeting_app/domain/repositories/expense_tag_repository.dart';
+import 'package:budgeting_app/domain/repositories/shop_repository.dart';
+import 'package:budgeting_app/ui/dashboard/models/dashboard_top_daily_element_model.dart';
+import 'package:budgeting_app/ui/dashboard/models/dashboard_top_daily_list_model.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_expense_log_model.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_monthly_calendar_model.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_summary_model.dart';
@@ -11,12 +19,19 @@ import 'package:flutter/foundation.dart';
 class DashboardTopViewModel {
   DashboardTopViewModel({
     required ExpenseHistoryRepository expenseHistoryRepository,
+    required ExpenseCategoryRepository expenseCategoryRepository,
+    required ShopRepository shopRepository,
+    required ExpenseTagRepository expenseTagRepository,
   }) : 
     _monthlyModel = ValueNotifier(null),
     _weeklyModel = ValueNotifier(null),
     _calendarMode = ValueNotifier(CalendarMode.weekly),
     _expenseHistoryRepository = expenseHistoryRepository,
-    _summary = ValueNotifier(null) {
+    _expenseCategoryRepository = expenseCategoryRepository,
+    _shopRepository = shopRepository,
+    _expenseTagRepository = expenseTagRepository,
+    _summary = ValueNotifier(null),
+    _dailyModel = ValueNotifier(null) {
 
     // 日付が変化したらsummaryを更新する
     _monthlyModel.addListener(
@@ -57,7 +72,14 @@ class DashboardTopViewModel {
   ValueNotifier<CalendarMode> get calendarMode => _calendarMode;
 
   final ExpenseHistoryRepository _expenseHistoryRepository;
+  final ExpenseCategoryRepository _expenseCategoryRepository;
+  final ShopRepository _shopRepository;
+  final ExpenseTagRepository _expenseTagRepository;
 
+  final ValueNotifier<DashboardTopDailyListModel?> _dailyModel;
+  /// 選択した日付のログ一覧
+  ValueNotifier<DashboardTopDailyListModel?> get dailyModel => _dailyModel;
+  
   final ValueNotifier<DashboardTopSummaryModel?> _summary;
   /// 集計情報
   ValueNotifier<DashboardTopSummaryModel?> get summary => _summary;
@@ -67,6 +89,7 @@ class DashboardTopViewModel {
     _weeklyModel.dispose();
     _calendarMode.dispose();
     _summary.dispose();
+    _dailyModel.dispose();
   }
 
   /// カレンダーデータを1つ前の月に
@@ -174,6 +197,9 @@ class DashboardTopViewModel {
           )
         ).toList()
     );
+
+    // カレンダーが更新されたら選択状態を解除
+    _dailyModel.value = null;
   }
 
   /// 月間カレンダー表示の更新
@@ -194,6 +220,9 @@ class DashboardTopViewModel {
           )
         ).toList(),
     );
+
+    // カレンダーが更新されたら選択状態を解除
+    _dailyModel.value = null;
   }
 
   /// 集計情報を取得.
@@ -215,6 +244,58 @@ class DashboardTopViewModel {
       amountSum: amountSum, 
       fromDate: from, 
       toDate: to,
+    );
+  }
+
+  /// セルが選択されたときの処理：Monthly
+  void onSelectDateMonthly(int date) {
+    final DashboardTopMonthlyCalendarModel? model = _monthlyModel.value;
+    if (model != null) {
+      _onSelectDate(
+        year: model.year, 
+        month: model.month, 
+        date: date
+      );
+    }
+  }
+
+  /// セルが選択されたときの処理：Weekly
+  void onSelectDateWeekly(int date) {
+    final DashboardTopWeeklyCalendarModel? model = _weeklyModel.value;
+    if (model != null) {
+      _onSelectDate(
+        year: model.startYear == model.endYear || date >= model.startDate ? model.startYear : model.endYear, 
+        month: model.startMonth == model.endMonth || date >= model.startDate ? model.startMonth : model.endMonth, 
+        date: date
+      );
+    }
+  }
+
+  /// セルが選択されたときにその日のデータを検索する
+  void _onSelectDate({
+    required int year,
+    required int month,
+    required int date,
+  }) async {
+    final String usedAt = '$year${month.toString().padLeft(2,'0')}${date.toString().padLeft(2,'0')}';
+    List<ExpenseHistoryEntity> logList = await _expenseHistoryRepository.getHistoryList(minUsedAt:usedAt, maxUsedAt: usedAt);
+
+    List<ExpenseCategoryEntity> categories = await _expenseCategoryRepository.getCategories(logList.map((log) => log.categoryId).toSet());
+    List<ShopEntity> shops = await _shopRepository.getShops(logList.map((log) => log.shopId).toSet());
+    Map<int, List<ExpenseHistoryTagEntity>> tags = await _expenseTagRepository.getTags(logList.map((log) => log.id));
+
+    _dailyModel.value = DashboardTopDailyListModel(
+      year: year, 
+      month: month, 
+      date: date, 
+      logs: logList.map(
+        (log) => DashboardTopDailyElementModel.from(
+          expenseHistory: log,
+          expenseCategory: categories.firstWhereOrNull((category) => category.id == log.categoryId),
+          shop: shops.firstWhereOrNull((shop) => shop.id == log.shopId),
+          expenseTags: tags[log.id] ?? [],
+        )
+      ).toList(),
     );
   }
 }
