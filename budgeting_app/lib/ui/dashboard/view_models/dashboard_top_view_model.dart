@@ -43,6 +43,12 @@ class DashboardTopViewModel {
             from: '${model.year}${model.month.toString().padLeft(2,'0')}01',
             to: '${end.year}${end.month.toString().padLeft(2,'0')}${end.day.toString().padLeft(2,'0')}',
           );
+
+          if (model.defaultSelectedDate != null) {
+            onSelectDateMonthly(model.defaultSelectedDate!);
+          } else {
+            _dailyModel.value = null;
+          }
         }
       }
     );
@@ -54,6 +60,12 @@ class DashboardTopViewModel {
             from: '${model.startYear}${model.startMonth.toString().padLeft(2,'0')}${model.startDate.toString().padLeft(2,'0')}', 
             to: '${model.endYear}${model.endMonth.toString().padLeft(2,'0')}${model.endDate.toString().padLeft(2,'0')}'
           );
+
+          if (model.defaultSelectedDate != null) {
+            onSelectDateWeekly(model.defaultSelectedDate!);
+          } else {
+            _dailyModel.value = null;
+          }
         }
       }
     );
@@ -123,7 +135,7 @@ class DashboardTopViewModel {
   /// カレンダーデータを今の月に
   void setCalendarCurrentMonth() {
     DateTime now = DateTime.now();
-    _updateCalendarMonth(DateTime(now.year, now.month));
+    _updateCalendarMonth(DateTime(now.year, now.month), defaultSelectedDate: now.day);
   }
 
   /// カレンダーデータを前の週に
@@ -145,7 +157,7 @@ class DashboardTopViewModel {
       DateTime now = DateTime.now();
       DateTime limit = now.copyWith(year: now.year + 20);
       if (limit.isAfter(targetDateTime)) {
-        _updateCalendarWeek(targetDateTime);
+        _updateCalendarWeek(targetDateTime, defaultSelectedDate: now.day);
       }
     }
   }
@@ -154,7 +166,7 @@ class DashboardTopViewModel {
   void setCalendarCurrentWeek() {
     DateTime now = DateTime.now();
     DateTime targetDateTime = now.add(Duration(days: -(now.weekday % 7)));
-    _updateCalendarWeek(targetDateTime);
+    _updateCalendarWeek(targetDateTime, defaultSelectedDate: now.day);
   }
 
   /// カレンダーの切り替え
@@ -179,7 +191,7 @@ class DashboardTopViewModel {
   }
 
   /// 週間カレンダー表示の更新
-  Future _updateCalendarWeek(DateTime targetDate) async {
+  Future _updateCalendarWeek(DateTime targetDate, { int? defaultSelectedDate }) async {
     final DateTime endDate = targetDate.copyWith(day: targetDate.day + 6);
 
     List<ExpenseHistoryEntity> historyList = await _expenseHistoryRepository.getHistoryList(
@@ -195,15 +207,13 @@ class DashboardTopViewModel {
             usedAt: entry.key, 
             logs: entry.value.map((record) => record.amount).toList(),
           )
-        ).toList()
+        ).toList(),
+      defaultSelectedDate: defaultSelectedDate,
     );
-
-    // カレンダーが更新されたら選択状態を解除
-    _dailyModel.value = null;
   }
 
   /// 月間カレンダー表示の更新
-  Future _updateCalendarMonth(DateTime targetDate) async {
+  Future _updateCalendarMonth(DateTime targetDate, { int? defaultSelectedDate }) async {
     final DateTime endDate = DateTime(targetDate.year, targetDate.month+1, targetDate.day-1);
     List<ExpenseHistoryEntity> historyList = await _expenseHistoryRepository.getHistoryList(
       minUsedAt: '${targetDate.year}${targetDate.month.toString().padLeft(2,'0')}${targetDate.day.toString().padLeft(2,'0')}',
@@ -219,10 +229,8 @@ class DashboardTopViewModel {
             logs: entry.value.map((record) => record.amount).toList(),
           )
         ).toList(),
+      defaultSelectedDate: defaultSelectedDate,
     );
-
-    // カレンダーが更新されたら選択状態を解除
-    _dailyModel.value = null;
   }
 
   /// 集計情報を取得.

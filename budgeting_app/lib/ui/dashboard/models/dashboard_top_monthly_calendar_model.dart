@@ -10,6 +10,8 @@ import 'package:budgeting_app/ui/dashboard/models/dashboard_top_expense_log_mode
 /// 日曜日から始まらない場合は前月の日付で埋めるため.
 /// 
 /// days: この月は何日まであるか
+/// 
+/// defaultSelectedDate: 最初に選択されている日付
 class DashboardTopMonthlyCalendarModel {
   const DashboardTopMonthlyCalendarModel({
     required this.year,
@@ -17,14 +19,18 @@ class DashboardTopMonthlyCalendarModel {
     required this.prevMonthDates,
     required this.days,
     required this.expenseLog,
+    this.defaultSelectedDate,
   });
 
   /// DateTime型から生成
   /// 
   /// dateTime: 必ず〇月1日を設定する
+  /// 
+  /// defaultSelectedDate: 最初に選択されている日付
   DashboardTopMonthlyCalendarModel.fromDateTime({
     required DateTime dateTime,
     required List<DashboardTopExpenseLogModel> expenseLog,
+    int? defaultSelectedDate,
   }): this(
     year: dateTime.year,
     month: dateTime.month,
@@ -38,6 +44,7 @@ class DashboardTopMonthlyCalendarModel {
     ),
     days: DateTime(dateTime.year, dateTime.month+1, 1).add(Duration(days: -1)).day,
     expenseLog: expenseLog,
+    defaultSelectedDate: defaultSelectedDate,
   );
 
   /// 何年か（西暦）
@@ -54,4 +61,7 @@ class DashboardTopMonthlyCalendarModel {
 
   /// 消費のログ
   final List<DashboardTopExpenseLogModel> expenseLog;
+
+  // あらかじめ選択されている日付
+  final int? defaultSelectedDate;
 }

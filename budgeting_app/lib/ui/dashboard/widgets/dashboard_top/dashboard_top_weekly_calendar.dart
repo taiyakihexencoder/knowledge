@@ -33,14 +33,25 @@ class DashboardTopWeeklyCalendar extends StatefulWidget {
       (index) {
         // 月替わりの日付算出
         if(model.endDate < 7) {
-          int offset = model.endDate + index - 6;
+          final int offset = model.endDate + index - 6;
           return offset > 0 ? offset : model.startDate + index;
         } else {
           return model.startDate + index;
         }
       }
     ),
-    _notifiers = List.generate(7, (_) => ValueNotifier(false));
+    _notifiers = List.generate(7, 
+      (index) {
+        if(model.endDate < 7) {
+          final int offset = model.endDate + index - 6;
+          final int date = offset > 0 ? offset : model.startDate + index;
+          return ValueNotifier(date == model.defaultSelectedDate);
+        } else {
+          final int date = model.startDate + index;
+          return ValueNotifier(date == model.defaultSelectedDate);
+        }
+      }
+    );
 
   final DashboardTopWeeklyCalendarModel _model;
   final Function() _onClickPrevWeek;

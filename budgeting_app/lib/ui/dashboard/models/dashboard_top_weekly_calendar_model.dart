@@ -13,12 +13,14 @@ class DashboardTopWeeklyCalendarModel {
     required this.endMonth,
     required this.endDate,
     required this.expenseLog,
+    this.defaultSelectedDate,
   });
 
   /// 注意：dateTimeは日曜日想定
   DashboardTopWeeklyCalendarModel.fromDateTime({
     required DateTime dateTime,
     required List<DashboardTopExpenseLogModel> expenseLog,
+    int? defaultSelectedDate,
   }) : this(
     startYear: dateTime.year,
     startMonth: dateTime.month,
@@ -27,6 +29,7 @@ class DashboardTopWeeklyCalendarModel {
     endMonth: dateTime.add(Duration(days: 7)).month,
     endDate: dateTime.add(Duration(days: 7)).day,
     expenseLog: expenseLog,
+    defaultSelectedDate: defaultSelectedDate,
   );
 
   /// 開始年
@@ -44,4 +47,7 @@ class DashboardTopWeeklyCalendarModel {
 
   /// 消費のログ
   final List<DashboardTopExpenseLogModel> expenseLog;
+
+  // あらかじめ選択されている日付
+  final int? defaultSelectedDate;
 }

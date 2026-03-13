@@ -27,7 +27,7 @@ class DashboardTopMonthlyCalendar extends StatefulWidget {
     _onClickToday = onClickToday,
     _onClickSwitch = onClickSwitch,
     _onClickCell = onClickCell,
-    _notifiers = List.generate(model.days, (_) => ValueNotifier(false));
+    _notifiers = List.generate(model.days, (index) => ValueNotifier(index+1 == model.defaultSelectedDate));
 
   /// データモデル
   final DashboardTopMonthlyCalendarModel _model;
