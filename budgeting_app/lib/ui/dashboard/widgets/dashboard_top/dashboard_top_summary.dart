@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 import 'package:intl/intl.dart';
 
+/// サマリー情報を表示する
 class DashboardTopSummary extends StatelessWidget {
   const DashboardTopSummary({
     super.key,
@@ -38,8 +39,8 @@ class DashboardTopSummary extends StatelessWidget {
           Table(
             columnWidths: {
               0: IntrinsicColumnWidth(),
-              1: FlexColumnWidth(1.0),
-              2: IntrinsicColumnWidth(),
+              1: FixedColumnWidth(32.0),
+              2: FlexColumnWidth(1.0),
             },
             children: [
               TableRow(
@@ -49,11 +50,13 @@ class DashboardTopSummary extends StatelessWidget {
                     child: Text(L10n.of(context)!.dashboardTopAmountSum),
                   ),
                   
-                  SizedBox(width: 50.0),
+                  /// 最低限32.0の空間を空ける
+                  Container(),
 
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      Spacer(),
                       Text(
                         _model.amountSum.toString(),
                         style: Theme.of(context).textTheme.headlineMedium,
@@ -61,10 +64,10 @@ class DashboardTopSummary extends StatelessWidget {
                       SizedBox(width: 10.0),
                       Text(L10n.of(context)!.commonPriceSuffix),
                     ],
-                  )
-                ]
-              )
-            ]
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
