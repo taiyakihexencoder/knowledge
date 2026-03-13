@@ -33,6 +33,9 @@ class L10nJa extends L10n {
   String get dashboardTopDailyLogEmpty => '登録された履歴はありません。';
 
   @override
+  String get dashboardTopButtonNewLog => '新規作成';
+
+  @override
   String get expenseHistory => '消費履歴';
 
   @override

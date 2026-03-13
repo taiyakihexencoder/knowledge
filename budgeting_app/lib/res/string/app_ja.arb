@@ -7,6 +7,7 @@
   "dashboardTopWeeklyLogCount": "{number}件",
   "dashboardTopMonthlyLogCount": "{number}件の合計",
   "dashboardTopDailyLogEmpty": "登録された履歴はありません。",
+  "dashboardTopButtonNewLog": "新規作成",
 
   "expenseHistory": "消費履歴",
   "expenseHistoryListFilter": "検索条件",

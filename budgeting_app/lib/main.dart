@@ -79,6 +79,25 @@ class DashboardTopPageState extends State<DashboardTopPage> {
   Widget build(BuildContext context) {
     return DashboardTop(
       viewModel: widget._viewModel,
+      onClickNewLog: _navigateToNewLog,
+    );
+  }
+
+  void _navigateToNewLog(
+    BuildContext context, {
+    required int year,
+    required int month,
+    required int date,
+  }) {
+    // 注意：NewLogの日付情報はハイフンでつなげる
+    final dateString = '$year-${month.toString().padLeft(2,'0')}-${date.toString().padLeft(2,'0')}';
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NewLogPage(
+          startDate: dateString,
+        ),
+      )
     );
   }
 }
@@ -294,14 +313,17 @@ class HistoryFilterPageState extends State<HistoryFilterPage> {
 class NewLogPage extends StatefulWidget {
   NewLogPage({
     super.key,
+    String? startDate,
   }): _viewModel = NewLogViewModel(
-    historyRepository: historyRepository,
-    categoryRepository: categoryRepository,
-    tagRepository: tagRepository,
-    shopRepository: shopRepository,
-  );
+      historyRepository: historyRepository,
+      categoryRepository: categoryRepository,
+      tagRepository: tagRepository,
+      shopRepository: shopRepository,
+    ),
+    _startDate = startDate;
 
   final NewLogViewModel _viewModel;
+  final String? _startDate;
 
   @override
   NewLogPageState createState() {
@@ -320,6 +342,7 @@ class NewLogPageState extends State<NewLogPage> {
   Widget build(BuildContext context) {
     return NewLog(
       viewModel: widget._viewModel,
+      startDate: widget._startDate,
       navigateOnSubmit: _navigateOnSubmit,
     );
   }

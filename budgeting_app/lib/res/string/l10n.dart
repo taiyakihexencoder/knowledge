@@ -129,6 +129,12 @@ abstract class L10n {
   /// **'登録された履歴はありません。'**
   String get dashboardTopDailyLogEmpty;
 
+  /// No description provided for @dashboardTopButtonNewLog.
+  ///
+  /// In ja, this message translates to:
+  /// **'新規作成'**
+  String get dashboardTopButtonNewLog;
+
   /// No description provided for @expenseHistory.
   ///
   /// In ja, this message translates to:

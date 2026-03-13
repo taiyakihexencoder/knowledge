@@ -15,12 +15,15 @@ class NewLog extends StatefulWidget {
   NewLog({
     super.key,
     required NewLogViewModel viewModel,
+    String? startDate,
     required Function(BuildContext) navigateOnSubmit,
   }): 
     _viewModel = viewModel,
+    _startDate = startDate,
     _navigateOnSubmit = navigateOnSubmit;
 
   final NewLogViewModel _viewModel;
+  final String? _startDate;
   final Function(BuildContext) _navigateOnSubmit;
 
   @override
@@ -61,6 +64,10 @@ class NewLogState extends State<NewLog> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget._startDate != null) {
+      _usedAtEditingController.text = widget._startDate!;
+    }
+    
     widget._viewModel.refreshCategoryList();
     widget._viewModel.refreshTagList();
     widget._viewModel.refreshShopList();

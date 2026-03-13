@@ -1,5 +1,6 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
+import 'package:budgeting_app/ui/dashboard/models/dashboard_top_daily_list_model.dart';
 import 'package:budgeting_app/ui/dashboard/values/calendar_mode.dart';
 import 'package:budgeting_app/ui/dashboard/view_models/dashboard_top_view_model.dart';
 import 'package:budgeting_app/ui/dashboard/widgets/dashboard_top/dashboard_top_daily_element.dart';
@@ -13,10 +14,13 @@ class DashboardTop extends StatelessWidget {
   const DashboardTop({
     super.key,
     required DashboardTopViewModel viewModel,
+    required Function(BuildContext, { required int year, required int month, required int date }) onClickNewLog,
   }):
-    _viewModel = viewModel;
+    _viewModel = viewModel,
+    _onClickNewLog = onClickNewLog;
 
   final DashboardTopViewModel _viewModel;
+  final Function(BuildContext, { required int year, required int month, required int date }) _onClickNewLog;
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +126,29 @@ class DashboardTop extends StatelessWidget {
                       ),
                     
                     SizedBox(height: 20.0),
+
+                    // 追加ボタン
+                    Padding(
+                      padding: EdgeInsetsGeometry.only(left:24.0, right:24.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          DashboardTopDailyListModel? model = _viewModel.dailyModel.value;
+                          if (model != null) {
+                            _onClickNewLog(
+                              context,
+                              year: model.year,
+                              month: model.month,
+                              date: model.date,
+                            );
+                          }
+                        }, 
+                        child: Text(
+                          L10n.of(context)!.dashboardTopButtonNewLog,
+                        )
+                      ),
+                    ),
+
+                    SizedBox(height: 24.0),
                   ],
                 ),
               ],
