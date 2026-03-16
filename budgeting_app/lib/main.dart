@@ -1,6 +1,9 @@
 import 'package:budgeting_app/domain/repositories/repositories.dart';
+import 'package:budgeting_app/main_frame.dart';
 import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
+import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
+import 'package:budgeting_app/ui/core/widget/project_navigator.dart';
 import 'package:budgeting_app/ui/dashboard/view_models/dashboard_top_view_model.dart';
 import 'package:budgeting_app/ui/dashboard/widgets/dashboard_top/dashboard_top.dart';
 import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
@@ -41,10 +44,17 @@ class MainApp extends StatelessWidget {
       navigateToSettings: (_) => SettingsPage(),
     );
 
+    mainFrameViewModel.setEdgeInsets(MediaQuery.of(context).padding);
+
     return MaterialApp(
       localizationsDelegates: L10n.localizationsDelegates,
       supportedLocales: L10n.supportedLocales,
       home: DashboardTopPage(),
+      navigatorKey: navigator.key,
+      builder: (context, child) => MainFrame(
+        viewModel: mainFrameViewModel,
+        child: child,
+      ),
     );
   }
 }
@@ -83,7 +93,7 @@ class DashboardTopPageState extends State<DashboardTopPage> {
     );
   }
 
-  void _navigateToNewLog(
+  Future _navigateToNewLog(
     BuildContext context, {
     required int year,
     required int month,
@@ -92,7 +102,7 @@ class DashboardTopPageState extends State<DashboardTopPage> {
     // 注意：NewLogの日付情報はハイフンでつなげる
     final dateString = '$year-${month.toString().padLeft(2,'0')}-${date.toString().padLeft(2,'0')}';
 
-    Navigator.of(context).push(
+    return navigator.push(
       MaterialPageRoute(
         builder: (context) => NewLogPage(
           startDate: dateString,
@@ -139,16 +149,16 @@ class HistoryListPageState extends State<HistoryListPage> {
     );
   }
 
-  void _navigateToNewLog(BuildContext context) {
-    Navigator.of(context).push(
+  Future _navigateToNewLog() {
+    return navigator.push(
       MaterialPageRoute(
         builder: (context) => NewLogPage(),
       )
     );
   }
 
-  void _navigateToHistoryDetail(BuildContext context, int historyId) {
-    Navigator.of(context).push(
+  Future _navigateToHistoryDetail(int historyId) {
+    return navigator.push(
       MaterialPageRoute(
         builder: (context) => HistoryDetailPage(
           historyId: historyId,
@@ -157,8 +167,8 @@ class HistoryListPageState extends State<HistoryListPage> {
     );
   }
 
-  void _navigateToHistoryFilter(BuildContext context, SearchFilterModel? searchFilter) {
-   Navigator.of(context).push(
+  Future _navigateToHistoryFilter(SearchFilterModel? searchFilter) {
+   return navigator.push(
      MaterialPageRoute(
        builder: (context) => HistoryFilterPage(searchFilter: searchFilter),
      )
@@ -204,8 +214,8 @@ class HistoryDetailPageState extends State<HistoryDetailPage> {
     );
   }
 
-  void _navigateToHistoryEdit(BuildContext context) {
-    Navigator.of(context).push(
+  Future _navigateToHistoryEdit() {
+    return navigator.push(
       MaterialPageRoute(
         builder: (_) => HistoryEditPage(
           historyId: widget._historyId,
@@ -253,10 +263,10 @@ class HistoryEditPageState extends State<HistoryEditPage> {
     );
   }
 
-  void _navigateOnSubmit(BuildContext context) {
+  Future _navigateOnSubmit() {
     final int removeCount = 2;
     int count = 0;
-    Navigator.of(context).pushAndRemoveUntil(
+    return navigator.pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => HistoryDetailPage(historyId: widget._historyId)
       ),
@@ -301,8 +311,8 @@ class HistoryFilterPageState extends State<HistoryFilterPage> {
     );
   }
 
-  void _navigateOnSubmit(BuildContext context, SearchFilterModel searchFilter) {
-    Navigator.of(context).push(
+  Future _navigateOnSubmit(SearchFilterModel searchFilter) {
+    return navigator.push(
       MaterialPageRoute(
         builder: (_) => HistoryListPage(searchFilter: searchFilter),
       )
@@ -347,10 +357,10 @@ class NewLogPageState extends State<NewLogPage> {
     );
   }
 
-  void _navigateOnSubmit(BuildContext context) {
+  Future _navigateOnSubmit() {
     final int removeCount = 2;
     int count = 0;
-    Navigator.of(context).pushAndRemoveUntil(
+    return navigator.pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (_) => HistoryListPage()
       ),
@@ -373,8 +383,8 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  void _navigateToSettingsAttributes(BuildContext context) {
-    Navigator.of(context).push(
+  Future _navigateToSettingsAttributes() {
+    return navigator.push(
       MaterialPageRoute(
         builder: (context) => SettingsAttributesPage(),
       )

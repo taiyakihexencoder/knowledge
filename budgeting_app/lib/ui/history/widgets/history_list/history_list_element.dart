@@ -11,11 +11,11 @@ class HistoryListElement extends StatelessWidget {
   const HistoryListElement({
     super.key,
     required this.model,
-    required Function(BuildContext, int) navigateToDetail
+    required Future Function(int) navigateToDetail
   }): _navigateToDetail = navigateToDetail;
 
   final HistoryModel model;
-  final Function(BuildContext, int) _navigateToDetail;
+  final Future Function(int) _navigateToDetail;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +24,8 @@ class HistoryListElement extends StatelessWidget {
     final DateFormat dateViewFormat = DateFormat(L10n.of(context)!.commonAbbrDateFormat);
 
     return InkWell(
-      onTap: () {
-        _navigateToDetail(context, model.id);
+      onTap: () async {
+        await _navigateToDetail(model.id);
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
@@ -139,7 +139,7 @@ Widget previewHistoryListElement() {
       usedAt: '20260220',
       tags: ['趣味', 'ゲーム', ],
     ),
-    navigateToDetail:(_, _) {},
+    navigateToDetail:(_) async {},
   );
 }
 
@@ -157,6 +157,6 @@ Widget previewHistoryListElementEmptyTag() {
       usedAt: '20260217',
       tags:[],
     ),
-    navigateToDetail: (_, _) {},
+    navigateToDetail: (_) async {},
   );
 }

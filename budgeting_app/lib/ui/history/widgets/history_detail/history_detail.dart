@@ -1,4 +1,6 @@
 import 'package:budgeting_app/res/string/l10n.dart';
+import 'package:budgeting_app/ui/core/models/floating_action_button_model.dart';
+import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_detail/history_detail_amount.dart';
@@ -13,13 +15,13 @@ class HistoryDetail extends StatefulWidget {
   const HistoryDetail({
     super.key,
     required HistoryDetailViewModel viewModel,
-    required Function(BuildContext) navigateToHistoryEdit,
+    required Future Function() navigateToHistoryEdit,
   }) : 
     _viewModel = viewModel,
     _navigateToHistoryEdit = navigateToHistoryEdit;
 
   final HistoryDetailViewModel _viewModel;
-  final Function(BuildContext) _navigateToHistoryEdit;
+  final Future Function() _navigateToHistoryEdit;
 
   @override
   HistoryDetailState createState() {
@@ -28,8 +30,24 @@ class HistoryDetail extends StatefulWidget {
 }
 
 class HistoryDetailState extends State<HistoryDetail> {
+  void _updateScaffold() {
+    mainFrameViewModel.showTopBar(title: L10n.of(context)!.expenseHistoryDetail);
+    mainFrameViewModel.showNavigator();
+    mainFrameViewModel.setFloatingActionButton([
+      FloatingActionButtonModel(
+        icon: Icons.edit, 
+        heroTag: 'edit', 
+        onPressed: () async { 
+          await widget._navigateToHistoryEdit(); 
+          _updateScaffold();
+        },
+      ),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
+    _updateScaffold();
     widget._viewModel.init();
 
     return Material(

@@ -1,5 +1,6 @@
 import 'package:budgeting_app/res/string/l10n.dart';
-import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
+import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
+import 'package:budgeting_app/ui/core/widget/safe_area_padding.dart';
 import 'package:budgeting_app/ui/dashboard/models/dashboard_top_daily_list_model.dart';
 import 'package:budgeting_app/ui/dashboard/values/calendar_mode.dart';
 import 'package:budgeting_app/ui/dashboard/view_models/dashboard_top_view_model.dart';
@@ -14,16 +15,24 @@ class DashboardTop extends StatelessWidget {
   const DashboardTop({
     super.key,
     required DashboardTopViewModel viewModel,
-    required Function(BuildContext, { required int year, required int month, required int date }) onClickNewLog,
+    required Future Function(BuildContext, { required int year, required int month, required int date }) onClickNewLog,
   }):
     _viewModel = viewModel,
     _onClickNewLog = onClickNewLog;
 
   final DashboardTopViewModel _viewModel;
-  final Function(BuildContext, { required int year, required int month, required int date }) _onClickNewLog;
+  final Future Function(BuildContext, { required int year, required int month, required int date }) _onClickNewLog;
+
+  void _updateScaffold() {
+    mainFrameViewModel.hideTopBar();
+    mainFrameViewModel.showNavigator();
+    mainFrameViewModel.setFloatingActionButton();
+  }
 
   @override
   Widget build(BuildContext context) {
+    _updateScaffold();
+
     _viewModel.setCalendarCurrentMonth();
     _viewModel.setCalendarCurrentWeek();
 
@@ -32,6 +41,7 @@ class DashboardTop extends StatelessWidget {
         slivers: [
           SliverList.list(
             children:[
+              SafeAreaPadding.top,
               ValueListenableBuilder(
                 valueListenable: _viewModel.calendarMode, 
                 builder: (_, mode, _) {
@@ -130,15 +140,16 @@ class DashboardTop extends StatelessWidget {
                     Padding(
                       padding: EdgeInsetsGeometry.only(left:24.0, right:24.0),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           DashboardTopDailyListModel? model = _viewModel.dailyModel.value;
                           if (model != null) {
-                            _onClickNewLog(
+                            await _onClickNewLog(
                               context,
                               year: model.year,
                               month: model.month,
                               date: model.date,
                             );
+                            _updateScaffold();
                           }
                         }, 
                         child: Text(
@@ -153,7 +164,6 @@ class DashboardTop extends StatelessWidget {
               ],
             ),
           ),
-
         ],
       ),
     );

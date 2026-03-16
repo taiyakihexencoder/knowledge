@@ -1,6 +1,8 @@
 import 'package:budgeting_app/res/string/l10n.dart';
+import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/core/widget/ok_cancel_dialog.dart';
+import 'package:budgeting_app/ui/core/widget/project_navigator.dart';
 import 'package:budgeting_app/ui/core/widget/text_field_dialog.dart';
 import 'package:budgeting_app/ui/settings/models/category_model.dart';
 import 'package:budgeting_app/ui/settings/models/shop_model.dart';
@@ -50,6 +52,12 @@ class SettingsAttributes extends StatefulWidget {
 class SettingsAttributesState extends State<SettingsAttributes> {
   @override
   Widget build(BuildContext context) {
+    mainFrameViewModel.showTopBar(
+      title: L10n.of(context)!.settingsAttributes,
+    );
+    mainFrameViewModel.showNavigator();
+    mainFrameViewModel.setFloatingActionButton();
+
     widget._viewModel.updateShopList();
     widget._viewModel.updateCategoryList();
     widget._viewModel.updateTagList();
@@ -124,10 +132,10 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     await TextFieldDialog.show(
       context: context,
       onCancel: (){
-        Navigator.pop(context);
+        navigator.pop();
       },
       onDone: (text) {
-        Navigator.pop(context);
+        navigator.pop();
         widget._onRequestAddShop(text);
       },
       title: L10n.of(context)!.settingsAttributesAddShop,
@@ -143,10 +151,10 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     await TextFieldDialog.show(
       context: context, 
       onCancel: () {
-        Navigator.pop(context);
+        navigator.pop();
       }, 
       onDone: (text){
-        Navigator.pop(context);
+        navigator.pop();
         if (model.name != text) {
           widget._onRequestEditShop(model.id, text);
         }
@@ -165,10 +173,10 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     await OkCancelDialog.show(
       context: context,
       onCancel: () {
-        Navigator.pop(context);
+        navigator.pop();
       },
       onOk: () {
-        Navigator.pop(context);
+        navigator.pop();
         widget._onRequestDeleteShop(model.id);
       },
       description: L10n.of(context)!.settingsAttributesDeleteShop(model.name),
@@ -216,10 +224,10 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     await TextFieldDialog.show(
       context: context,
       onCancel: (){
-        Navigator.pop(context);
+        navigator.pop();
       },
       onDone: (text) {
-        Navigator.pop(context);
+        navigator.pop();
         widget._onRequestAddCategory(text);
       },
       title: L10n.of(context)!.settingsAttributesAddCategory,
@@ -235,10 +243,10 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     await TextFieldDialog.show(
       context: context, 
       onCancel: () {
-        Navigator.pop(context);
+        navigator.pop();
       }, 
       onDone: (text){
-        Navigator.pop(context);
+        navigator.pop();
         if (model.name != text) {
           widget._onRequestEditCategory(model.id, text);
         }
@@ -257,10 +265,10 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     await OkCancelDialog.show(
       context: context,
       onCancel: () {
-        Navigator.pop(context);
+        navigator.pop();
       },
       onOk: () {
-        Navigator.pop(context);
+        navigator.pop();
         widget._onRequestDeleteCategory(model.id);
       },
       description: L10n.of(context)!.settingsAttributesDeleteCategory(model.name),
@@ -307,10 +315,10 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     await TextFieldDialog.show(
       context: context,
       onCancel: (){
-        Navigator.pop(context);
+        navigator.pop();
       },
       onDone: (text) {
-        Navigator.pop(context);
+        navigator.pop();
         widget._onRequestAddTag(text);
       },
       title: L10n.of(context)!.settingsAttributesAddTag,
@@ -326,10 +334,10 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     await TextFieldDialog.show(
       context: context, 
       onCancel: () {
-        Navigator.pop(context);
+        navigator.pop();
       }, 
       onDone: (text){
-        Navigator.pop(context);
+        navigator.pop();
         if (model.name != text) {
           widget._onRequestEditTag(model.id, text);
         }
@@ -348,10 +356,10 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     await OkCancelDialog.show(
       context: context,
       onCancel: () {
-        Navigator.pop(context);
+        navigator.pop();
       },
       onOk: () {
-        Navigator.pop(context);
+        navigator.pop();
         widget._onRequestDeleteTag(model.id);
       },
       description: L10n.of(context)!.settingsAttributesDeleteTag(model.name),

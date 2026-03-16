@@ -1,3 +1,4 @@
+import 'package:budgeting_app/ui/core/widget/project_navigator.dart';
 import 'package:flutter/material.dart';
 
 // アイコンの順番情報
@@ -66,32 +67,31 @@ class BudgetingAppBottomNavigation extends StatelessWidget {
     );
   }
 
-  void _onTapIcon(BuildContext context, int index) {
+  Future? _onTapIcon(BuildContext context, int index) {
     switch(index) {
       case _bottomNavigationIndexDashboard:
-        Navigator.of(context).pushAndRemoveUntil(
+        return navigator.pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => _navigateToDashboard(context),
           ), 
           (_) => false,
         );
-        break;
       case _bottomNavigationIndexHistoryList:
-        Navigator.of(context).pushAndRemoveUntil(
+        return navigator.pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => _navigateToHitoryList(context),
           ),
           (_) => false,
         );
-        break;
       case _bottomNavigationIndexSettings:
-        Navigator.of(context).pushAndRemoveUntil(
+        return navigator.pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => _navigateToSettings(context),
           ),
           (_) => false,
         );
-        break;
+      default:
+        return null;
     }
   }
 }

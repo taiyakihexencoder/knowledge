@@ -2,6 +2,7 @@ import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/models/edit/content_model.dart';
 import 'package:budgeting_app/ui/core/models/edit/log_model.dart';
 import 'package:budgeting_app/ui/core/models/edit/tag_model.dart';
+import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/comment_field.dart';
 import 'package:budgeting_app/ui/core/widget/date_selector_field.dart';
 import 'package:budgeting_app/ui/core/widget/extendable_selector_field.dart';
@@ -15,13 +16,13 @@ class HistoryEdit extends StatefulWidget {
   const HistoryEdit({
     super.key,
     required HistoryEditViewModel viewModel,
-    required Function(BuildContext) navigateOnSubmit,
+    required Function() navigateOnSubmit,
   }):
     _viewModel = viewModel,
     _navigateOnSubmit = navigateOnSubmit;
 
   final HistoryEditViewModel _viewModel;
-  final Function(BuildContext) _navigateOnSubmit;
+  final Function() _navigateOnSubmit;
 
   @override
   HistoryEditState createState() {
@@ -61,6 +62,11 @@ class HistoryEditState extends State<HistoryEdit> {
 
   @override
   Widget build(BuildContext context) {
+    mainFrameViewModel.showTopBar(title: L10n.of(context)!.expenseHistoryEdit);
+    mainFrameViewModel.hideNavigator();
+    mainFrameViewModel.setFloatingActionButton();
+
+
     widget._viewModel.initDetail();
     widget._viewModel.refreshCategoryList();
     widget._viewModel.refreshTagList();
@@ -215,7 +221,7 @@ class HistoryEditState extends State<HistoryEdit> {
       child: ElevatedButton(
         onPressed: () async {
           widget._viewModel.onRequestUpdateLog(_createLogModel());
-          widget._navigateOnSubmit(context);
+          widget._navigateOnSubmit();
         }, 
         child: Text(
           L10n.of(context)!.expenseHistoryEditUpdate,

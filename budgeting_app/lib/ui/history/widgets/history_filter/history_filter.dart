@@ -1,5 +1,6 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
+import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/stateful_checkbox.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_category_model.dart';
 import 'package:budgeting_app/ui/history/models/history_filter_shop_model.dart';
@@ -15,13 +16,13 @@ class HistoryFilter extends StatefulWidget {
   const HistoryFilter({
     super.key,
     required HistoryFilterViewModel viewModel,
-    required Function(BuildContext, SearchFilterModel) navigateOnSubmit,
+    required Function(SearchFilterModel) navigateOnSubmit,
   }): 
     _viewModel = viewModel,
     _navigateOnSubmit = navigateOnSubmit;
 
   final HistoryFilterViewModel _viewModel;
-  final Function(BuildContext, SearchFilterModel) _navigateOnSubmit;
+  final Function(SearchFilterModel) _navigateOnSubmit;
 
   @override
   HistoryFilterState createState() {
@@ -44,6 +45,9 @@ class HistoryFilterState extends State<HistoryFilter> {
   @override
   Widget build(BuildContext context) {
     widget._viewModel.loadData();
+    mainFrameViewModel.showTopBar(title: L10n.of(context)!.expenseHistoryFilter);
+    mainFrameViewModel.hideNavigator();
+    mainFrameViewModel.setFloatingActionButton();
 
     return Material(
       child: Container(
@@ -411,7 +415,7 @@ class HistoryFilterState extends State<HistoryFilter> {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () => widget._navigateOnSubmit(context, widget._viewModel.createSearchFilter()), 
+        onPressed: () => widget._navigateOnSubmit(widget._viewModel.createSearchFilter()), 
         child: Text(
           L10n.of(context)!.expenseHistoryFilterApply,
         ),

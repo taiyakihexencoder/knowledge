@@ -1,4 +1,5 @@
 import 'package:budgeting_app/res/string/l10n.dart';
+import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/comment_field.dart';
 import 'package:budgeting_app/ui/core/widget/date_selector_field.dart';
 import 'package:budgeting_app/ui/core/widget/extendable_selector_field.dart';
@@ -16,7 +17,7 @@ class NewLog extends StatefulWidget {
     super.key,
     required NewLogViewModel viewModel,
     String? startDate,
-    required Function(BuildContext) navigateOnSubmit,
+    required Future Function() navigateOnSubmit,
   }): 
     _viewModel = viewModel,
     _startDate = startDate,
@@ -24,7 +25,7 @@ class NewLog extends StatefulWidget {
 
   final NewLogViewModel _viewModel;
   final String? _startDate;
-  final Function(BuildContext) _navigateOnSubmit;
+  final Future Function() _navigateOnSubmit;
 
   @override
   NewLogState createState() {
@@ -62,8 +63,16 @@ class NewLogState extends State<NewLog> {
     super.dispose();
   }
 
+  void _updateScaffold() {
+    mainFrameViewModel.showTopBar(title: L10n.of(context)!.newLog);
+    mainFrameViewModel.hideNavigator();
+    mainFrameViewModel.setFloatingActionButton();    
+  }
+
   @override
   Widget build(BuildContext context) {
+    _updateScaffold();
+
     if (widget._startDate != null) {
       _usedAtEditingController.text = widget._startDate!;
     }
@@ -195,7 +204,8 @@ class NewLogState extends State<NewLog> {
       child: ElevatedButton(
         onPressed: () async {
           widget._viewModel.onRequestAddLog(_createLogModel());
-          widget._navigateOnSubmit(context);
+          await widget._navigateOnSubmit();
+          _updateScaffold();
         }, 
         child: Text(
           L10n.of(context)!.newLogAdd,

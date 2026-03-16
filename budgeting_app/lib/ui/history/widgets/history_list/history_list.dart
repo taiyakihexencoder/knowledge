@@ -1,6 +1,9 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
+import 'package:budgeting_app/ui/core/models/floating_action_button_model.dart';
+import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
+import 'package:budgeting_app/ui/core/widget/safe_area_padding.dart';
 import 'package:budgeting_app/ui/history/view_models/history_list_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_list/history_list_element.dart';
 import 'package:budgeting_app/ui/history/widgets/history_list/history_list_filter.dart';
@@ -11,9 +14,9 @@ class HistoryList extends StatelessWidget {
   HistoryList({
     super.key,
     required HistoryListViewModel viewModel,
-    required Function(BuildContext context) navigateToNewLog,
-    required Function(BuildContext context, int historyId) navigateToDetail, 
-    required Function(BuildContext context, SearchFilterModel?) navigateToHistoryFilter,
+    required Future Function() navigateToNewLog,
+    required Future Function(int historyId) navigateToDetail, 
+    required Future Function(SearchFilterModel?) navigateToHistoryFilter,
   }) : 
     _viewModel = viewModel,
     _navigateToNewLog = navigateToNewLog,
@@ -21,21 +24,45 @@ class HistoryList extends StatelessWidget {
     _navigateToHistoryFilter = navigateToHistoryFilter;
 
   final HistoryListViewModel _viewModel;
-  final Function(BuildContext) _navigateToNewLog;
-  final Function(BuildContext, int) _navigateToDetail;
-  final Function(BuildContext, SearchFilterModel?) _navigateToHistoryFilter;
+  final Future Function() _navigateToNewLog;
+  final Future Function(int) _navigateToDetail;
+  final Future Function(SearchFilterModel?) _navigateToHistoryFilter;
+
+  void _updateScaffold() {
+    mainFrameViewModel.hideTopBar();
+    mainFrameViewModel.showNavigator();
+    mainFrameViewModel.setFloatingActionButton([
+      FloatingActionButtonModel(
+        icon: Icons.add, 
+        heroTag: 'add', 
+        onPressed: () async {
+          await _navigateToNewLog(); 
+          _updateScaffold();
+        }
+      ),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
     _viewModel.refreshList();
+    _updateScaffold();
 
     return Material(
       child: CustomScrollView(
         slivers: [
+          SliverToBoxAdapter(
+            child: SafeAreaPadding.top,
+          ),
+
           SliverAppBar(
+            primary: false,
             actions: [
               IconButton(
-                onPressed: () => _navigateToHistoryFilter(context, _viewModel.searchFilter), 
+                onPressed: () async {
+                  await _navigateToHistoryFilter(_viewModel.searchFilter);
+                  _updateScaffold();
+                }, 
                 icon: Icon(Icons.search),
               ),
             ],
@@ -60,7 +87,10 @@ class HistoryList extends StatelessWidget {
                 ...models.map(
                   (model) => HistoryListElement(
                     model: model,
-                    navigateToDetail: _navigateToDetail,
+                    navigateToDetail: (id) async {
+                      await _navigateToDetail(id);
+                      _updateScaffold();
+                    }
                   ),
                 ),
               ],
@@ -77,17 +107,21 @@ class HistoryList extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
       margin: EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
+      child: Column(
         children: [
-          Text(
-            L10n.of(context)!.expenseHistoryListFilter,
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.bold),
-          ),
-          SizedBox(width: 8),
-          Icon(
-            Icons.check_box,
-            size: 16.0,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                L10n.of(context)!.expenseHistoryListFilter,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 8),
+              Icon(
+                Icons.check_box,
+                size: 16.0,
+              ),
+            ],
           ),
         ],
       )
