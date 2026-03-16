@@ -13,12 +13,8 @@ class SettingsTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.of(context)!.settingsTop),
-      ),
-      bottomNavigationBar: bottomNavigationBar,
-      body: SingleChildScrollView(
+    return Material(
+      child: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 16.0),
         child: Column(
           spacing: 12.0,

@@ -27,9 +27,8 @@ class DashboardTop extends StatelessWidget {
     _viewModel.setCalendarCurrentMonth();
     _viewModel.setCalendarCurrentWeek();
 
-    return Scaffold(
-      bottomNavigationBar: bottomNavigationBar,
-      body: CustomScrollView(
+    return Material(
+      child: CustomScrollView(
         slivers: [
           SliverList.list(
             children:[

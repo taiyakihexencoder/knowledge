@@ -66,11 +66,8 @@ class HistoryEditState extends State<HistoryEdit> {
     widget._viewModel.refreshTagList();
     widget._viewModel.refreshShopList();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.of(context)!.expenseHistoryEdit),
-      ),
-      body: Padding(
+    return Material(
+      child: Padding(
         padding: EdgeInsetsGeometry.fromSTEB(16.0, 0.0, 16.0, 0.0),
         child: SingleChildScrollView(
           child: ValueListenableBuilder(

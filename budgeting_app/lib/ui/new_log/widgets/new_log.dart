@@ -72,11 +72,8 @@ class NewLogState extends State<NewLog> {
     widget._viewModel.refreshTagList();
     widget._viewModel.refreshShopList();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.of(context)!.newLog),
-      ),
-      body: Padding(
+    return Material(
+      child: Padding(
         padding: EdgeInsetsGeometry.fromSTEB(16.0, 0.0, 16.0, 0.0),
         child: SingleChildScrollView(
           child: Column(

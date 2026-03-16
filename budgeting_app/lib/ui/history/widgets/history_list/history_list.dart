@@ -29,15 +29,8 @@ class HistoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     _viewModel.refreshList();
 
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _navigateToNewLog(context);
-        },
-        child: const Icon(Icons.add),
-      ),
-      bottomNavigationBar: bottomNavigationBar,
-      body: CustomScrollView(
+    return Material(
+      child: CustomScrollView(
         slivers: [
           SliverAppBar(
             actions: [

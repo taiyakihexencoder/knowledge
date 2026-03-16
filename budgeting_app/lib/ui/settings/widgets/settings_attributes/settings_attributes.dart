@@ -54,12 +54,8 @@ class SettingsAttributesState extends State<SettingsAttributes> {
     widget._viewModel.updateCategoryList();
     widget._viewModel.updateTagList();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.of(context)!.settingsAttributes),
-      ),
-      bottomNavigationBar: bottomNavigationBar,
-      body: Container(
+    return Material(
+      child: Container(
         padding: EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 0.0),
         child: CustomScrollView(
           slivers: [

@@ -45,11 +45,8 @@ class HistoryFilterState extends State<HistoryFilter> {
   Widget build(BuildContext context) {
     widget._viewModel.loadData();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.of(context)!.expenseHistoryFilter),
-      ),
-      body: Container(
+    return Material(
+      child: Container(
         padding: EdgeInsets.only(left: 24.0, right: 24.0),
         child: CustomScrollView(
           slivers: [

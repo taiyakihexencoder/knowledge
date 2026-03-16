@@ -32,18 +32,8 @@ class HistoryDetailState extends State<HistoryDetail> {
   Widget build(BuildContext context) {
     widget._viewModel.init();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(L10n.of(context)!.expenseHistoryDetail),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          widget._navigateToHistoryEdit(context);
-        },
-        child: const Icon(Icons.edit),
-      ),
-      bottomNavigationBar: bottomNavigationBar,
-      body: SingleChildScrollView(
+    return Material(
+      child: SingleChildScrollView(
         padding: EdgeInsetsDirectional.fromSTEB(24.0, 32.0, 24.0, 32.0),
         child: ValueListenableBuilder(
           valueListenable: widget._viewModel.model, 
