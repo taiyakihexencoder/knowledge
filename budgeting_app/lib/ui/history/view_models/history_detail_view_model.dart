@@ -72,6 +72,7 @@ class HistoryDetailViewModel {
     }
   }
 
+  /// 編集画面で編集された
   void onHistoryEdited() {
     _historyEdited = true;
   }
