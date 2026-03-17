@@ -2,7 +2,6 @@ import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/models/filter/search_filter_model.dart';
 import 'package:budgeting_app/ui/core/models/floating_action_button_model.dart';
 import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
-import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/core/widget/safe_area_padding.dart';
 import 'package:budgeting_app/ui/history/view_models/history_list_view_model.dart';
 import 'package:budgeting_app/ui/history/widgets/history_list/history_list_element.dart';
@@ -14,8 +13,8 @@ class HistoryList extends StatelessWidget {
   HistoryList({
     super.key,
     required HistoryListViewModel viewModel,
-    required Future Function() navigateToNewLog,
-    required Future Function(int historyId) navigateToDetail, 
+    required Future<bool> Function() navigateToNewLog,
+    required Future<bool> Function(int historyId) navigateToDetail, 
     required Future Function(SearchFilterModel?) navigateToHistoryFilter,
   }) : 
     _viewModel = viewModel,
@@ -24,8 +23,8 @@ class HistoryList extends StatelessWidget {
     _navigateToHistoryFilter = navigateToHistoryFilter;
 
   final HistoryListViewModel _viewModel;
-  final Future Function() _navigateToNewLog;
-  final Future Function(int) _navigateToDetail;
+  final Future<bool> Function() _navigateToNewLog;
+  final Future<bool> Function(int) _navigateToDetail;
   final Future Function(SearchFilterModel?) _navigateToHistoryFilter;
 
   void _updateScaffold() {
@@ -36,8 +35,11 @@ class HistoryList extends StatelessWidget {
         icon: Icons.add, 
         heroTag: 'add', 
         onPressed: () async {
-          await _navigateToNewLog(); 
+          bool updated = await _navigateToNewLog(); 
           _updateScaffold();
+          if (updated) {
+            _viewModel.refreshList();
+          }
         }
       ),
     ]);
@@ -88,8 +90,11 @@ class HistoryList extends StatelessWidget {
                   (model) => HistoryListElement(
                     model: model,
                     navigateToDetail: (id) async {
-                      await _navigateToDetail(id);
+                      bool updated = await _navigateToDetail(id);
                       _updateScaffold();
+                      if (updated) {
+                        _viewModel.refreshList();
+                      }
                     }
                   ),
                 ),

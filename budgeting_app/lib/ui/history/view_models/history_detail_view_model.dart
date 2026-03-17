@@ -23,7 +23,8 @@ class HistoryDetailViewModel {
     _categoryRepository = categoryRepository,
     _tagRepository = tagRepository,
     _shopRepository = shopRepository,
-    _model = ValueNotifier(null);
+    _model = ValueNotifier(null),
+    _historyEdited = false;
 
   final int _historyId;
 
@@ -41,6 +42,10 @@ class HistoryDetailViewModel {
 
   final ValueNotifier<HistoryDetailModel?> _model;
   ValueNotifier<HistoryDetailModel?> get model => _model;
+
+  bool _historyEdited;
+  /// 履歴が編集画面で編集されたか
+  bool get historyEdited => _historyEdited;
 
   void dispose() {
     _model.dispose();
@@ -65,5 +70,9 @@ class HistoryDetailViewModel {
         expenseContents: await contents,
       );
     }
+  }
+
+  void onHistoryEdited() {
+    _historyEdited = true;
   }
 }

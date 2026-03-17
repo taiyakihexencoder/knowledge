@@ -16,13 +16,13 @@ class HistoryEdit extends StatefulWidget {
   const HistoryEdit({
     super.key,
     required HistoryEditViewModel viewModel,
-    required Future Function() navigateOnSubmit,
+    required void Function() navigateOnSubmit,
   }):
     _viewModel = viewModel,
     _navigateOnSubmit = navigateOnSubmit;
 
   final HistoryEditViewModel _viewModel;
-  final Future Function() _navigateOnSubmit;
+  final void Function() _navigateOnSubmit;
 
   @override
   HistoryEditState createState() {
@@ -225,7 +225,7 @@ class HistoryEditState extends State<HistoryEdit> {
       child: ElevatedButton(
         onPressed: () async {
           widget._viewModel.onRequestUpdateLog(_createLogModel());
-          await widget._navigateOnSubmit();
+          widget._navigateOnSubmit();
         }, 
         child: Text(
           L10n.of(context)!.expenseHistoryEditUpdate,
