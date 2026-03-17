@@ -8,7 +8,8 @@ class MainFrameViewModel {
   MainFrameViewModel():
     _topBar = ValueNotifier(null),
     _navigatorState = ValueNotifier(false),
-    _floatingActionButton = ValueNotifier([]);
+    _floatingActionButton = ValueNotifier([]),
+    _selectedBottomNavigationItem = ValueNotifier(0);
 
   final ValueNotifier<AppBarModel?> _topBar;
   /// トップバーの状態
@@ -22,6 +23,9 @@ class MainFrameViewModel {
   /// FloatingActionButton
   ValueNotifier<List<FloatingActionButtonModel>> get floatingActionButton => _floatingActionButton; 
 
+  final ValueNotifier<int> _selectedBottomNavigationItem;
+  ValueNotifier<int> get selectedBottomNavigationItem => _selectedBottomNavigationItem;
+
   late EdgeInsets _edgeInsets;
   /// システムバー領域のデフォルトの大きさ
   EdgeInsets get edgeInsets => _edgeInsets;
@@ -30,6 +34,7 @@ class MainFrameViewModel {
     _topBar.dispose();
     _navigatorState.dispose();
     _floatingActionButton.dispose();
+    _selectedBottomNavigationItem.dispose();
   }
 
   void showTopBar({
@@ -78,6 +83,14 @@ class MainFrameViewModel {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         _floatingActionButton.value = buttons;
+      }
+    );
+  }
+
+  void selectBottomNavigationItem(int index) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        _selectedBottomNavigationItem.value = index;
       }
     );
   }

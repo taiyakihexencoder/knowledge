@@ -1,3 +1,4 @@
+import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/project_navigator.dart';
 import 'package:flutter/material.dart';
 
@@ -40,34 +41,39 @@ class BudgetingAppBottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      onTap: (index) {
-        _onTapIcon(context, index);
-      },
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.dashboard,
+    return ValueListenableBuilder(
+      valueListenable: mainFrameViewModel.selectedBottomNavigationItem, 
+      builder: (_, selectedIndex, _) => BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (index) {
+          _onTapIcon(context, index);
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.dashboard,
+            ),
+            label: _bottomNavigationLabelDashboard,
           ),
-          label: _bottomNavigationLabelDashboard,
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.list,
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.list,
+            ),
+            label: _bottomNavigationLabelHistoryList,
           ),
-          label: _bottomNavigationLabelHistoryList,
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(
-            Icons.settings,
-          ),
-          label: _bottomNavigationLabelSettings,
-        )
-      ]
-    );
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.settings,
+            ),
+            label: _bottomNavigationLabelSettings,
+          )
+        ],
+      ),
+    );   
   }
 
   Future? _onTapIcon(BuildContext context, int index) {
+    mainFrameViewModel.selectBottomNavigationItem(index);
     switch(index) {
       case _bottomNavigationIndexDashboard:
         return navigator.pushAndRemoveUntil(

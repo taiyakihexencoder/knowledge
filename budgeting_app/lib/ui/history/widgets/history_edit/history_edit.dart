@@ -16,13 +16,13 @@ class HistoryEdit extends StatefulWidget {
   const HistoryEdit({
     super.key,
     required HistoryEditViewModel viewModel,
-    required Function() navigateOnSubmit,
+    required Future Function() navigateOnSubmit,
   }):
     _viewModel = viewModel,
     _navigateOnSubmit = navigateOnSubmit;
 
   final HistoryEditViewModel _viewModel;
-  final Function() _navigateOnSubmit;
+  final Future Function() _navigateOnSubmit;
 
   @override
   HistoryEditState createState() {
@@ -60,12 +60,16 @@ class HistoryEditState extends State<HistoryEdit> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    mainFrameViewModel.showTopBar(title: L10n.of(context)!.expenseHistoryEdit);
+  void _updateScaffold({ required String topBarTitle}) {
+    mainFrameViewModel.showTopBar(title: topBarTitle);
     mainFrameViewModel.hideNavigator();
     mainFrameViewModel.setFloatingActionButton();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    String topBarTitle = L10n.of(context)!.expenseHistoryEdit;
+    _updateScaffold(topBarTitle: topBarTitle);
 
     widget._viewModel.initDetail();
     widget._viewModel.refreshCategoryList();
@@ -221,7 +225,7 @@ class HistoryEditState extends State<HistoryEdit> {
       child: ElevatedButton(
         onPressed: () async {
           widget._viewModel.onRequestUpdateLog(_createLogModel());
-          widget._navigateOnSubmit();
+          await widget._navigateOnSubmit();
         }, 
         child: Text(
           L10n.of(context)!.expenseHistoryEditUpdate,
