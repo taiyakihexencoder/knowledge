@@ -176,9 +176,15 @@ class MainFrameState extends State<MainFrame> {
     required BuildContext context, 
     required SnackBarModel model
   }) {
+    final Color snackBarColor = switch(model.type) {
+      SnackBarType.confirm => Colors.black,
+      SnackBarType.alert => Colors.redAccent,
+    };
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(model.text),
+        backgroundColor: snackBarColor,
       )
     );
   }

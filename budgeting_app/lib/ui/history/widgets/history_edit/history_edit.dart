@@ -227,10 +227,7 @@ class HistoryEditState extends State<HistoryEdit> {
         onPressed: () async {
           widget._viewModel.onRequestUpdateLog(_createLogModel());
           mainFrameViewModel.showSnackBar(
-            SnackBarModel(
-              label: 'complete update history',
-              text: L10n.of(context)!.expenseHistoryEditUpdated,
-            )
+            SnackBarModel.confirm(L10n.of(context)!.expenseHistoryEditUpdated),
           );
 
           widget._navigateOnSubmit();

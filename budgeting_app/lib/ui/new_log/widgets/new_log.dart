@@ -207,10 +207,7 @@ class NewLogState extends State<NewLog> {
           widget._viewModel.onRequestAddLog(_createLogModel());
 
           mainFrameViewModel.showSnackBar(
-            SnackBarModel(
-              label: 'complete new log',
-              text: L10n.of(context)!.newLogCompleted,
-            )
+            SnackBarModel.confirm(L10n.of(context)!.newLogCompleted),
           );
           
           widget._navigateOnSubmit();
