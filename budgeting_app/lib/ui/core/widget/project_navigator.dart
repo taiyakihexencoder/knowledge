@@ -4,11 +4,16 @@ final ProjectNavigator navigator = ProjectNavigator();
 
 class ProjectNavigator {
   ProjectNavigator(): 
-    _navigatorKey = GlobalKey<NavigatorState>();
+    _navigatorKey = GlobalKey<NavigatorState>(),
+    _overridePop = null;
 
   final GlobalKey<NavigatorState> _navigatorKey;
   /// MaterialAppでnavigatorKeyにセットする
   GlobalKey<NavigatorState> get key => _navigatorKey;
+
+  /// AppBarによるback処理の上書き
+  /// 画面を離れる場合に破棄が必要
+  Function()? _overridePop;
 
   /// 過去画面を削除して遷移
   Future<T?> pushAndRemoveUntil<T extends Object?>(
@@ -26,8 +31,8 @@ class ProjectNavigator {
   }
 
   /// back処理
-  void pop() {
-    _navigatorKey.currentState!.pop();
+  void pop<T extends Object?>([T? result]) {
+    _navigatorKey.currentState!.pop(result);
   }
 
   /// AppBarの戻るボタン
@@ -35,7 +40,23 @@ class ProjectNavigator {
     return _navigatorKey.currentState?.canPop() == true
       ? IconButton(
         icon: const Icon(Icons.arrow_back),
-        onPressed: () => pop()
+        onPressed: () {
+          if (_overridePop == null) {
+            pop();
+          } else {
+            _overridePop!();
+          }
+        }
       ) : null;
+  }
+
+  /// AppBarによるpop処理を上書きする
+  void overrideAppBarPop(Function() popFunction) {
+    _overridePop = popFunction;
+  }
+
+  /// 上書きしたpop処理を消す
+  void disposeOverrideAppBarPop() {
+    _overridePop = null;
   }
 }

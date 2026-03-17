@@ -24,6 +24,7 @@ class MainFrameViewModel {
   ValueNotifier<List<FloatingActionButtonModel>> get floatingActionButton => _floatingActionButton; 
 
   final ValueNotifier<int> _selectedBottomNavigationItem;
+  /// Bottom Navigationの選択状態
   ValueNotifier<int> get selectedBottomNavigationItem => _selectedBottomNavigationItem;
 
   late EdgeInsets _edgeInsets;

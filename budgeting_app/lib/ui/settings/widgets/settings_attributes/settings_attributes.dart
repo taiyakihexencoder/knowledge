@@ -1,6 +1,5 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
-import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/core/widget/ok_cancel_dialog.dart';
 import 'package:budgeting_app/ui/core/widget/project_navigator.dart';
 import 'package:budgeting_app/ui/core/widget/text_field_dialog.dart';

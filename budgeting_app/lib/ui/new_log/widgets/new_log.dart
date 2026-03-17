@@ -17,7 +17,7 @@ class NewLog extends StatefulWidget {
     super.key,
     required NewLogViewModel viewModel,
     String? startDate,
-    required Future Function() navigateOnSubmit,
+    required Function() navigateOnSubmit,
   }): 
     _viewModel = viewModel,
     _startDate = startDate,
@@ -25,7 +25,7 @@ class NewLog extends StatefulWidget {
 
   final NewLogViewModel _viewModel;
   final String? _startDate;
-  final Future Function() _navigateOnSubmit;
+  final Function() _navigateOnSubmit;
 
   @override
   NewLogState createState() {
@@ -204,8 +204,7 @@ class NewLogState extends State<NewLog> {
       child: ElevatedButton(
         onPressed: () async {
           widget._viewModel.onRequestAddLog(_createLogModel());
-          await widget._navigateOnSubmit();
-          _updateScaffold();
+          widget._navigateOnSubmit();
         }, 
         child: Text(
           L10n.of(context)!.newLogAdd,

@@ -149,22 +149,24 @@ class HistoryListPageState extends State<HistoryListPage> {
     );
   }
 
-  Future _navigateToNewLog() {
-    return navigator.push(
+  Future<bool> _navigateToNewLog() async {
+    var result = await navigator.push(
       MaterialPageRoute(
         builder: (context) => NewLogPage(),
       )
     );
+    return result is bool && result;
   }
 
-  Future _navigateToHistoryDetail(int historyId) {
-    return navigator.push(
+  Future<bool> _navigateToHistoryDetail(int historyId) async {
+    var result = await navigator.push(
       MaterialPageRoute(
         builder: (context) => HistoryDetailPage(
           historyId: historyId,
         ),
       )
     );
+    return result is bool && result;
   }
 
   Future _navigateToHistoryFilter(SearchFilterModel? searchFilter) {
@@ -211,17 +213,23 @@ class HistoryDetailPageState extends State<HistoryDetailPage> {
     return HistoryDetail(
       viewModel: widget._viewModel,
       navigateToHistoryEdit: _navigateToHistoryEdit,
+      popScreen: _popHistoryDetail,
     );
   }
 
-  Future _navigateToHistoryEdit() {
-    return navigator.push(
+  Future<bool> _navigateToHistoryEdit() async {
+    var result = await navigator.push(
       MaterialPageRoute(
         builder: (_) => HistoryEditPage(
           historyId: widget._historyId,
         ),
       ),
     );
+    return result is bool && result;
+  }
+
+  void _popHistoryDetail(bool updated) {
+    navigator.pop(updated);
   }
 }
 
@@ -230,7 +238,6 @@ class HistoryEditPage extends StatefulWidget {
     super.key,
     required int historyId,
   }):
-    _historyId = historyId,
     _viewModel = HistoryEditViewModel(
       id: historyId,
       historyRepository: historyRepository,
@@ -239,7 +246,6 @@ class HistoryEditPage extends StatefulWidget {
       shopRepository: shopRepository
     );
 
-  final int _historyId;
   final HistoryEditViewModel _viewModel;
 
   @override
@@ -263,17 +269,8 @@ class HistoryEditPageState extends State<HistoryEditPage> {
     );
   }
 
-  Future _navigateOnSubmit() {
-    final int removeCount = 2;
-    int count = 0;
-    return navigator.pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => HistoryDetailPage(historyId: widget._historyId)
-      ),
-      (_) {
-        return count++ >= removeCount;
-      }
-    );
+  void _navigateOnSubmit() {
+    navigator.pop(true);
   }
 }
 
@@ -357,17 +354,8 @@ class NewLogPageState extends State<NewLogPage> {
     );
   }
 
-  Future _navigateOnSubmit() {
-    final int removeCount = 2;
-    int count = 0;
-    return navigator.pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => HistoryListPage()
-      ),
-      (_) {
-        return count++ >= removeCount;
-      }
-    );
+  void _navigateOnSubmit() {
+    navigator.pop(true);
   }
 }
 
