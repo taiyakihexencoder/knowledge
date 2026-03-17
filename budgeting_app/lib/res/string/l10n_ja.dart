@@ -93,6 +93,9 @@ class L10nJa extends L10n {
   String get expenseHistoryEditUpdate => '購入情報を更新';
 
   @override
+  String get expenseHistoryEditUpdated => '情報を更新しました。';
+
+  @override
   String get expenseHistoryFilter => '履歴の検索条件';
 
   @override
@@ -159,6 +162,9 @@ class L10nJa extends L10n {
 
   @override
   String get newLogErrorEmptyCategory => '購入カテゴリーが未設定';
+
+  @override
+  String get newLogCompleted => '新しい履歴を登録しました。';
 
   @override
   String get settingsTop => '設定';

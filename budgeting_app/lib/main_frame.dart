@@ -1,3 +1,4 @@
+import 'package:budgeting_app/ui/core/models/snack_bar_model.dart';
 import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/budgeting_app_bottom_navigation.dart';
 import 'package:budgeting_app/ui/core/widget/project_navigator.dart';
@@ -36,6 +37,24 @@ class MainFrame extends StatefulWidget {
 }
 
 class MainFrameState extends State<MainFrame> {
+  @override
+  void initState() {
+    super.initState();
+
+    // SnackBarのモデルが更新されたら表示
+    mainFrameViewModel.snackBarModel.addListener(
+      () {
+        SnackBarModel? model = mainFrameViewModel.snackBarModel.value;
+        if (model != null) {
+          _showSnackBar(
+            context: navigator.context, 
+            model: model
+          );
+        }
+      }
+    );
+  }
+
   @override
   void dispose() {
     widget._viewModel.dispose();
@@ -150,6 +169,17 @@ class MainFrameState extends State<MainFrame> {
           ),
         ),
       ],
+    );
+  }
+
+  void _showSnackBar({
+    required BuildContext context, 
+    required SnackBarModel model
+  }) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(model.text),
+      )
     );
   }
 }
