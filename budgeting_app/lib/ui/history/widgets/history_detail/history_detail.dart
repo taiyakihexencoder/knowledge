@@ -1,5 +1,6 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/models/floating_action_button_model.dart';
+import 'package:budgeting_app/ui/core/models/snack_bar_model.dart';
 import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/project_navigator.dart';
 import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
@@ -53,7 +54,11 @@ class HistoryDetailState extends State<HistoryDetail> {
         icon: Icons.edit, 
         heroTag: 'edit', 
         onPressed: () async { 
+          // pushでは画面が破棄されるわけではないので、
+          // 遷移先からのpop処理で発火しないように、解除 → 登録をやり直す必要がある
+          navigator.disposeOverrideAppBarPop();
           bool updateLog = await widget._navigateToHistoryEdit(); 
+          navigator.overrideAppBarPop(_pop);
           _updateScaffold();
 
           if (updateLog) {
