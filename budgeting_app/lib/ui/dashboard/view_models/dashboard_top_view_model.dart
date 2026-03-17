@@ -190,6 +190,31 @@ class DashboardTopViewModel {
     }
   }
 
+  /// ログを追加して戻ってきたときに、
+  /// データを更新する
+  void updateOnNewlog() {
+    switch (_calendarMode.value) {
+      case CalendarMode.monthly: {
+        DashboardTopMonthlyCalendarModel? model = monthlyModel.value;
+        if (model != null) {
+          _updateCalendarMonth(
+            DateTime(model.year, model.month, 1), 
+            defaultSelectedDate: _dailyModel.value?.date ?? 1
+          );
+        }
+      }
+      case CalendarMode.weekly: {
+        DashboardTopWeeklyCalendarModel? model = weeklyModel.value;
+        if (model != null) {
+          _updateCalendarWeek(
+            DateTime(model.startYear, model.startMonth, model.startDate),
+            defaultSelectedDate: _dailyModel.value?.date ?? model.startDate
+          );
+        }
+      }
+    }
+  }
+
   /// 週間カレンダー表示の更新
   Future _updateCalendarWeek(DateTime targetDate, { int? defaultSelectedDate }) async {
     final DateTime endDate = targetDate.copyWith(day: targetDate.day + 6);

@@ -93,22 +93,23 @@ class DashboardTopPageState extends State<DashboardTopPage> {
     );
   }
 
-  Future _navigateToNewLog(
+  Future<bool> _navigateToNewLog(
     BuildContext context, {
     required int year,
     required int month,
     required int date,
-  }) {
+  }) async {
     // 注意：NewLogの日付情報はハイフンでつなげる
     final dateString = '$year-${month.toString().padLeft(2,'0')}-${date.toString().padLeft(2,'0')}';
 
-    return navigator.push(
+    var updated = await navigator.push(
       MaterialPageRoute(
         builder: (context) => NewLogPage(
           startDate: dateString,
         ),
       )
     );
+    return updated is bool && updated;
   }
 }
 
