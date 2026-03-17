@@ -15,13 +15,13 @@ class DashboardTop extends StatelessWidget {
   const DashboardTop({
     super.key,
     required DashboardTopViewModel viewModel,
-    required Future Function(BuildContext, { required int year, required int month, required int date }) onClickNewLog,
+    required Future<bool> Function(BuildContext, { required int year, required int month, required int date }) onClickNewLog,
   }):
     _viewModel = viewModel,
     _onClickNewLog = onClickNewLog;
 
   final DashboardTopViewModel _viewModel;
-  final Future Function(BuildContext, { required int year, required int month, required int date }) _onClickNewLog;
+  final Future<bool> Function(BuildContext, { required int year, required int month, required int date }) _onClickNewLog;
 
   void _updateScaffold() {
     mainFrameViewModel.hideTopBar();
@@ -143,13 +143,16 @@ class DashboardTop extends StatelessWidget {
                         onPressed: () async {
                           DashboardTopDailyListModel? model = _viewModel.dailyModel.value;
                           if (model != null) {
-                            await _onClickNewLog(
+                            bool addedNewLog = await _onClickNewLog(
                               context,
                               year: model.year,
                               month: model.month,
                               date: model.date,
                             );
                             _updateScaffold();
+                            if (addedNewLog) {
+                              _viewModel.updateOnNewlog();
+                            }
                           }
                         }, 
                         child: Text(
