@@ -1,6 +1,5 @@
 import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/models/floating_action_button_model.dart';
-import 'package:budgeting_app/ui/core/models/snack_bar_model.dart';
 import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/project_navigator.dart';
 import 'package:budgeting_app/ui/history/view_models/history_detail_view_model.dart';
