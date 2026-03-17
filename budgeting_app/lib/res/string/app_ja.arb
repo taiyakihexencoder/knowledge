@@ -30,6 +30,7 @@
 
   "expenseHistoryEdit": "購入情報編集",
   "expenseHistoryEditUpdate": "購入情報を更新",
+  "expenseHistoryEditUpdated": "情報を更新しました。",
 
   "expenseHistoryFilter": "履歴の検索条件",
   "expenseHistoryFilterAmount": "金額の範囲",
@@ -54,6 +55,7 @@
   "newLogAdd": "新規追加",
   "newLogErrorEmptyShop": "購入先が未設定",
   "newLogErrorEmptyCategory": "購入カテゴリーが未設定",
+  "newLogCompleted": "新しい履歴を登録しました。",
 
   "settingsTop": "設定",
   "settingsAttributes": "履歴の項目を編集",

@@ -1,5 +1,6 @@
 import 'package:budgeting_app/ui/core/models/app_bar_model.dart';
 import 'package:budgeting_app/ui/core/models/floating_action_button_model.dart';
+import 'package:budgeting_app/ui/core/models/snack_bar_model.dart';
 import 'package:flutter/material.dart';
 
 final MainFrameViewModel mainFrameViewModel = MainFrameViewModel();
@@ -9,7 +10,8 @@ class MainFrameViewModel {
     _topBar = ValueNotifier(null),
     _navigatorState = ValueNotifier(false),
     _floatingActionButton = ValueNotifier([]),
-    _selectedBottomNavigationItem = ValueNotifier(0);
+    _selectedBottomNavigationItem = ValueNotifier(0),
+    _snackBarModel = ValueNotifier(null);
 
   final ValueNotifier<AppBarModel?> _topBar;
   /// トップバーの状態
@@ -27,6 +29,10 @@ class MainFrameViewModel {
   /// Bottom Navigationの選択状態
   ValueNotifier<int> get selectedBottomNavigationItem => _selectedBottomNavigationItem;
 
+  final ValueNotifier<SnackBarModel?> _snackBarModel;
+  /// スナックバー表示
+  ValueNotifier<SnackBarModel?> get snackBarModel => _snackBarModel;
+
   late EdgeInsets _edgeInsets;
   /// システムバー領域のデフォルトの大きさ
   EdgeInsets get edgeInsets => _edgeInsets;
@@ -36,6 +42,7 @@ class MainFrameViewModel {
     _navigatorState.dispose();
     _floatingActionButton.dispose();
     _selectedBottomNavigationItem.dispose();
+    _snackBarModel.dispose();
   }
 
   void showTopBar({
@@ -94,6 +101,10 @@ class MainFrameViewModel {
         _selectedBottomNavigationItem.value = index;
       }
     );
+  }
+
+  void showSnackBar(SnackBarModel model) {
+    _snackBarModel.value = model;
   }
 
   /// アプリケーションの開始時にセーフエリアの大きさ情報を保持する

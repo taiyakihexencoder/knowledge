@@ -249,6 +249,12 @@ abstract class L10n {
   /// **'購入情報を更新'**
   String get expenseHistoryEditUpdate;
 
+  /// No description provided for @expenseHistoryEditUpdated.
+  ///
+  /// In ja, this message translates to:
+  /// **'情報を更新しました。'**
+  String get expenseHistoryEditUpdated;
+
   /// No description provided for @expenseHistoryFilter.
   ///
   /// In ja, this message translates to:
@@ -380,6 +386,12 @@ abstract class L10n {
   /// In ja, this message translates to:
   /// **'購入カテゴリーが未設定'**
   String get newLogErrorEmptyCategory;
+
+  /// No description provided for @newLogCompleted.
+  ///
+  /// In ja, this message translates to:
+  /// **'新しい履歴を登録しました。'**
+  String get newLogCompleted;
 
   /// No description provided for @settingsTop.
   ///

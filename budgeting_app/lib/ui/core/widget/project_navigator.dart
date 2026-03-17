@@ -15,6 +15,9 @@ class ProjectNavigator {
   /// 画面を離れる場合に破棄が必要
   Function()? _overridePop;
 
+  /// Navigatorのコンテキスト
+  BuildContext get context => _navigatorKey.currentState!.context;
+
   /// 過去画面を削除して遷移
   Future<T?> pushAndRemoveUntil<T extends Object?>(
     Route<T> newRoute,

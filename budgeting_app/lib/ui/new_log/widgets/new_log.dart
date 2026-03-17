@@ -1,4 +1,5 @@
 import 'package:budgeting_app/res/string/l10n.dart';
+import 'package:budgeting_app/ui/core/models/snack_bar_model.dart';
 import 'package:budgeting_app/ui/core/view_models/main_frame_view_model.dart';
 import 'package:budgeting_app/ui/core/widget/comment_field.dart';
 import 'package:budgeting_app/ui/core/widget/date_selector_field.dart';
@@ -204,6 +205,14 @@ class NewLogState extends State<NewLog> {
       child: ElevatedButton(
         onPressed: () async {
           widget._viewModel.onRequestAddLog(_createLogModel());
+
+          mainFrameViewModel.showSnackBar(
+            SnackBarModel(
+              label: 'complete new log',
+              text: L10n.of(context)!.newLogCompleted,
+            )
+          );
+          
           widget._navigateOnSubmit();
         }, 
         child: Text(
