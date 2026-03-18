@@ -101,7 +101,8 @@ class MainFrameState extends State<MainFrame> {
             bottomNavigationBar: ValueListenableBuilder(
               valueListenable: widget._viewModel.navigatorState,
               builder: (context, state, _) {
-                return state ? bottomNavigationBar : Container();
+                // 空の場合はPreferredSizeWidgetを置くかnullでないとSnackBarが表示できない
+                return state ? bottomNavigationBar : PreferredSize(preferredSize: Size(double.infinity, 0.0), child: SizedBox.shrink(),);
               },
             ),
 
