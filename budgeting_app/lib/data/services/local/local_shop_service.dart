@@ -42,7 +42,7 @@ class LocalShopService implements ShopService {
   }
 
   @override
-  Future<bool> addShop({
+  Future<ShopEntity?> addShop({
     required String name,
   }) async {
     return (select..where((column) => column.name.equals(name))).getSingleOrNull()
@@ -53,9 +53,9 @@ class LocalShopService implements ShopService {
               ShopCompanion(
                 name: Value(name),
               )
-            ).then( (_) => true, );
+            ).then( (id) => ShopEntity(id: id, name: name), );
           } else {
-            return false;
+            return null;
           }
         }
       );

@@ -46,10 +46,10 @@ class MockShopService implements ShopService {
   }
 
   @override
-  Future<bool> addShop({
+  Future<ShopEntity?> addShop({
     required String name,
   }) {
-    return Future.value(true);
+    return Future.value(null);
   }
 
   @override

@@ -50,10 +50,10 @@ class MockExpenseCategoryService implements ExpenseCategoryService {
   }
 
   @override
-  Future<bool> addCategory({
+  Future<ExpenseCategoryEntity?> addCategory({
     required String name,
   }) {
-    return Future.value(true);
+    return Future.value(null);
   }
 
   @override

@@ -27,9 +27,8 @@ class ExpenseCategoryRepository {
 
   /// 購入カテゴリーを追加する
   /// 
-  /// すでにあるものと重複している場合は追加できずfalse, 
-  /// それ以外はtrue
-  Future<bool> addCategory({
+  /// すでにあるものと重複している場合は追加できず失敗
+  Future<ExpenseCategoryEntity?> addCategory({
     required String name,
   }) {
     return _expenseCategoryService.addCategory(name: name);

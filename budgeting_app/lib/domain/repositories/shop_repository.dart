@@ -27,9 +27,8 @@ class ShopRepository {
 
   /// 購入先を追加する。
   /// 
-  /// すでにあるものと重複している場合は追加できずfalse, 
-  /// それ以外はtrue
-  Future<bool> addShop({
+  /// すでにあるものと重複している場合は追加できず失敗
+  Future<ShopEntity?> addShop({
     required String name,
   }) {
     return _shopService.addShop(name: name);

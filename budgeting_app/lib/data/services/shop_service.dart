@@ -8,7 +8,7 @@ abstract interface class ShopService {
   /// 購入先の追加
   /// 
   /// 他と重複する名称になる場合はfalse
-  Future<bool> addShop({
+  Future<ShopEntity?> addShop({
     required String name,
   });
 

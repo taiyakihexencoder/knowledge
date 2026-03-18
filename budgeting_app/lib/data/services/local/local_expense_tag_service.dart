@@ -70,7 +70,7 @@ class LocalExpenseTagService implements ExpenseTagService {
   }
 
   @override
-  Future<bool> addTag({
+  Future<ExpenseTagEntity?> addTag({
     required String name,
   }) async {
     return (_database.select(_database.expenseTag)..where((column) => column.name.equals(name))).getSingleOrNull()
@@ -81,9 +81,9 @@ class LocalExpenseTagService implements ExpenseTagService {
               ExpenseTagCompanion(
                 name: Value(name),
               )  
-            ).then( (_) => true, );
+            ).then( (id) => ExpenseTagEntity(id: id, name: name), );
           } else {
-            return false;
+            return null;
           }
         },
       );

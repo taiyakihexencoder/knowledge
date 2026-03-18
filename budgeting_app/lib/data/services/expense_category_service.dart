@@ -7,8 +7,8 @@ abstract interface class ExpenseCategoryService {
 
   /// 購入カテゴリーの追加
   /// 
-  /// 他と重複する名称になる場合はfalse
-  Future<bool> addCategory({
+  /// 他と重複する名称になる場合は失敗
+  Future<ExpenseCategoryEntity?> addCategory({
     required String name,
   });
 

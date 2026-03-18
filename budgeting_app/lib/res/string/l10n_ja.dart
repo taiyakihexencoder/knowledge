@@ -158,12 +158,6 @@ class L10nJa extends L10n {
   String get newLogAdd => '新規追加';
 
   @override
-  String get newLogErrorEmptyShop => '購入先が未設定';
-
-  @override
-  String get newLogErrorEmptyCategory => '購入カテゴリーが未設定';
-
-  @override
   String get newLogCompleted => '新しい履歴を登録しました。';
 
   @override
@@ -224,6 +218,55 @@ class L10nJa extends L10n {
   }
 
   @override
+  String get inputValidationAmountEmpty => '金額を入力してください。';
+
+  @override
+  String get inputValidationAmountNotNumber => '数値で入力してください。';
+
+  @override
+  String inputValidationAmountOutOfBounds(Object max, Object min) {
+    return '金額は$min円–$max円の範囲で入力してください。';
+  }
+
+  @override
+  String get inputValidationUsedAtEmpty => '日付を設定してください。';
+
+  @override
+  String get inputValidationShopEmpty => '購入先を設定してください。';
+
+  @override
+  String get inputValidationCategoryEmpty => '購入カテゴリーを設定してください。';
+
+  @override
+  String get inputValidationContentTitleEmpty => '詳細タイトルを入力してください';
+
+  @override
+  String inputValidationContentTitleOutOfBounds(Object length) {
+    return '詳細タイトルは$length文字以内で入力してください。';
+  }
+
+  @override
+  String inputValidationContentDescriptionOutOfBounds(Object length) {
+    return '詳細テキストは$length文字以内で入力してください。';
+  }
+
+  @override
+  String get inputValidationExistsError => '入力に不備があるようです。各項目を確認してください。';
+
+  @override
+  String inputExcessSelectWord(Object count) {
+    return '検索ワードは$count文字まで有効です。';
+  }
+
+  @override
+  String inputMaxTagCount(Object count) {
+    return '設定できるタグは$count個までです。';
+  }
+
+  @override
+  String get inputTagDuplicate => 'タグが重複しています。';
+
+  @override
   String get commonAbbrSunDay => '日';
 
   @override
@@ -276,4 +319,7 @@ class L10nJa extends L10n {
 
   @override
   String get commonEmpty => '未設定';
+
+  @override
+  String get commonUnknownError => '不明なエラー';
 }

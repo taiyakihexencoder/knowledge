@@ -77,10 +77,10 @@ class MockExpenseTagService implements ExpenseTagService {
   }
 
   @override
-  Future<bool> addTag({
+  Future<ExpenseTagEntity?> addTag({
     required String name,
   }) {
-    return Future.value(true);
+    return Future.value(null);
   }
 
   @override

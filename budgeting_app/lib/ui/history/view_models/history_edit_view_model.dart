@@ -10,10 +10,10 @@ import 'package:budgeting_app/domain/repositories/expense_history_repository.dar
 import 'package:budgeting_app/domain/repositories/expense_tag_repository.dart';
 import 'package:budgeting_app/domain/repositories/shop_repository.dart';
 import 'package:budgeting_app/ui/core/models/edit/category_model.dart';
+import 'package:budgeting_app/ui/core/models/edit/content_model.dart';
 import 'package:budgeting_app/ui/core/models/edit/log_model.dart';
 import 'package:budgeting_app/ui/core/models/edit/shop_model.dart';
 import 'package:budgeting_app/ui/core/models/edit/tag_model.dart';
-import 'package:budgeting_app/ui/history/models/history_detail_model.dart';
 import 'package:flutter/material.dart';
 
 class HistoryEditViewModel {
@@ -31,8 +31,7 @@ class HistoryEditViewModel {
     _shopRepository = shopRepository,
     _categorySelections = ValueNotifier([]),
     _tagSelections = ValueNotifier([]),
-    _shopSelections = ValueNotifier([]),
-    _detail = ValueNotifier(null);
+    _shopSelections = ValueNotifier([]);
 
   /// 購入履歴のID
   final int _id;
@@ -61,34 +60,34 @@ class HistoryEditViewModel {
   final ValueNotifier<List<ShopModel>> _shopSelections;
   ValueNotifier<List<ShopModel>> get shopSelections => _shopSelections;
 
-  // 詳細情報
-  final ValueNotifier<HistoryDetailModel?> _detail;
-  ValueNotifier<HistoryDetailModel?> get detail => _detail;
-
   void dispose() {
     _categorySelections.dispose();
     _tagSelections.dispose();
     _shopSelections.dispose();
-    _detail.dispose();
   }
 
   // 詳細情報の取得
-  void initDetail() async {
+  Future<LogModel?> getDetail() async {
     ExpenseHistoryEntity? history = await _historyRepository.getHistory(historyId: _id);
     if (history == null) {
-      _detail.value = null;
+      return null;
     } else {
       Map<int, List<ExpenseHistoryTagEntity>> tagMap = await _tagRepository.getTags([history.id]);
       Future<ExpenseCategoryEntity?> category = _categoryRepository.getCategory(history.categoryId);
       Future<ShopEntity?> shop = _shopRepository.getShop(history.shopId);
       Future<List<ExpenseHistoryContentEntity>> contents = _historyRepository.getHistoryContents(historyId: history.id);
 
-      _detail.value = HistoryDetailModel.from(
-        expenseHistory: history,
-        expenseCategory: await category,
-        shop: await shop,
-        expenseTags: tagMap[history.id] ?? [],
-        expenseContents: await contents,
+      return LogModel(
+        usedAt: '${history.usedAt.substring(0,4)}-${history.usedAt.substring(4,6)}-${history.usedAt.substring(6,8)}', 
+        amount: history.amount, 
+        shop: await shop.then( (shop) => shop == null ? null : ShopModel(id: shop.id, name: shop.name,)), 
+        category: await category.then( (category) => category == null ? null : CategoryModel(id: category.id, name: category.name,)), 
+        tags: (tagMap[history.id] ?? []).map((tag) => TagModel(id: tag.id, name: tag.name,)).toList(), 
+        contents: await contents.then( 
+          (contentsList) => contentsList.map(
+            (content) => ContentModel(title: content.title, description: content.description),
+          ).toList()
+        ),
       );
     }
   }
@@ -154,30 +153,39 @@ class HistoryEditViewModel {
   /// 購入先を追加
   /// 
   /// 追加後にリストを更新する
-  Future<void> onRequestAddShopName(String name) async {
-    bool result = await _shopRepository.addShop(name: name);
-    if (result) {
+  Future<ShopModel?> onRequestAddShopName(String name) async {
+    ShopEntity? result = await _shopRepository.addShop(name: name);
+    if (result != null) {
       refreshShopList();
+      return ShopModel(id: result.id, name: result.name);
+    } else {
+      return null;
     }
   }
 
   /// カテゴリーの追加
   /// 
   /// 追加後にリストを更新する
-  Future<void> onRequestAddCategoryName(String name) async {
-    bool result = await _categoryRepository.addCategory(name: name);
-    if (result) {
+  Future<CategoryModel?> onRequestAddCategoryName(String name) async {
+    ExpenseCategoryEntity? result = await _categoryRepository.addCategory(name: name);
+    if (result != null) {
       refreshCategoryList();
+      return CategoryModel(id: result.id, name: result.name);
+    } else {
+      return null;
     }
   }
 
   /// タグの追加
   /// 
   /// 追加後にリストを更新する
-  Future<void> onRequestAddTagName(String name) async {
-    bool result = await _tagRepository.addTag(name: name);
-    if (result) {
+  Future<TagModel?> onRequestAddTagName(String name) async {
+    ExpenseTagEntity? result = await _tagRepository.addTag(name: name);
+    if (result != null) {
       refreshTagList();
+      return TagModel(id: result.id, name: result.name);
+    } else {
+      return null;
     }
   }
 }

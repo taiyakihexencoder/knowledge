@@ -375,18 +375,6 @@ abstract class L10n {
   /// **'新規追加'**
   String get newLogAdd;
 
-  /// No description provided for @newLogErrorEmptyShop.
-  ///
-  /// In ja, this message translates to:
-  /// **'購入先が未設定'**
-  String get newLogErrorEmptyShop;
-
-  /// No description provided for @newLogErrorEmptyCategory.
-  ///
-  /// In ja, this message translates to:
-  /// **'購入カテゴリーが未設定'**
-  String get newLogErrorEmptyCategory;
-
   /// No description provided for @newLogCompleted.
   ///
   /// In ja, this message translates to:
@@ -495,6 +483,84 @@ abstract class L10n {
   /// **'タグ \"{name}\" を削除しますか？'**
   String settingsAttributesDeleteTag(Object name);
 
+  /// No description provided for @inputValidationAmountEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'金額を入力してください。'**
+  String get inputValidationAmountEmpty;
+
+  /// No description provided for @inputValidationAmountNotNumber.
+  ///
+  /// In ja, this message translates to:
+  /// **'数値で入力してください。'**
+  String get inputValidationAmountNotNumber;
+
+  /// No description provided for @inputValidationAmountOutOfBounds.
+  ///
+  /// In ja, this message translates to:
+  /// **'金額は{min}円–{max}円の範囲で入力してください。'**
+  String inputValidationAmountOutOfBounds(Object max, Object min);
+
+  /// No description provided for @inputValidationUsedAtEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'日付を設定してください。'**
+  String get inputValidationUsedAtEmpty;
+
+  /// No description provided for @inputValidationShopEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入先を設定してください。'**
+  String get inputValidationShopEmpty;
+
+  /// No description provided for @inputValidationCategoryEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'購入カテゴリーを設定してください。'**
+  String get inputValidationCategoryEmpty;
+
+  /// No description provided for @inputValidationContentTitleEmpty.
+  ///
+  /// In ja, this message translates to:
+  /// **'詳細タイトルを入力してください'**
+  String get inputValidationContentTitleEmpty;
+
+  /// No description provided for @inputValidationContentTitleOutOfBounds.
+  ///
+  /// In ja, this message translates to:
+  /// **'詳細タイトルは{length}文字以内で入力してください。'**
+  String inputValidationContentTitleOutOfBounds(Object length);
+
+  /// No description provided for @inputValidationContentDescriptionOutOfBounds.
+  ///
+  /// In ja, this message translates to:
+  /// **'詳細テキストは{length}文字以内で入力してください。'**
+  String inputValidationContentDescriptionOutOfBounds(Object length);
+
+  /// No description provided for @inputValidationExistsError.
+  ///
+  /// In ja, this message translates to:
+  /// **'入力に不備があるようです。各項目を確認してください。'**
+  String get inputValidationExistsError;
+
+  /// No description provided for @inputExcessSelectWord.
+  ///
+  /// In ja, this message translates to:
+  /// **'検索ワードは{count}文字まで有効です。'**
+  String inputExcessSelectWord(Object count);
+
+  /// No description provided for @inputMaxTagCount.
+  ///
+  /// In ja, this message translates to:
+  /// **'設定できるタグは{count}個までです。'**
+  String inputMaxTagCount(Object count);
+
+  /// No description provided for @inputTagDuplicate.
+  ///
+  /// In ja, this message translates to:
+  /// **'タグが重複しています。'**
+  String get inputTagDuplicate;
+
   /// No description provided for @commonAbbrSunDay.
   ///
   /// In ja, this message translates to:
@@ -590,6 +656,12 @@ abstract class L10n {
   /// In ja, this message translates to:
   /// **'未設定'**
   String get commonEmpty;
+
+  /// No description provided for @commonUnknownError.
+  ///
+  /// In ja, this message translates to:
+  /// **'不明なエラー'**
+  String get commonUnknownError;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

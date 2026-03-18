@@ -11,8 +11,8 @@ abstract interface class ExpenseTagService {
 
   /// タグの追加
   /// 
-  /// 他と重複する名称になる場合はfalse
-  Future<bool> addTag({
+  /// 他と重複する名称になる場合は失敗
+  Future<ExpenseTagEntity?> addTag({
     required String name,
   });
 

@@ -1,3 +1,6 @@
+import 'package:budgeting_app/data/entities/expense_category_entity.dart';
+import 'package:budgeting_app/data/entities/expense_tag_entity.dart';
+import 'package:budgeting_app/data/entities/shop_entity.dart';
 import 'package:budgeting_app/domain/repositories/expense_category_repository.dart';
 import 'package:budgeting_app/domain/repositories/expense_tag_repository.dart';
 import 'package:budgeting_app/domain/repositories/shop_repository.dart';
@@ -58,8 +61,8 @@ class SettingsAttributesViewModel {
   /// 
   /// 追加後にリストを更新する
   void onRequestAddShopName(String name) async {
-    bool result = await _shopRepository.addShop(name: name);
-    if (result) {
+    ShopEntity? result = await _shopRepository.addShop(name: name);
+    if (result != null) {
       updateShopList();
     }
   }
@@ -98,8 +101,8 @@ class SettingsAttributesViewModel {
   /// 
   /// 追加後にリストを更新する
   void onRequestAddCategoryName(String name) async {
-    bool result = await _categoryRepository.addCategory(name: name);
-    if (result) {
+    ExpenseCategoryEntity? result = await _categoryRepository.addCategory(name: name);
+    if (result != null) {
       updateCategoryList();
     }
   }
@@ -139,8 +142,8 @@ class SettingsAttributesViewModel {
   /// 
   /// 追加後にリストを更新する
   void onRequestAddTagName(String name) async {
-    bool result = await _tagRepository.addTag(name: name);
-    if (result) {
+    ExpenseTagEntity? result = await _tagRepository.addTag(name: name);
+    if (result != null) {
       updateTagList();
     }
   }

@@ -42,7 +42,7 @@ class LocalExpenseCategoryService implements ExpenseCategoryService {
   }
 
   @override
-  Future<bool> addCategory({
+  Future<ExpenseCategoryEntity?> addCategory({
     required String name,
   }) async {
     return (select..where((column) => column.name.equals(name))).getSingleOrNull()
@@ -53,9 +53,9 @@ class LocalExpenseCategoryService implements ExpenseCategoryService {
               ExpenseCategoryCompanion(
                 name: Value(name),
               )  
-            ).then( (_) => true, );
+            ).then( (id) => ExpenseCategoryEntity(id: id, name: name), );
           } else {
-            return false;
+            return null;
           }
         },
       );

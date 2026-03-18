@@ -114,33 +114,42 @@ class NewLogViewModel {
     );
   }
 
-  /// 購入先を追加
+   /// 購入先を追加
   /// 
   /// 追加後にリストを更新する
-  Future<void> onRequestAddShopName(String name) async {
-    bool result = await _shopRepository.addShop(name: name);
-    if (result) {
+  Future<ShopModel?> onRequestAddShopName(String name) async {
+    ShopEntity? result = await _shopRepository.addShop(name: name);
+    if (result != null) {
       refreshShopList();
+      return ShopModel(id: result.id, name: result.name);
+    } else {
+      return null;
     }
   }
 
   /// カテゴリーの追加
   /// 
   /// 追加後にリストを更新する
-  Future<void> onRequestAddCategoryName(String name) async {
-    bool result = await _categoryRepository.addCategory(name: name);
-    if (result) {
+  Future<CategoryModel?> onRequestAddCategoryName(String name) async {
+    ExpenseCategoryEntity? result = await _categoryRepository.addCategory(name: name);
+    if (result != null) {
       refreshCategoryList();
+      return CategoryModel(id: result.id, name: result.name);
+    } else {
+      return null;
     }
   }
 
   /// タグの追加
   /// 
   /// 追加後にリストを更新する
-  Future<void> onRequestAddTagName(String name) async {
-    bool result = await _tagRepository.addTag(name: name);
-    if (result) {
+  Future<TagModel?> onRequestAddTagName(String name) async {
+    ExpenseTagEntity? result = await _tagRepository.addTag(name: name);
+    if (result != null) {
       refreshTagList();
+      return TagModel(id: result.id, name: result.name);
+    } else {
+      return null;
     }
   }
 }

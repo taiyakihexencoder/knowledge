@@ -1,3 +1,4 @@
+import 'package:budgeting_app/res/string/l10n.dart';
 import 'package:budgeting_app/ui/core/widget/text_editing_controller_provider.dart';
 import 'package:budgeting_app/ui/core/widget/preview_wrapper.dart';
 import 'package:collection/collection.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/widget_previews.dart';
 /// 新規追加が可能なドロップダウンメニュー.
 /// 
 /// 初期状態はコンストラクタ引数ではなくcontrollerにセットする.
-class ExtendableSelectorField<T> extends StatefulWidget{
+class ExtendableSelectorForm<T> extends StatefulWidget{
   /// entries: 選択肢
   /// 
   /// controller: 入力状況取得用
@@ -17,27 +18,42 @@ class ExtendableSelectorField<T> extends StatefulWidget{
   /// 
   /// onRequestAdd: 新規追加が選択されたときの処理。ここでリストへの追加処理を行う
   /// 
-  /// onSelected: 選択されたときの処理。
-  /// 新規追加の場合はリストが更新されるので呼ばれない。
-  const ExtendableSelectorField({
+  /// inputLength: 入力可能なテキストの長さ
+  /// 
+  /// clearOnSelect: 選択したときに消すかどうか
+  /// 
+  /// onSelected: 選択されたときの処理
+  /// 
+  /// validator: バリデーション
+  const ExtendableSelectorForm({
     super.key,
     required ValueListenable<List<T>> entries,
     required TextEditingController controller,
     required String Function(T) display,
-    required Future<void> Function(String) onRequestAdd,
+    required Future<T?> Function(String) onRequestAdd,
+    required Function(T?) onSaved,
+    int inputLength = 30,
+    bool clearOnSelect = false,
     Function(T?) onSelected = _emptyOnSelected,
+    String? Function(T?)? validator,
   }): 
     _entries = entries,
     _controller = controller,
     _display = display,
     _onRequestAdd = onRequestAdd,
-    _onSelected = onSelected;
+    _onSaved = onSaved,
+    _onSelected = onSelected,
+    _inputLength = inputLength,
+    _validator = validator;
 
   final ValueListenable<List<T>> _entries;
   final TextEditingController _controller;
   final String Function(T) _display;
-  final Future<void> Function(String) _onRequestAdd;
+  final Future<T?> Function(String) _onRequestAdd;
+  final Function(T?) _onSaved;
   final Function(T?) _onSelected;
+  final int _inputLength;
+  final String? Function(T? value)? _validator;
 
   @override
   ExtendableSelectorFieldState<T> createState() {
@@ -45,7 +61,7 @@ class ExtendableSelectorField<T> extends StatefulWidget{
   }
 }
 
-class ExtendableSelectorFieldState<T> extends State<ExtendableSelectorField<T>> {
+class ExtendableSelectorFieldState<T> extends State<ExtendableSelectorForm<T>> {
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -82,11 +98,22 @@ class ExtendableSelectorFieldState<T> extends State<ExtendableSelectorField<T>> 
 
   /// ドロップダウンWidget
   Widget _dropdown(BuildContext context, List<T> entries) {
-    return DropdownMenu<T?>(
+    T? initialSelection = entries.firstWhereOrNull(
+      (entry) => widget._display(entry) == widget._controller.text,
+    );
+
+    return DropdownMenuFormField<T?>(
       controller: widget._controller,
+      // keyを設定しないと、
+      // リスト更新後にinitialSelectionは更新されない。
+      initialSelection: initialSelection,
+      key: ValueKey(entries),
+      autovalidateMode: AutovalidateMode.disabled,
+      validator: widget._validator,
       focusNode: _focusNode,
       width: double.infinity,
       enableFilter: true,
+      onSaved: widget._onSaved,
       dropdownMenuEntries: [
         ...entries.map(
           (entry) => DropdownMenuEntry(
@@ -114,9 +141,14 @@ class ExtendableSelectorFieldState<T> extends State<ExtendableSelectorField<T>> 
   /// 新規追加を選択した場合を含めた選択時処理
   void _onSelected(T? selected) async {
     if (selected == null && widget._controller.text.isNotEmpty) {
-      await widget._onRequestAdd(widget._controller.text);
+      T? result = await widget._onRequestAdd(widget._controller.text);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget._onSelected(result);
+      });
     } else {
-      widget._onSelected(selected);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget._onSelected(selected);
+      });
     }
   }
 
@@ -130,7 +162,11 @@ class ExtendableSelectorFieldState<T> extends State<ExtendableSelectorField<T>> 
     ).toList();
 
     if (filter.isNotEmpty && !filteredEntries.any((entry) => entry.label == filter)) {
-      filteredEntries.add(_emptyMenuEntry());
+      if (filter.length <= widget._inputLength) {
+        filteredEntries.add(_emptyMenuEntry());
+      } else {
+        filteredEntries.add(_overflowMenuEntry());
+      }
     }
 
     return filteredEntries;
@@ -145,13 +181,21 @@ class ExtendableSelectorFieldState<T> extends State<ExtendableSelectorField<T>> 
       trailingIcon: Icon(Icons.add),
     );
   }
+
+  DropdownMenuEntry<T?> _overflowMenuEntry() {
+    return DropdownMenuEntry(
+      value: null, 
+      label: L10n.of(context)?.inputExcessSelectWord(widget._inputLength) ?? '',
+      enabled: false,
+    );
+  }
 }
 
 /// 空の関数
 void _emptyOnSelected(Object? entry) {}
 
 @Preview(
-  name: 'Extendable Selector Field',
+  name: 'Extendable Selector Form',
   wrapper: previewWrapper,
 )
 Widget previewExtendableSelectorField() {
@@ -165,11 +209,19 @@ Widget previewExtendableSelectorField() {
     builder: (context, controllers) {
       return SizedBox(
         height: 300.0,
-        child: ExtendableSelectorField(
+        child: ExtendableSelectorForm(
           entries: entries,
           controller: controllers[0], 
+          validator: (value) {
+            if (value == 'AAAA') {
+              return 'NG';
+            } else {
+              return null;
+            }
+          },
           display: (String? selected) => selected ?? '', 
-          onRequestAdd: (String text) => Future.value()
+          onRequestAdd: (text) => Future.value(text),
+          onSaved: (_) {}
         ),
       );
     }

@@ -33,9 +33,8 @@ class ExpenseTagRepository {
 
   /// タグを追加する
   /// 
-  /// すでにあるものと重複している場合は追加できずfalse, 
-  /// それ以外はtrue
-  Future<bool> addTag({
+  /// すでにあるものと重複している場合は追加できず失敗, 
+  Future<ExpenseTagEntity?> addTag({
     required String name,
   }) {
     return _expenseTagService.addTag(name: name);
